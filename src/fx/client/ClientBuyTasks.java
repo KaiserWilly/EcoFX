@@ -102,7 +102,7 @@ public class ClientBuyTasks {
                                 lookin.setTextFill(Paint.valueOf("White"));
                                 lookin.setAlignment(Pos.CENTER);
                                 lookin.setTextAlignment(TextAlignment.CENTER);
-                                AnchorPane.setTopAnchor(lookin, 5.0);
+                                AnchorPane.setTopAnchor(lookin, 3.0);
                                 AnchorPane.setRightAnchor(lookin, 15.0);
                                 widgetPane.getChildren().add(lookin);
 
