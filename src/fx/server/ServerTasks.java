@@ -7,6 +7,7 @@ import javafx.scene.chart.XYChart;
 import rsc.StockHistory;
 import rsc.Values;
 import server.ServerMain;
+import server.ServerValues;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -127,10 +128,10 @@ public class ServerTasks {
                                 ServerGUI.avgMarData.getData().add(new XYChart.Data<>(i * 2, history[i]));
                         }
                     });
-                    while (count == Values.secCount && Objects.equals(name, Values.currentStockName)) {
+                    while (count == ServerValues.secCount && Objects.equals(name, Values.currentStockName)) {
                         Thread.sleep(10);
                     }
-                    count = Values.secCount;
+                    count = ServerValues.secCount;
                     name = Values.currentStockName;
                     return null;
                 }

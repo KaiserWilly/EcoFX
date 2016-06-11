@@ -1,12 +1,10 @@
 package server;
 
-import rsc.Values;
-import server.engine.EcoEngine;
-
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
 
 /**
  * Created 12/27/15
@@ -30,10 +28,10 @@ public class ServerClientHandler extends Thread {
             System.out.println("New client connected!");
 
             while (true) {
-                if (secCount < Values.secCount) {
-                    secCount = Values.secCount;
+                if (secCount < ServerValues.secCount) {
+                    secCount = ServerValues.secCount;
                     System.out.println(secCount);
-                    out.writeObject(EcoEngine.getData()); //Writes The Stock Data To The Client
+                    out.writeObject(ServerValues.serverData); //Writes The Stock Data To The Client
                     out.reset(); //Resets the Output Stream to clear to avgMarData inside
 //                    HashMap<String, Object> userData = (HashMap<String, Object>) in.readObject(); //To be used later
 

@@ -2,6 +2,7 @@ package fx.client;
 
 import rsc.StockHistory;
 import rsc.Values;
+
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -22,9 +23,9 @@ public class ClientNetwork {
             System.out.println("Permanent Connection Made!");
 
             while (true) {
-                Object[][] serverData = (Object[][]) in.readObject();
-                StockHistory.addHistory(serverData);
-                Values.secCount++;
+                HashMap<String, Object> serverData = (HashMap<String, Object>) in.readObject();
+                StockHistory.addHistory((Object[][]) serverData.get("Market Data"));
+                Values.secCount = (int) serverData.get("SEC");
                 System.out.println(Values.secCount);
             }
         } catch (Exception e) {

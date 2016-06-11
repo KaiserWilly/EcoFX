@@ -1,7 +1,7 @@
 package server.engine;
 
-import rsc.Values;
-import java.util.ArrayList;
+import server.ServerValues;
+
 import java.util.Random;
 
 /**
@@ -137,7 +137,7 @@ public class EcoEngine {
                     // For Pushing Purposes only
                 }
             } else if (stockVolatility <= stockChangeParameter.nextInt(100 + 1)) {
-                if (Values.secCount > 0) {
+                if (ServerValues.secCount > 0) {
                     if (originalStockPrice >= newStockPrice) { //Checks to see if the change in the stock market price was negative
                         if (positivePriceChange) { // Checks to see if the change in the stock price was positive after the initial negative
                             originalStockPrice = Double.parseDouble(String.valueOf(stockInput[i][1])) + totalPriceChange; // If it is positive, it bases the new price off of the last positive value, so as to keep the same level of possible increas in price

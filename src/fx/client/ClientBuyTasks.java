@@ -23,7 +23,7 @@ import java.util.Collections;
 public class ClientBuyTasks {
 
     public static class widgetService extends Service<Void> {
-        DecimalFormat df = new DecimalFormat("$#,###,###.00");
+        DecimalFormat df = new DecimalFormat("$#,###,##0.00");
         int count = -1;
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
