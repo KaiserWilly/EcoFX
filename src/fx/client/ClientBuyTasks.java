@@ -5,7 +5,11 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -21,13 +25,15 @@ import java.util.Collections;
  * Created by james on 6/10/2016.
  */
 public class ClientBuyTasks {
+    static String currentStock = null;
 
     public static class widgetService extends Service<Void> {
-        DecimalFormat df = new DecimalFormat("$#,###,##0.00");
+        DecimalFormat money = new DecimalFormat("$#,###,##0.00");
+        DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-
+        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
 
         @Override
         protected Task<Void> createTask() {
@@ -61,7 +67,7 @@ public class ClientBuyTasks {
                                 AnchorPane.setLeftAnchor(stock, 0.0);
                                 widgetPane.getChildren().add(stock);
 
-                                Label price = new Label(df.format(StockHistory.getPrice(name)));
+                                Label price = new Label(money.format(StockHistory.getPrice(name)));
                                 price.setFont(priceF);
                                 price.setTextFill(Paint.valueOf("White"));
                                 price.setPrefSize(75.0, 35.0);
@@ -70,6 +76,35 @@ public class ClientBuyTasks {
                                 AnchorPane.setTopAnchor(price, 0.0);
                                 AnchorPane.setLeftAnchor(price, 100.0);
                                 widgetPane.getChildren().add(price);
+
+                                double pC = getPChange(name);
+                                Label pChange;
+                                if (pC < 0.0) {
+                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+                                } else {
+                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                                }
+                                pChange.setContentDisplay(ContentDisplay.RIGHT);
+                                pChange.setFont(priceF);
+                                pChange.setTextFill(Paint.valueOf("White"));
+                                pChange.setPrefSize(75.0, 35.0);
+                                pChange.setTextAlignment(TextAlignment.CENTER);
+                                pChange.setAlignment(Pos.CENTER);
+                                AnchorPane.setTopAnchor(pChange, 0.0);
+                                AnchorPane.setLeftAnchor(pChange, 200.0);
+                                widgetPane.getChildren().add(pChange);
+
+                                Button lookin = new Button("Investigate");
+                                lookin.setOnAction(event -> currentStock = name);
+                                lookin.setFont(buttonF);
+                                lookin.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
+                                lookin.setPrefSize(100, 25);
+                                lookin.setTextFill(Paint.valueOf("White"));
+                                lookin.setAlignment(Pos.CENTER);
+                                lookin.setTextAlignment(TextAlignment.CENTER);
+                                AnchorPane.setTopAnchor(lookin, 5.0);
+                                AnchorPane.setRightAnchor(lookin, 15.0);
+                                widgetPane.getChildren().add(lookin);
 
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
@@ -84,13 +119,27 @@ public class ClientBuyTasks {
                     count = Values.secCount;
                     return null;
                 }
-            };
+            }
+
+                    ;
         }
 
         @Override
         protected void succeeded() {
             reset();
             start();
+        }
+
+        double getPChange(String name) {
+            double[] history = StockHistory.getHistory(name);
+            for (int i = 0; i < history.length; i++) {
+                if (history[i] == 0.0) {
+                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
+                }
+
+            }
+            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
+
         }
     }
 }

@@ -48,10 +48,10 @@ public class ServerTasks {
                     } else {
                         updateMessage("SEC Count: " + count);
                     }
-                    while (count == Values.secCount) {
+                    while (count == ServerValues.secCount) {
                         Thread.sleep(50);
                     }
-                    count = Values.secCount;
+                    count = ServerValues.secCount;
                     return null;
                 }
             };

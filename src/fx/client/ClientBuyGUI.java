@@ -1,18 +1,9 @@
 package fx.client;
 
-import fx.MenuSubGUI;
 import javafx.animation.FadeTransition;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
-import rsc.Values;
-
-import java.util.ArrayList;
 
 /**
  * Created by james on 4/29/2016.
@@ -20,8 +11,6 @@ import java.util.ArrayList;
 public class ClientBuyGUI {
     public AnchorPane buyAnchorPane = new AnchorPane();
     public static AnchorPane stockWidget = new AnchorPane();
-    public static ClientBuyTasks.widgetService widS = new ClientBuyTasks.widgetService();
-    boolean opened = false;
 
     public AnchorPane createPane() {
         buyAnchorPane.setPrefSize(980, 490);
@@ -52,9 +41,11 @@ public class ClientBuyGUI {
     }
 
     public AnchorPane stockWidget() {
-        stockWidget.setPrefSize(440, 1875);
+        stockWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(stockWidget, 0.0);
         AnchorPane.setLeftAnchor(stockWidget, 0.0);
+        ClientBuyTasks.widgetService widS = new ClientBuyTasks.widgetService();
+        widS.start();
         return stockWidget;
     }
 
@@ -64,10 +55,6 @@ public class ClientBuyGUI {
 
     public void open() {
         buyAnchorPane.setVisible(true);
-        if (!opened) {
-            widS.start();
-            opened = true;
-        }
         FadeTransition in = new FadeTransition(Duration.millis(250), buyAnchorPane);
         in.setFromValue(0.0);
         in.setToValue(1.0);

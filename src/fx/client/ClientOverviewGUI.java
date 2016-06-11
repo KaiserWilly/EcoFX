@@ -25,8 +25,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import rsc.Values;
 
-import static fx.client.ClientBuyGUI.widS;
-
 /**
  * Created by james on 4/29/2016.
  */
