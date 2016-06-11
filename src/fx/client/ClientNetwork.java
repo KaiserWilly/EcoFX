@@ -24,7 +24,7 @@ public class ClientNetwork {
 
             while (true) {
                 HashMap<String, Object> serverData = (HashMap<String, Object>) in.readObject();
-                StockHistory.addHistory((Object[][]) serverData.get("Market Data"));
+                StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
                 Values.secCount = (int) serverData.get("SEC");
                 System.out.println(Values.secCount);
             }

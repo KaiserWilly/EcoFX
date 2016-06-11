@@ -4,7 +4,6 @@ import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
@@ -30,7 +29,7 @@ public class ClientFrameGUI {
     static ClientSellGUI sell = new ClientSellGUI();
     public static ClientFrameTasks.serverService servS;
     AnchorPane overviewP, portfolioP, buyP, sellP;
-    Font aeroM20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 20);
+    Font aeroM20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
 
     public AnchorPane clientPane() {
 
@@ -115,8 +114,8 @@ public class ClientFrameGUI {
     public ToolBar createToolBarHeader() {
         ToolBar bar = new ToolBar();
         bar.setId("header");
-
-        Label totalAssets = new Label("Assets: $175,699");
+        bar.setStyle("-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5; -fx-background-color: #333333;");
+        Label totalAssets = new Label("Cash On Hand: $175,699");
         totalAssets.setPadding(new Insets(0,0,0,20));
         totalAssets.setTextFill(Paint.valueOf("White"));
         totalAssets.setFont(aeroM20);
@@ -124,22 +123,22 @@ public class ClientFrameGUI {
 
         bar.getItems().add(createSeparator());
 
-        String[] stockArray = new String[]{
-                "AARP",
-                "ACID",
-                "CORN",
-                "WILL"
-        };
-        for (int i = 0; i <= 3; i++) {
-            Label stock = new Label(stockArray[i] + "  2.27  0.9%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
-            stock.setContentDisplay(ContentDisplay.RIGHT);
-            stock.setPadding(new Insets(0, 20, 0, 0));
-            stock.setTextFill(Paint.valueOf("White"));
-            stock.setFont(aeroM20);
-            bar.getItems().add(stock);
-        }
+//        String[] stockArray = new String[]{
+//                "AARP",
+//                "ACID",
+//                "CORN",
+//                "WILL"
+//        };
+//        for (int i = 0; i <= 3; i++) {
+//            Label stock = new Label(stockArray[i] + "  2.27  0.9%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+//            stock.setContentDisplay(ContentDisplay.RIGHT);
+//            stock.setPadding(new Insets(0, 20, 0, 0));
+//            stock.setTextFill(Paint.valueOf("White"));
+//            stock.setFont(aeroM20);
+//            bar.getItems().add(stock);
+//        }
 
-        bar.setPrefSize(1000, 25);
+        bar.setPrefSize(1000, 20);
         bar.getStylesheets().add("rsc/StylesheetClient.css");
 
         return bar;

@@ -1,5 +1,6 @@
 package rsc;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -8,26 +9,28 @@ import java.util.HashMap;
 public class StockHistory {
     static HashMap<String, double[]> stockHistory = new HashMap<>();
 
-    public static void addHistory(Object[][] stockArray) {
+    public static void addHistory(HashMap<String, Object> stockMap) {
         int i;
         double composite = 0;
-        for (i = 0; i < stockArray.length; i++) {
-            String name = String.valueOf(stockArray[i][0]);
+        ArrayList<String> stockN = (ArrayList<String>) stockMap.get("Names");
+        for (i = 0; i < stockN.size(); i++) {
+            String name = stockN.get(i);
+            Object[] stock = (Object[]) stockMap.get(stockN.get(i));
             if (!stockHistory.containsKey(name)) {
                 Values.stockNames.add(name);
                 Values.stockNamesNC.add(name);
                 double[] history = new double[16];
-                history[0] = (double) stockArray[i][1];
+                history[0] = (double) stock[1];
                 stockHistory.put(name, history);
             } else {
                 double[] history = stockHistory.get(name);
                 System.arraycopy(history, 0, history, 1, history.length - 1);
-                history[0] = (double) stockArray[i][1];
+                history[0] = (double) stock[1];
                 stockHistory.replace(name, history);
             }
-            composite += (double) stockArray[i][1];
+            composite += (double) stock[1];
         }
-        composite = composite / stockArray.length;
+        composite = composite / stockN.size();
         if (!stockHistory.containsKey("Composite")) {
             double[] history = new double[16];
             history[0] = composite;

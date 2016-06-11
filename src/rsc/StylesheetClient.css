@@ -6,5 +6,6 @@
    -fx-background-color: #333333;
    }
    #header{
-   -fx-background-color: transparent, transparent, transparent, transparent;
+   -fx-border-color: transparent transparent #444444 transparent;
+   -fx-border-width:  0 0 3 0;
    }

@@ -31,7 +31,7 @@ public class ClientBuyTasks {
 
     public static class widgetService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.0");
+        DecimalFormat perc = new DecimalFormat("$#,###,##0.00");
         int count = -1;
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
@@ -82,9 +82,9 @@ public class ClientBuyTasks {
                                 double pC = getPChange(name);
                                 Label pChange;
                                 if (pC < 0.0) {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+                                    pChange = new Label(perc.format(Math.abs(pC)) /*+ "%"*/, new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
                                 } else {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                                    pChange = new Label(perc.format(Math.abs(pC)) /*+ "%"*/, new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
                                 }
                                 pChange.setContentDisplay(ContentDisplay.RIGHT);
                                 pChange.setFont(priceF);
@@ -136,11 +136,13 @@ public class ClientBuyTasks {
             double[] history = StockHistory.getHistory(name);
             for (int i = 0; i < history.length; i++) {
                 if (history[i] == 0.0) {
-                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
+//                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
+                    return history[0] - history[i - 1];
                 }
 
             }
-            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
+//            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
+            return history[0]-history[history.length-1];
 
         }
     }

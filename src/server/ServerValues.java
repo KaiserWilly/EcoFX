@@ -16,11 +16,12 @@ public class ServerValues {
 
     public static void genServerData() {
         server.engine.EcoEngine.genereateData();
-        //StockHistory.addHistory(server.engine.EcoEngine.getData());
+        HashMap<String, Object> serverD = EcoEngine.getData();
+        StockHistory.addHistory(serverD);
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("SEC", secCount);
-        data.put("Market Data", EcoEngine.getData());
+        data.put("Market Data", serverD);
         data.put("Usernames", usernames);
         data.put("User Data", new HashMap<String, Object>());
 
