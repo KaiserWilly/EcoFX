@@ -32,7 +32,7 @@ public class ServerClientHandler extends Thread {
                     secCount = ServerValues.secCount;
                     System.out.println(secCount);
                     out.writeObject(ServerValues.serverData); //Writes The Stock Data To The Client
-                    out.reset(); //Resets the Output Stream to clear to avgMarData inside
+                    out.reset(); //Resets the Output Stream to clear to markData inside
 //                    HashMap<String, Object> userData = (HashMap<String, Object>) in.readObject(); //To be used later
 
 

@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -20,6 +21,7 @@ import rsc.Values;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * Created by james on 6/10/2016.
@@ -95,7 +97,7 @@ public class ClientBuyTasks {
                                 widgetPane.getChildren().add(pChange);
 
                                 Button lookin = new Button("Investigate");
-                                lookin.setOnAction(event -> currentStock = name);
+                                lookin.setOnAction(event -> ClientBuyGUI.graphS.changeName = name);
                                 lookin.setFont(buttonF);
                                 lookin.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
                                 lookin.setPrefSize(100, 25);
@@ -140,6 +142,44 @@ public class ClientBuyTasks {
             }
             return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
 
+        }
+    }
+
+    public static class graphService extends Service<Void> {
+        int count = 0;
+        public String changeName = "<Select Stock>";
+        private String name = "<Select Stock>";
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    updateMessage(name);
+                    Platform.runLater(() -> {
+                        if (Values.stockNamesNC.contains(name)) {
+                            double[] history = StockHistory.getHistory(name);
+                            ClientBuyGUI.markData.getData().remove(0, ClientBuyGUI.markData.getData().size());
+                            for (int i = 0; i < history.length; i++) {
+                                if (history[i] != 0.0)
+                                    ClientBuyGUI.markData.getData().add(new XYChart.Data<>(i * 2, history[i]));
+                            }
+                        }
+                    });
+                    while (count == Values.secCount && Objects.equals(changeName, name)) {
+                        Thread.sleep(10);
+                    }
+                    count = Values.secCount;
+                    name = changeName;
+                    return null;
+                }
+            };
+        }
+
+        @Override
+        protected void succeeded() {
+            reset();
+            start();
         }
     }
 }
