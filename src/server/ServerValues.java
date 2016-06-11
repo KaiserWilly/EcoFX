@@ -16,7 +16,7 @@ public class ServerValues {
 
     public static void genServerData() {
         server.engine.EcoEngine.genereateData();
-        StockHistory.addHistory(server.engine.EcoEngine.getData());
+        //StockHistory.addHistory(server.engine.EcoEngine.getData());
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("SEC", secCount);
