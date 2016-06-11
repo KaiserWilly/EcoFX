@@ -95,19 +95,6 @@ public class ClientOverviewGUI {
         AnchorPane.setRightAnchor(graphWidget, 280.0);
         graphPane.getChildren().add(graphWidget);
 
-
-        Label shares = new Label("Shares Available: 1,200,000");
-//        shares.setStyle("-fx-background-color: #ffffff;");
-        shares.setFont(aeroM14);
-        shares.setPrefSize(175, 23);
-        shares.setTextFill(Paint.valueOf("White"));
-        shares.setAlignment(Pos.BOTTOM_LEFT);
-        shares.setTextAlignment(TextAlignment.LEFT);
-        AnchorPane.setTopAnchor(shares, 27.0);
-        AnchorPane.setLeftAnchor(shares, 15.0);
-        graphPane.getChildren().add(shares);
-
-
         NumberAxis xAxis = new NumberAxis(0.0, 30.0, 2.0);
         NumberAxis yAxis = new NumberAxis(25.0, 30.0, 1.0);
         xAxis.setLabel("Time (sec)");
@@ -219,7 +206,7 @@ public class ClientOverviewGUI {
         );
 
         String[] columnNames = new String[]{"Rank", "Trades", "Name", "Assets", "Asset Change over 30s"};
-        String[] propertyValue = new String[]{"rank", "trades", "name", "assets", "assetChange"};
+        String[] propertyValue = new String[]{"rank", "trades", "changeName", "assets", "assetChange"};
         int[] columnWidth = new int[]{50, 50, 125, 75, 163};
 
         TableView<playerRank> rankView = new TableView<>();

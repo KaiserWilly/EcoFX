@@ -122,10 +122,10 @@ public class ServerTasks {
                     updateMessage(name);
                     Platform.runLater(() -> {
                         double[] history = StockHistory.getHistory(name);
-                        ServerGUI.avgMarData.getData().remove(0, ServerGUI.avgMarData.getData().size());
+                        ServerGUI.markData.getData().remove(0, ServerGUI.markData.getData().size());
                         for (int i = 0; i < history.length; i++) {
                             if (history[i] != 0.0)
-                                ServerGUI.avgMarData.getData().add(new XYChart.Data<>(i * 2, history[i]));
+                                ServerGUI.markData.getData().add(new XYChart.Data<>(i * 2, history[i]));
                         }
                     });
                     while (count == ServerValues.secCount && Objects.equals(name, Values.currentStockName)) {

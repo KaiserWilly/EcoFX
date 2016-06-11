@@ -9,13 +9,17 @@ import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.chart.*;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -24,7 +28,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import rsc.Values;
 
-import java.net.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 /**
  * Created by james on 4/4/2016.
@@ -52,7 +57,7 @@ public class ServerGUI extends Application {
     private static ServerTasks.playerLabelService plaLaS = new ServerTasks.playerLabelService();
     public static initializerService iniS = new initializerService();
     public static ServerTasks.graphService graS = new ServerTasks.graphService();
-    public static XYChart.Series<Number, Number> avgMarData = new XYChart.Series<>();
+    public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
     public static LineChart<Number, Number> marketTrend;
     public static NumberAxis yAxis;
 
@@ -96,7 +101,7 @@ public class ServerGUI extends Application {
         marketTrend = new LineChart<>(xAxis, yAxis);
         marketTrend.setAnimated(false);
         marketTrend.getStylesheets().add("rsc/StylesheetCharts.css");
-        marketTrend.getData().add(avgMarData);
+        marketTrend.getData().add(markData);
         marketTrend.setPrefSize(590, 200);
         marketTrend.setCreateSymbols(true);
         marketTrend.setLegendVisible(false);
