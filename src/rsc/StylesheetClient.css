@@ -1,0 +1,10 @@
+.tool-bar {
+      -fx-font-size: 12pt;
+
+  }
+  #footer{
+   -fx-background-color: #333333;
+   }
+   #header{
+   -fx-background-color: transparent, transparent, transparent, transparent;
+   }
