@@ -15,7 +15,7 @@ public class StockHistory {
         ArrayList<String> stockN = (ArrayList<String>) stockMap.get("Names");
         for (i = 0; i < stockN.size(); i++) {
             String name = stockN.get(i);
-            Object[] stock = (Object[]) stockMap.get(stockN.get(i));
+            Object[] stock = (Object[]) stockMap.get(name);
             if (!stockHistory.containsKey(name)) {
                 Values.stockNames.add(name);
                 Values.stockNamesNC.add(name);

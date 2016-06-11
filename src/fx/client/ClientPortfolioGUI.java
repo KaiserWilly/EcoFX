@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -28,7 +30,7 @@ public class ClientPortfolioGUI {
 
     public AnchorPane createPane() {
         portfolioAnchorPane.setPrefSize(980, 490);
-        portfolioAnchorPane.getChildren().add(stockPane());
+        portfolioAnchorPane.getChildren().add(tabbedPane());
 //        portfolioAnchorPane.getChildren().add(graphPane());
 
 
@@ -37,9 +39,25 @@ public class ClientPortfolioGUI {
         return portfolioAnchorPane;
     }
 
-    public AnchorPane stockPane() {
+    public AnchorPane tabbedPane(){
+
         AnchorPane tabPane = new AnchorPane();
+        tabPane.setPrefSize(450,478);
         AnchorPane.setTopAnchor(tabPane, 0.0);
+        AnchorPane.setRightAnchor(tabPane, 0.0);
+
+        TabPane tab = new TabPane();
+//        tab.setPrefSize();
+
+        Tab port = new Tab("Portfolio");
+        port.setContent(stockPane());
+
+
+        return new AnchorPane();
+    }
+    public AnchorPane stockPane() {
+
+
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         stockPane.setPrefSize(450.0, 478.0);
@@ -79,7 +97,7 @@ public class ClientPortfolioGUI {
 
         ScrollPane sPane = new ScrollPane();
         sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
-        sPane.setPrefSize(440.0, 460.0);
+        sPane.setPrefSize(440.0, 418.0);
         sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sPane.setFitToWidth(true);
         sPane.setContent(stockWidget());

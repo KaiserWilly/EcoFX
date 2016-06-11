@@ -36,7 +36,7 @@ public class EcoEngine {
     }
 
     public static void genereateData() {
-        EcoEngine.simulateStocks(stockInfo);
+        EcoEngine.simulateStocks();
     }
 
 //    public static void generatePotentialStockEvent() {
@@ -44,19 +44,19 @@ public class EcoEngine {
 //    }
 
 
-
     public static void createStocks() { //Creates a certain number of stocks, with certain information input into them
         stockInfo = new HashMap<>();
-        Object[] stockdata = new Object[7];
+
         List<String> stockNames = new ArrayList<>();
-        String stockName;
         double stockPrice;
         int volitility, trend;
+
         boolean isTrending = false;
         int trendingUp = 0, trendDuration = 0;
         Random stockRandomizer = new Random();
         for (int i = 0; i < numberOfStocks; i++) {
-            stockName = "";
+            Object[] stockdata = new Object[7];
+            String stockName = "";
             for (int j = 0; j <= 3; j++) {
                 int number = stockRandomizer.nextInt(26 + 1); //26 letters in the alphabet, but the Random function does the number inputted minus 1.
                 if (number == 1) {
@@ -113,8 +113,8 @@ public class EcoEngine {
                     stockName = stockName + "Z";
                 }
             }
-            stockPrice = stockRandomizer.nextDouble() * 50; // Generates a random number between 0 and 50.
-            stockPrice = (double) Math.round(stockPrice * 100) / 100; //Rounds the random value to the hundredths place.
+            stockPrice = stockRandomizer.nextDouble() * (double) 50; // Generates a random number between 0 and 50.
+            stockPrice = (double) Math.round(stockPrice * (double) 100) / (double) 100; //Rounds the random value to the hundredths place.
             volitility = stockRandomizer.nextInt(100 + 1); //Generates a random number from 1 to 100
             trend = stockRandomizer.nextInt(100 + 1);
 
@@ -127,21 +127,21 @@ public class EcoEngine {
             stockdata[6] = trendDuration;
 
             stockInfo.put(stockName, stockdata);
-            stockNames.add(stockdata[0].toString());
+            stockNames.add((String) stockdata[0]);
         }
         stockInfo.put("Names", stockNames);
     }
 
-    public static void simulateStocks(HashMap stockData) { //Simulating the stocks by randomly changing random stock values
+    public static void simulateStocks() { //Simulating the stocks by randomly changing random stock values
         Integer stockVolatility;
         Double originalStockPrice = 0.0;
         Double newStockPrice = 0.0;
-        ArrayList stockNames = (ArrayList) stockData.get("Names");
-        Object[] stockInput;
+        ArrayList stockNames = (ArrayList) stockInfo.get("Names");
+        System.out.println(String.valueOf(stockNames));
         Random stockChangeParameter = new Random(); //Sets the parameter against the volatility is checked to see if there is a change in stock value
-        for (int i = 0; i < numberOfStocks; i++) {
+        for (int i = 0; i < stockNames.size(); i++) {
 //            System.out.println("Volatility Value of Stock: " + String.valueOf(stockInput[i][2]));
-            stockInput = (Object[]) stockData.get(stockNames.get(i));
+            Object[] stockInput = (Object[]) stockInfo.get(((ArrayList<String>) stockInfo.get("Names")).get(i));
             stockVolatility = Integer.parseInt(String.valueOf(stockInput[2]));
             if (Boolean.getBoolean(String.valueOf(stockInput[4]))) { //Changes the price of the stock if it is trending
                 if (stockVolatility <= stockChangeParameter.nextInt(100 + 1)) {
@@ -204,10 +204,10 @@ public class EcoEngine {
                     }
                 }
             }
-            stockInfo.put(String.valueOf(stockNames.get(i)), stockInput);
+            stockInfo.replace(String.valueOf(stockNames.get(i)), stockInput);
         }
         for (int i = 0; i < numberOfStocks; i++) {
-            stockInput = (Object[]) stockData.get(stockNames.get(i));
+            Object[] stockInput = (Object[]) stockInfo.get(stockNames.get(i));
             if (Double.parseDouble(stockInput[1].toString()) < 0.01) {
                 stockInput[1] = 0.01;
             }
