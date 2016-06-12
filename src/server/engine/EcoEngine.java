@@ -137,7 +137,6 @@ public class EcoEngine {
         Double originalStockPrice = 0.0;
         Double newStockPrice = 0.0;
         ArrayList stockNames = (ArrayList) stockInfo.get("Names");
-        System.out.println(String.valueOf(stockNames));
         Random stockChangeParameter = new Random(); //Sets the parameter against the volatility is checked to see if there is a change in stock value
         for (int i = 0; i < stockNames.size(); i++) {
 //            System.out.println("Volatility Value of Stock: " + String.valueOf(stockInput[i][2]));

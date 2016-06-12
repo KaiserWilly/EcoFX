@@ -48,8 +48,8 @@ public class ClientSellTasks {
                         Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                         Platform.runLater(() -> {
                             double height = 0.0;
-                            if (ClientBuyGUI.stockWidget.getChildren().size() > 0) {
-                                ClientBuyGUI.stockWidget.getChildren().remove(0, ClientBuyGUI.stockWidget.getChildren().size());
+                            if (ClientSellGUI.stockWidget.getChildren().size() > 0) {
+                                ClientSellGUI.stockWidget.getChildren().remove(0, ClientSellGUI.stockWidget.getChildren().size());
                             }
 
                             for (String name : stockNames) {
@@ -111,7 +111,7 @@ public class ClientSellTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientBuyGUI.stockWidget.getChildren().add(widgetPane);
+                                ClientSellGUI.stockWidget.getChildren().add(widgetPane);
                             }
                         });
                     }
@@ -159,10 +159,10 @@ public class ClientSellTasks {
                     Platform.runLater(() -> {
                         if (Values.stockNamesNC.contains(name)) {
                             double[] history = StockHistory.getHistory(name);
-                            ClientBuyGUI.markData.getData().remove(0, ClientBuyGUI.markData.getData().size());
+                            ClientSellGUI.markData.getData().remove(0, ClientSellGUI.markData.getData().size());
                             for (int i = 0; i < history.length; i++) {
                                 if (history[i] != 0.0)
-                                    ClientBuyGUI.markData.getData().add(new XYChart.Data<>(i * 2, history[i]));
+                                    ClientSellGUI.markData.getData().add(new XYChart.Data<>(i * 2, history[i]));
                             }
                         }
                     });

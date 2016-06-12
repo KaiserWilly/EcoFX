@@ -18,7 +18,7 @@ import javafx.util.Duration;
  */
 public class ClientPortfolioGUI {
     public AnchorPane portfolioAnchorPane = new AnchorPane();
-    public static AnchorPane stockWidget = new AnchorPane();
+    public static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane();
     Font aeroMI30 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
     Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
     Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
@@ -31,7 +31,6 @@ public class ClientPortfolioGUI {
     public AnchorPane createPane() {
         portfolioAnchorPane.setPrefSize(980, 490);
         portfolioAnchorPane.getChildren().add(tabbedPane());
-//        portfolioAnchorPane.getChildren().add(graphPane());
 
 
         portfolioAnchorPane.managedProperty().bind(portfolioAnchorPane.visibleProperty());
@@ -39,24 +38,39 @@ public class ClientPortfolioGUI {
         return portfolioAnchorPane;
     }
 
-    public AnchorPane tabbedPane(){
+    public AnchorPane tabbedPane() {
 
         AnchorPane tabPane = new AnchorPane();
-        tabPane.setPrefSize(450,478);
-        AnchorPane.setTopAnchor(tabPane, 0.0);
-        AnchorPane.setRightAnchor(tabPane, 0.0);
-
-        TabPane tab = new TabPane();
-//        tab.setPrefSize();
+        tabPane.setPrefSize(450, 478);
+        AnchorPane.setTopAnchor(tabPane, 5.0);
+        AnchorPane.setLeftAnchor(tabPane, 5.0);
 
         Tab port = new Tab("Portfolio");
-        port.setContent(stockPane());
+        port.setContent(portfolioPane());
+
+        Tab buy = new Tab("Buy Orders");
+        buy.setContent(buyOrderPane());
+
+        Tab sell = new Tab("Sell Orders");
+        sell.setContent(sellOrderPane());
+
+        TabPane tab = new TabPane();
+        tab.getStylesheets().add("/rsc/StylesheetTabPane.css");
+        tab.setPrefSize(450, 478);
+        AnchorPane.setTopAnchor(tab, 0.0);
+        AnchorPane.setLeftAnchor(tab, 0.0);
+
+        tab.getTabs().add(port);
+        tab.getTabs().add(buy);
+        tab.getTabs().add(sell);
+
+        tabPane.getChildren().add(tab);
 
 
-        return new AnchorPane();
+        return tabPane;
     }
-    public AnchorPane stockPane() {
 
+    public AnchorPane portfolioPane() {
 
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
@@ -100,20 +114,140 @@ public class ClientPortfolioGUI {
         sPane.setPrefSize(440.0, 418.0);
         sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sPane.setFitToWidth(true);
-        sPane.setContent(stockWidget());
+        sPane.setContent(portfolioWidget());
         AnchorPane.setTopAnchor(sPane, 10.0);
         AnchorPane.setLeftAnchor(sPane, 5.0);
         stockPane.getChildren().add(sPane);
         return stockPane;
     }
 
-    public AnchorPane stockWidget() {
-        stockWidget.setPrefSize(440, 1725);
-        AnchorPane.setTopAnchor(stockWidget, 0.0);
-        AnchorPane.setLeftAnchor(stockWidget, 0.0);
+    public AnchorPane portfolioWidget() {
+        portfolioWidget.setPrefSize(440, 1725);
+        AnchorPane.setTopAnchor(portfolioWidget, 0.0);
+        AnchorPane.setLeftAnchor(portfolioWidget, 0.0);
         ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
         widS.start();
-        return stockWidget;
+        return portfolioWidget;
+    }
+
+    public AnchorPane buyOrderPane() {
+
+        AnchorPane stockPane = new AnchorPane();
+        stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
+        stockPane.setPrefSize(450.0, 478.0);
+        AnchorPane.setTopAnchor(stockPane, 5.0);
+        AnchorPane.setLeftAnchor(stockPane, 5.0);
+
+
+        Label title = new Label("STOCK NAME");
+        title.setFont(aeroMI10);
+        title.setPrefSize(75, 10);
+        title.setTextFill(Paint.valueOf("White"));
+        title.setAlignment(Pos.CENTER);
+        title.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(title, -1.0);
+        AnchorPane.setLeftAnchor(title, 5.0);
+        stockPane.getChildren().add(title);
+
+        Label price = new Label("STOCK PRICE");
+        price.setFont(aeroMI10);
+        price.setPrefSize(75, 10);
+        price.setTextFill(Paint.valueOf("White"));
+        price.setAlignment(Pos.CENTER);
+        price.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(price, -1.0);
+        AnchorPane.setLeftAnchor(price, 105.0);
+        stockPane.getChildren().add(price);
+
+        Label change = new Label("CHANGE OVER 30S");
+        change.setFont(aeroMI10);
+        change.setPrefSize(75, 10);
+        change.setTextFill(Paint.valueOf("White"));
+        change.setAlignment(Pos.CENTER);
+        change.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(change, -1.0);
+        AnchorPane.setLeftAnchor(change, 200.0);
+        stockPane.getChildren().add(change);
+
+        ScrollPane sPane = new ScrollPane();
+        sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        sPane.setPrefSize(440.0, 418.0);
+        sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sPane.setFitToWidth(true);
+        sPane.setContent(portfolioWidget());
+        AnchorPane.setTopAnchor(sPane, 10.0);
+        AnchorPane.setLeftAnchor(sPane, 5.0);
+        stockPane.getChildren().add(sPane);
+        return stockPane;
+    }
+
+    public AnchorPane buyOrderWidget() {
+        buyOrderWidget.setPrefSize(440, 1725);
+        AnchorPane.setTopAnchor(buyOrderWidget, 0.0);
+        AnchorPane.setLeftAnchor(buyOrderWidget, 0.0);
+        ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
+        widS.start();
+        return buyOrderWidget;
+    }
+
+    public AnchorPane sellOrderPane() {
+
+        AnchorPane stockPane = new AnchorPane();
+        stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
+        stockPane.setPrefSize(450.0, 478.0);
+        AnchorPane.setTopAnchor(stockPane, 5.0);
+        AnchorPane.setLeftAnchor(stockPane, 5.0);
+
+
+        Label title = new Label("STOCK NAME");
+        title.setFont(aeroMI10);
+        title.setPrefSize(75, 10);
+        title.setTextFill(Paint.valueOf("White"));
+        title.setAlignment(Pos.CENTER);
+        title.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(title, -1.0);
+        AnchorPane.setLeftAnchor(title, 5.0);
+        stockPane.getChildren().add(title);
+
+        Label price = new Label("STOCK PRICE");
+        price.setFont(aeroMI10);
+        price.setPrefSize(75, 10);
+        price.setTextFill(Paint.valueOf("White"));
+        price.setAlignment(Pos.CENTER);
+        price.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(price, -1.0);
+        AnchorPane.setLeftAnchor(price, 105.0);
+        stockPane.getChildren().add(price);
+
+        Label change = new Label("CHANGE OVER 30S");
+        change.setFont(aeroMI10);
+        change.setPrefSize(75, 10);
+        change.setTextFill(Paint.valueOf("White"));
+        change.setAlignment(Pos.CENTER);
+        change.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(change, -1.0);
+        AnchorPane.setLeftAnchor(change, 200.0);
+        stockPane.getChildren().add(change);
+
+        ScrollPane sPane = new ScrollPane();
+        sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        sPane.setPrefSize(440.0, 418.0);
+        sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sPane.setFitToWidth(true);
+        sPane.setContent(portfolioWidget());
+        AnchorPane.setTopAnchor(sPane, 10.0);
+        AnchorPane.setLeftAnchor(sPane, 5.0);
+        stockPane.getChildren().add(sPane);
+        return stockPane;
+    }
+
+    public AnchorPane sellOrderWidget() {
+        sellOrderWidget.setPrefSize(440, 1725);
+        AnchorPane.setTopAnchor(sellOrderWidget, 0.0);
+        AnchorPane.setLeftAnchor(sellOrderWidget, 0.0);
+        ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
+        widS.start();
+        return sellOrderWidget;
     }
 
     public void setOpacity(double opacity) {
