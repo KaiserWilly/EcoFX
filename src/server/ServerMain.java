@@ -2,7 +2,9 @@ package server;
 
 import rsc.Values;
 
-import java.net.*;
+import java.net.BindException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Created 12/27/15
@@ -13,7 +15,7 @@ import java.net.*;
 public class ServerMain {
     static Boolean serverGo = true;
     public static void startServer() {
-        int ID = 1;
+        int ID = 0;
 
         try {
             ServerFile.showTimeStamp("Starting Server");

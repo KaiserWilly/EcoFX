@@ -15,8 +15,6 @@ import javafx.util.Duration;
 import rsc.StockHistory;
 import rsc.StockManagement;
 
-import java.text.DecimalFormat;
-
 /**
  * Created by james on 4/29/2016.
  */
@@ -171,10 +169,6 @@ public class ClientBuyGUI {
         buySlider.setMajorTickUnit((int) buySlider.getMax() / 5);
         buySlider.setMinorTickCount(5);
         buySlider.setBlockIncrement((int) buySlider.getMax() / 50);
-        DecimalFormat money = new DecimalFormat("#,###,###,###,##0");
-//        buySlider.setOnDragDetected(event -> buyL.setText("Buy: " + money.format(buySlider.getValue()) + " Shares"));
-//        buySlider.setOnDragDone(event -> buyL.setText("Buy: " + money.format(buySlider.getValue()) + " Shares"));
-//        buySlider.setOnDragOver(event -> buyL.setText("Buy: " + money.format(buySlider.getValue()) + " Shares"));
         buyL.textProperty().bind(Bindings.format("Buy: %.0f Shares", buySlider.valueProperty()));
         AnchorPane.setTopAnchor(buySlider, 225.0);
         AnchorPane.setLeftAnchor(buySlider, 5.0);
@@ -184,28 +178,28 @@ public class ClientBuyGUI {
         String buttonStyle = "-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;";
 
 
-        TextField buyPrice = new TextField();
-        buyPrice.setPrefSize(100, 25);
-        buyPrice.setAlignment(Pos.CENTER);
-        buyPrice.setFont(aeroMI14);
-        AnchorPane.setLeftAnchor(buyPrice, 125.0);
-        AnchorPane.setBottomAnchor(buyPrice, 50.0);
-        graphWidget.getChildren().add(buyPrice);
+        TextField sellOrderPrice = new TextField();
+        sellOrderPrice.setPrefSize(100, 25);
+        sellOrderPrice.setAlignment(Pos.CENTER);
+        sellOrderPrice.setFont(aeroMI14);
+        AnchorPane.setLeftAnchor(sellOrderPrice, 125.0);
+        AnchorPane.setBottomAnchor(sellOrderPrice, 50.0);
+        graphWidget.getChildren().add(sellOrderPrice);
 
 
-        CheckBox buyOrder = new CheckBox("Buy Order");
-        buyOrder.setSelected(false);
-        buyPrice.editableProperty().bind(buyOrder.selectedProperty());
-        buyOrder.setOnAction(event -> {
-            if (!buyOrder.isSelected()) buyPrice.setText("");
+        CheckBox buyOrderCB = new CheckBox("Buy Order");
+        buyOrderCB.setSelected(false);
+        sellOrderPrice.editableProperty().bind(buyOrderCB.selectedProperty());
+        buyOrderCB.setOnAction(event -> {
+            if (!buyOrderCB.isSelected()) sellOrderPrice.setText("");
         });
-        buyOrder.setPrefSize(100, 25);
-        buyOrder.setTextFill(Paint.valueOf("White"));
-        buyOrder.setAlignment(Pos.CENTER);
-        buyOrder.setFont(aeroMI14);
-        AnchorPane.setLeftAnchor(buyOrder, 25.0);
-        AnchorPane.setBottomAnchor(buyOrder, 50.0);
-        graphWidget.getChildren().add(buyOrder);
+        buyOrderCB.setPrefSize(100, 25);
+        buyOrderCB.setTextFill(Paint.valueOf("White"));
+        buyOrderCB.setAlignment(Pos.CENTER);
+        buyOrderCB.setFont(aeroMI14);
+        AnchorPane.setLeftAnchor(buyOrderCB, 25.0);
+        AnchorPane.setBottomAnchor(buyOrderCB, 50.0);
+        graphWidget.getChildren().add(buyOrderCB);
 
 
         Button buyB = new Button("Buy");
@@ -218,14 +212,16 @@ public class ClientBuyGUI {
             int quantity = (int) Math.floor(buySlider.getValue());
             double pps = StockHistory.getPrice(name);
 
-            if (buyOrder.isSelected()) {
-                pps = Double.parseDouble(buyPrice.getText().replaceAll("[^0-9.]", ""));
+            if (buyOrderCB.isSelected()) {
+                pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
                 StockManagement.setBuyOrder(name, quantity, pps);
             } else {
                 StockManagement.buyStock(name, quantity, pps, false);
             }
-            buyPrice.setText("");
+            sellOrderPrice.setText("");
             buySlider.setValue(0);
+            buyOrderCB.setSelected(false);
+
         });
         AnchorPane.setBottomAnchor(buyB, 5.0);
         AnchorPane.setRightAnchor(buyB, 5.0);

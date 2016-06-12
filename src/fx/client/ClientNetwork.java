@@ -1,5 +1,6 @@
 package fx.client;
 
+import rsc.PlayerManagement;
 import rsc.StockHistory;
 import rsc.StockManagement;
 import rsc.Values;
@@ -37,7 +38,7 @@ public class ClientNetwork {
 
     static HashMap<String, Object> getUserData() {
         HashMap<String, Object> playerData = new HashMap<>();
-        playerData.put("Name", "The Kaiser");
+        playerData.put("Name", PlayerManagement.name);
         playerData.put("Trades", 255);
         playerData.put("Assets", 135750);
         return playerData;

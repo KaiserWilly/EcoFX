@@ -1,6 +1,5 @@
 package fx;
 
-import com.sun.corba.se.spi.activation.Server;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -13,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import rsc.PlayerManagement;
 import rsc.Values;
 
 import java.net.InetAddress;
@@ -59,6 +59,24 @@ public class MenuSubGUI {
                 VBox.setMargin(ipBox, new Insets(0, 0, 0, 65));
 
 
+                HBox usernameBox = new HBox();
+                usernameBox.setPrefSize(250, 30);
+                usernameBox.setSpacing(5);
+                Label UNL = new Label("Name:");
+                UNL.setFont(aeroMI18);
+                UNL.setAlignment(Pos.CENTER_RIGHT);
+                UNL.setPrefSize(145, 30);
+                UNL.setTextFill(Paint.valueOf("White"));
+                usernameBox.getChildren().add(UNL);
+                TextField username = new TextField();
+                username.setPrefSize(150, 30);
+                username.setFont(aeroMI18);
+                username.setAlignment(Pos.CENTER);
+                usernameBox.getChildren().add(username);
+                base.getChildren().add(usernameBox);
+                VBox.setMargin(usernameBox, new Insets(0, 0, 0, 65));
+
+
                 Button jServer = new Button();
                 jServer.setBackground(null);
                 jServer.setBorder(null);
@@ -69,6 +87,7 @@ public class MenuSubGUI {
                     if (ip.getText().length() > 0) {
                         Values.ip = ip.getText();
                     }
+                    PlayerManagement.name = username.getText();
                     System.out.println("Going to join a game with the IP address: " + Values.ip);
                     FrameGUI.setScene("Client");
                 });

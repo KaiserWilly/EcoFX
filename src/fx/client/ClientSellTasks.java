@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import rsc.PlayerManagement;
 import rsc.StockHistory;
 import rsc.StockManagement;
 import rsc.Values;
@@ -171,6 +172,40 @@ public class ClientSellTasks {
                     }
                     count = Values.secCount;
                     name = changeName;
+                    return null;
+                }
+            };
+        }
+
+        @Override
+        protected void succeeded() {
+            reset();
+            start();
+        }
+    }
+    public static class sliderService extends Service<Void> {
+        int count = 0;
+        private String name = "<Select Stock>";
+        double max;
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    ArrayList<String> stockN = Values.stockNamesNC;
+                    Platform.runLater(() -> {
+                        if (stockN.contains(name)) {
+                            ClientSellGUI.sellSlider.setMajorTickUnit((int) PlayerManagement.getMoney() / StockHistory.getPrice(name));
+                            ClientSellGUI.sellSlider.setMax(Math.floor(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
+                        } else {
+                            ClientSellGUI.sellSlider.setMax(0);
+                        }
+                    });
+                    while (name.equals(ClientSellGUI.graphS.changeName)) {
+                        Thread.sleep(50);
+                    }
+                    name = ClientSellGUI.graphS.changeName;
                     return null;
                 }
             };

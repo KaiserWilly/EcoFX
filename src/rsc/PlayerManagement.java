@@ -5,6 +5,7 @@ package rsc;
  */
 public class PlayerManagement {
     private static double playerMoney = 100000.00;
+    public static String name = "BillyBob";
 
     public static void subtractMoney(double money) {
         if (money > playerMoney) {
