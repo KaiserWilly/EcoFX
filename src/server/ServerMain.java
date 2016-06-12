@@ -5,6 +5,7 @@ import rsc.Values;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created 12/27/15
@@ -14,6 +15,7 @@ import java.net.Socket;
  */
 public class ServerMain {
     static Boolean serverGo = true;
+
     public static void startServer() {
         int ID = 0;
 

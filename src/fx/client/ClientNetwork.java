@@ -7,7 +7,10 @@ import rsc.Values;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -24,12 +27,25 @@ public class ClientNetwork {
             ObjectInputStream in = new ObjectInputStream(is);
             System.out.println("Permanent Connection Made!");
 
+            OutputStream outputStream = clientSocket.getOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(outputStream);
+
             while (true) {
                 HashMap<String, Object> serverData = (HashMap<String, Object>) in.readObject();
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
                 StockManagement.checkOrders();
+
+                ArrayList<String> names = (ArrayList<String>)serverData.get("Usernames");
+
+                for (int i = 0; i < names.size(); i++) {
+                    System.out.println(names.get(i));
+                }
+
                 Values.secCount = (int) serverData.get("SEC");
                 System.out.println(Values.secCount);
+
+                out.writeObject(getUserData());
+
             }
         } catch (Exception e) {
             System.out.println("Failed to Connect!");
