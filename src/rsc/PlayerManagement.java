@@ -16,4 +16,8 @@ public class PlayerManagement {
     public static void addMoney(double money) {
         playerMoney += money;
     }
+
+    public static double getMoney() {
+        return playerMoney;
+    }
 }

@@ -26,6 +26,7 @@ public class ClientSellGUI {
     Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
     public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
     public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    boolean opened = false;
 
     public AnchorPane createPane() {
         sellAnchorPane.setPrefSize(980, 490);
@@ -212,6 +213,10 @@ public class ClientSellGUI {
     }
 
     public void open() {
+        if(!opened){
+            graphS.start();
+            opened = true;
+        }
         sellAnchorPane.setVisible(true);
         FadeTransition in = new FadeTransition(Duration.millis(250), sellAnchorPane);
         in.setFromValue(0.0);

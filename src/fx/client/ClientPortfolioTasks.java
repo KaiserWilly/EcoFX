@@ -46,8 +46,8 @@ public class ClientPortfolioTasks {
                         Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                         Platform.runLater(() -> {
                             double height = 0.0;
-                            if (ClientBuyGUI.stockWidget.getChildren().size() > 0) {
-                                ClientBuyGUI.stockWidget.getChildren().remove(0, ClientBuyGUI.stockWidget.getChildren().size());
+                            if (ClientPortfolioGUI.portfolioWidget.getChildren().size() > 0) {
+                                ClientPortfolioGUI.portfolioWidget.getChildren().remove(0, ClientPortfolioGUI.portfolioWidget.getChildren().size());
                             }
 
                             for (String name : stockNames) {
@@ -77,25 +77,25 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(price, 100.0);
                                 widgetPane.getChildren().add(price);
 
-                                double pC = getPChange(name);
+                                double net = getNetChange(name);
                                 Label pChange;
-                                if (pC < 0.0) {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+                                if (net < 0.0) {
+                                    pChange = new Label(money.format(Math.abs(net)), new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
                                 } else {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                                    pChange = new Label(money.format(Math.abs(net)), new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
                                 }
                                 pChange.setContentDisplay(ContentDisplay.RIGHT);
                                 pChange.setFont(priceF);
                                 pChange.setTextFill(Paint.valueOf("White"));
-                                pChange.setPrefSize(75.0, 35.0);
+                                pChange.setPrefSize(150.0, 35.0);
                                 pChange.setTextAlignment(TextAlignment.CENTER);
                                 pChange.setAlignment(Pos.CENTER);
                                 AnchorPane.setTopAnchor(pChange, 0.0);
-                                AnchorPane.setLeftAnchor(pChange, 200.0);
+                                AnchorPane.setLeftAnchor(pChange, 163.0);
                                 widgetPane.getChildren().add(pChange);
 
                                 Button lookin = new Button("Investigate");
-                                lookin.setOnAction(event -> ClientSellGUI.graphS.changeName = name);
+//                                lookin.setOnAction(event -> ClientSellGUI.graphS.changeName = name);
                                 lookin.setFont(buttonF);
                                 lookin.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
                                 lookin.setPrefSize(100, 25);
@@ -109,7 +109,7 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientBuyGUI.stockWidget.getChildren().add(widgetPane);
+                                ClientPortfolioGUI.portfolioWidget.getChildren().add(widgetPane);
                             }
                         });
                     }
@@ -130,15 +130,11 @@ public class ClientPortfolioTasks {
             start();
         }
 
-        double getPChange(String name) {
-            double[] history = StockHistory.getHistory(name);
-            for (int i = 0; i < history.length; i++) {
-                if (history[i] == 0.0) {
-                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
-                }
-
-            }
-            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
+        double getNetChange(String name) {
+            double cPrice = StockHistory.getPrice(name);
+            double orgPrice = StockManagement.getOrgPrice(name);
+            int qty = StockManagement.getOwnedQty(name);
+            return ((cPrice * (double) qty) - (orgPrice * (double) qty));
 
         }
     }
@@ -157,13 +153,13 @@ public class ClientPortfolioTasks {
                 @Override
                 protected Void call() throws Exception {
 
-                    ArrayList<String> stockNames = StockManagement.ownedStockN;
+                    ArrayList<String> stockNames = StockManagement.buyOrderN;
                     if (stockNames.size() > 0) {
                         Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                         Platform.runLater(() -> {
                             double height = 0.0;
-                            if (ClientBuyGUI.stockWidget.getChildren().size() > 0) {
-                                ClientBuyGUI.stockWidget.getChildren().remove(0, ClientBuyGUI.stockWidget.getChildren().size());
+                            if (ClientPortfolioGUI.buyOrderWidget.getChildren().size() > 0) {
+                                ClientPortfolioGUI.buyOrderWidget.getChildren().remove(0, ClientPortfolioGUI.buyOrderWidget.getChildren().size());
                             }
 
                             for (String name : stockNames) {
@@ -193,25 +189,18 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(price, 100.0);
                                 widgetPane.getChildren().add(price);
 
-                                double pC = getPChange(name);
-                                Label pChange;
-                                if (pC < 0.0) {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
-                                } else {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
-                                }
-                                pChange.setContentDisplay(ContentDisplay.RIGHT);
+                                Label pChange = new Label(money.format(StockManagement.buyOrderTargetPPS(name)));
                                 pChange.setFont(priceF);
                                 pChange.setTextFill(Paint.valueOf("White"));
                                 pChange.setPrefSize(75.0, 35.0);
                                 pChange.setTextAlignment(TextAlignment.CENTER);
                                 pChange.setAlignment(Pos.CENTER);
-                                AnchorPane.setTopAnchor(pChange, 0.0);
+                                AnchorPane.setTopAnchor(price, 0.0);
                                 AnchorPane.setLeftAnchor(pChange, 200.0);
                                 widgetPane.getChildren().add(pChange);
 
                                 Button lookin = new Button("Investigate");
-                                lookin.setOnAction(event -> ClientSellGUI.graphS.changeName = name);
+//                                lookin.setOnAction(event -> ClientSellGUI.graphS.changeName = name);
                                 lookin.setFont(buttonF);
                                 lookin.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
                                 lookin.setPrefSize(100, 25);
@@ -225,7 +214,7 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientBuyGUI.stockWidget.getChildren().add(widgetPane);
+                                ClientPortfolioGUI.buyOrderWidget.getChildren().add(widgetPane);
                             }
                         });
                     }
@@ -235,9 +224,7 @@ public class ClientPortfolioTasks {
                     count = Values.secCount;
                     return null;
                 }
-            }
-
-                    ;
+            };
         }
 
         @Override
@@ -245,19 +232,8 @@ public class ClientPortfolioTasks {
             reset();
             start();
         }
-
-        double getPChange(String name) {
-            double[] history = StockHistory.getHistory(name);
-            for (int i = 0; i < history.length; i++) {
-                if (history[i] == 0.0) {
-                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
-                }
-
-            }
-            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
-
-        }
     }
+
     public static class sellOrderService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
         DecimalFormat perc = new DecimalFormat("#,##0.0");
@@ -277,8 +253,8 @@ public class ClientPortfolioTasks {
                         Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                         Platform.runLater(() -> {
                             double height = 0.0;
-                            if (ClientBuyGUI.stockWidget.getChildren().size() > 0) {
-                                ClientBuyGUI.stockWidget.getChildren().remove(0, ClientBuyGUI.stockWidget.getChildren().size());
+                            if (ClientPortfolioGUI.sellOrderWidget.getChildren().size() > 0) {
+                                ClientPortfolioGUI.sellOrderWidget.getChildren().remove(0, ClientPortfolioGUI.sellOrderWidget.getChildren().size());
                             }
 
                             for (String name : stockNames) {
@@ -308,7 +284,7 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(price, 100.0);
                                 widgetPane.getChildren().add(price);
 
-                                double pC = getPChange(name);
+                                double pC = getPProfit(name);
                                 Label pChange;
                                 if (pC < 0.0) {
                                     pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
@@ -326,7 +302,7 @@ public class ClientPortfolioTasks {
                                 widgetPane.getChildren().add(pChange);
 
                                 Button lookin = new Button("Investigate");
-                                lookin.setOnAction(event -> ClientSellGUI.graphS.changeName = name);
+//                                lookin.setOnAction(event -> ClientSellGUI.graphS.changeName = name);
                                 lookin.setFont(buttonF);
                                 lookin.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
                                 lookin.setPrefSize(100, 25);
@@ -340,7 +316,7 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientBuyGUI.stockWidget.getChildren().add(widgetPane);
+                                ClientPortfolioGUI.sellOrderWidget.getChildren().add(widgetPane);
                             }
                         });
                     }
@@ -361,16 +337,12 @@ public class ClientPortfolioTasks {
             start();
         }
 
-        double getPChange(String name) {
-            double[] history = StockHistory.getHistory(name);
-            for (int i = 0; i < history.length; i++) {
-                if (history[i] == 0.0) {
-                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
-                }
+        double getPProfit(String name) {
+            Object[] orderData = StockManagement.buyOrderNameData(name);
+            double tPPS = (double) orderData[2], orgPPS = (double) orderData[3];
+            int quantity = (int) orderData[1];
 
-            }
-            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
-
+            return (((double) quantity * tPPS) - ((double) quantity * orgPPS));
         }
     }
 }

@@ -28,6 +28,7 @@ public class ClientFrameGUI {
     static ClientBuyGUI buy = new ClientBuyGUI();
     static ClientSellGUI sell = new ClientSellGUI();
     public static ClientFrameTasks.serverService servS;
+    static ClientFrameTasks.cohService cohS = new ClientFrameTasks.cohService();
     AnchorPane overviewP, portfolioP, buyP, sellP;
     Font aeroM20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
 
@@ -106,6 +107,7 @@ public class ClientFrameGUI {
         in.play();
         servS = new ClientFrameTasks.serverService(Values.ip);
         servS.start();
+        cohS.start();
     }
 
     public void close(String newPane) {
@@ -115,8 +117,9 @@ public class ClientFrameGUI {
         ToolBar bar = new ToolBar();
         bar.setId("header");
         bar.setStyle("-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5; -fx-background-color: #333333;");
-        Label totalAssets = new Label("Cash On Hand: $175,699");
-        totalAssets.setPadding(new Insets(0,0,0,20));
+        Label totalAssets = new Label();
+        totalAssets.textProperty().bind(cohS.messageProperty());
+        totalAssets.setPadding(new Insets(0, 0, 0, 20));
         totalAssets.setTextFill(Paint.valueOf("White"));
         totalAssets.setFont(aeroM20);
         bar.getItems().add(totalAssets);

@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import rsc.PlayerManagement;
 import rsc.StockHistory;
 import rsc.Values;
 
@@ -142,7 +143,7 @@ public class ClientBuyTasks {
 
             }
 //            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
-            return history[0]-history[history.length-1];
+            return history[0] - history[history.length - 1];
 
         }
     }
@@ -173,6 +174,41 @@ public class ClientBuyTasks {
                     }
                     count = Values.secCount;
                     name = changeName;
+                    return null;
+                }
+            };
+        }
+
+        @Override
+        protected void succeeded() {
+            reset();
+            start();
+        }
+    }
+
+    public static class sliderService extends Service<Void> {
+        int count = 0;
+        private String name = "<Select Stock>";
+        double max;
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    ArrayList<String> stockN = Values.stockNamesNC;
+                    Platform.runLater(() -> {
+                        if (stockN.contains(name)) {
+                            ClientBuyGUI.buySlider.setMajorTickUnit((int) PlayerManagement.getMoney() / StockHistory.getPrice(name));
+                            ClientBuyGUI.buySlider.setMax(Math.floor(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
+                        } else {
+                            ClientBuyGUI.buySlider.setMax(0);
+                        }
+                    });
+                    while (name.equals(ClientBuyGUI.graphS.changeName)) {
+                        Thread.sleep(50);
+                    }
+                    name = ClientBuyGUI.graphS.changeName;
                     return null;
                 }
             };

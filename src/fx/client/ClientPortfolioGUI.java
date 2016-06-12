@@ -25,8 +25,12 @@ public class ClientPortfolioGUI {
     Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
     Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
     Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
-    public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
+//    public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
+    public static ClientPortfolioTasks.portfolioService portS = new ClientPortfolioTasks.portfolioService();
+    public static ClientPortfolioTasks.buyOrderService buyS = new ClientPortfolioTasks.buyOrderService();
+    public static ClientPortfolioTasks.sellOrderService sellS = new ClientPortfolioTasks.sellOrderService();
     public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    boolean opened = false;
 
     public AnchorPane createPane() {
         portfolioAnchorPane.setPrefSize(980, 490);
@@ -99,14 +103,14 @@ public class ClientPortfolioGUI {
         AnchorPane.setLeftAnchor(price, 105.0);
         stockPane.getChildren().add(price);
 
-        Label change = new Label("CHANGE OVER 30S");
+        Label change = new Label("NET PROFIT");
         change.setFont(aeroMI10);
         change.setPrefSize(75, 10);
         change.setTextFill(Paint.valueOf("White"));
         change.setAlignment(Pos.CENTER);
         change.setTextAlignment(TextAlignment.CENTER);
         AnchorPane.setTopAnchor(change, -1.0);
-        AnchorPane.setLeftAnchor(change, 200.0);
+        AnchorPane.setLeftAnchor(change, 215.0);
         stockPane.getChildren().add(change);
 
         ScrollPane sPane = new ScrollPane();
@@ -125,8 +129,6 @@ public class ClientPortfolioGUI {
         portfolioWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(portfolioWidget, 0.0);
         AnchorPane.setLeftAnchor(portfolioWidget, 0.0);
-        ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
-        widS.start();
         return portfolioWidget;
     }
 
@@ -159,7 +161,7 @@ public class ClientPortfolioGUI {
         AnchorPane.setLeftAnchor(price, 105.0);
         stockPane.getChildren().add(price);
 
-        Label change = new Label("CHANGE OVER 30S");
+        Label change = new Label("TARGET PRICE");
         change.setFont(aeroMI10);
         change.setPrefSize(75, 10);
         change.setTextFill(Paint.valueOf("White"));
@@ -174,7 +176,7 @@ public class ClientPortfolioGUI {
         sPane.setPrefSize(440.0, 418.0);
         sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sPane.setFitToWidth(true);
-        sPane.setContent(portfolioWidget());
+        sPane.setContent(buyOrderWidget());
         AnchorPane.setTopAnchor(sPane, 10.0);
         AnchorPane.setLeftAnchor(sPane, 5.0);
         stockPane.getChildren().add(sPane);
@@ -185,8 +187,6 @@ public class ClientPortfolioGUI {
         buyOrderWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(buyOrderWidget, 0.0);
         AnchorPane.setLeftAnchor(buyOrderWidget, 0.0);
-        ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
-        widS.start();
         return buyOrderWidget;
     }
 
@@ -219,7 +219,7 @@ public class ClientPortfolioGUI {
         AnchorPane.setLeftAnchor(price, 105.0);
         stockPane.getChildren().add(price);
 
-        Label change = new Label("CHANGE OVER 30S");
+        Label change = new Label("TARGET PRICE");
         change.setFont(aeroMI10);
         change.setPrefSize(75, 10);
         change.setTextFill(Paint.valueOf("White"));
@@ -234,7 +234,7 @@ public class ClientPortfolioGUI {
         sPane.setPrefSize(440.0, 418.0);
         sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sPane.setFitToWidth(true);
-        sPane.setContent(portfolioWidget());
+        sPane.setContent(sellOrderWidget());
         AnchorPane.setTopAnchor(sPane, 10.0);
         AnchorPane.setLeftAnchor(sPane, 5.0);
         stockPane.getChildren().add(sPane);
@@ -245,8 +245,6 @@ public class ClientPortfolioGUI {
         sellOrderWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(sellOrderWidget, 0.0);
         AnchorPane.setLeftAnchor(sellOrderWidget, 0.0);
-        ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
-        widS.start();
         return sellOrderWidget;
     }
 
@@ -255,6 +253,12 @@ public class ClientPortfolioGUI {
     }
 
     public void open() {
+        if (!opened) {
+            opened = true;
+            portS.start();
+            buyS.start();
+//            sellS.start();
+        }
         portfolioAnchorPane.setVisible(true);
         FadeTransition in = new FadeTransition(Duration.millis(250), portfolioAnchorPane);
         in.setFromValue(0.0);

@@ -1,6 +1,7 @@
 package fx.client;
 
 import rsc.StockHistory;
+import rsc.StockManagement;
 import rsc.Values;
 
 import java.io.InputStream;
@@ -25,6 +26,7 @@ public class ClientNetwork {
             while (true) {
                 HashMap<String, Object> serverData = (HashMap<String, Object>) in.readObject();
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
+                StockManagement.checkOrders();
                 Values.secCount = (int) serverData.get("SEC");
                 System.out.println(Values.secCount);
             }

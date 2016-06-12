@@ -7,7 +7,7 @@ import java.util.HashMap;
  * Created by james on 6/10/2016.
  */
 public class StockManagement {
-    public static ArrayList<String> ownedStockN = new ArrayList<>();
+    public static ArrayList<String> ownedStockN = new ArrayList<>(), buyOrderN = new ArrayList<>(), sellOrderN = new ArrayList<>();
     private static HashMap<String, Object[]> ownedStock = new HashMap<>();
     private static ArrayList<Object[]> buyOrders = new ArrayList<>(), sellOrders = new ArrayList<>();
 
@@ -41,14 +41,47 @@ public class StockManagement {
         PlayerManagement.addMoney(pricePerShare * (double) quantity);
     }
 
+    public static double getOrgPrice(String name) {
+        return (double) ownedStock.get(name)[1];
+    }
+
+    public static int getOwnedQty(String name) {
+        return (int) ownedStock.get(name)[0];
+    }
+
     public static void setBuyOrder(String stockName, int quantity, double pricePershare) {
-        Object[] bOrder = new Object[]{stockName, quantity, pricePershare};
+        double orgPPS = StockHistory.getPrice(stockName);
+        Object[] bOrder = new Object[]{stockName, quantity, pricePershare, orgPPS};
         buyOrders.add(bOrder);
+        buyOrderN.add(stockName);
         PlayerManagement.subtractMoney(pricePershare * (double) quantity);
+    }
+
+    public static double buyOrderTargetPPS(String name) {
+        for (int i = 0; i < buyOrders.size(); i++) {
+            Object[] orderData = buyOrders.get(i);
+            if (orderData[0].equals(name)) {
+
+                return (double) orderData[2];
+            }
+        }
+        return 0.0;
+    }
+
+    public static Object[] buyOrderNameData(String name) {
+        for (int i = 0; i < buyOrders.size(); i++) {
+            Object[] orderData = buyOrders.get(i);
+            if (orderData[0].equals(name)) {
+
+                return orderData;
+            }
+        }
+        return null;
     }
 
     public static void setSellOrder(String stockName, int quantity, double pricePerShare) {
         Object[] sOrder = new Object[]{stockName, quantity, pricePerShare};
+        sellOrderN.add(stockName);
         sellOrders.add(sOrder);
     }
 
@@ -58,6 +91,7 @@ public class StockManagement {
             if (orderData[0].equals(name)) {
                 PlayerManagement.addMoney((double) orderData[2] * (double) orderData[1]);
                 buyOrders.remove(i);
+                buyOrderN.remove(name);
                 return;
             }
         }
@@ -68,6 +102,7 @@ public class StockManagement {
             Object[] orderData = sellOrders.get(i);
             if (orderData[0].equals(name)) {
                 sellOrders.remove(i);
+                sellOrderN.remove(name);
                 return;
             }
         }
@@ -88,6 +123,7 @@ public class StockManagement {
             if (pps <= (double) orderData[2]) {
                 buyStock((String) orderData[0], (int) orderData[1], pps, true);
                 buyOrders.remove(i);
+                buyOrderN.remove((String) orderData[0]);
                 i--; //Compensate for shift due to removal
             }
         }
@@ -97,6 +133,7 @@ public class StockManagement {
             if (pps >= (double) orderData[2]) {
                 sellStock((String) orderData[0], (int) orderData[1], pps);
                 sellOrders.remove(i);
+                sellOrderN.remove((String) orderData[0]);
                 i--; //Compensate for shift due to removal
             }
         }

@@ -1,6 +1,7 @@
 package fx.client;
 
 import javafx.animation.FadeTransition;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -11,6 +12,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import rsc.StockHistory;
+import rsc.StockManagement;
+
+import java.text.DecimalFormat;
 
 /**
  * Created by james on 4/29/2016.
@@ -25,7 +30,9 @@ public class ClientBuyGUI {
     Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
     Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
     public static ClientBuyTasks.graphService graphS = new ClientBuyTasks.graphService();
+    public static ClientBuyTasks.sliderService slidS = new ClientBuyTasks.sliderService();
     public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    public static Slider buySlider;
     boolean opened = false;
 
     public AnchorPane createPane() {
@@ -146,7 +153,7 @@ public class ClientBuyGUI {
 
         Label buyL = new Label("Buy:");
         buyL.setFont(aeroMI20);
-        buyL.setPrefSize(175, 23);
+        buyL.setPrefSize(200, 23);
         buyL.setTextFill(Paint.valueOf("White"));
         buyL.setAlignment(Pos.BOTTOM_LEFT);
         buyL.setTextAlignment(TextAlignment.LEFT);
@@ -154,19 +161,25 @@ public class ClientBuyGUI {
         AnchorPane.setLeftAnchor(buyL, 5.0);
         graphWidget.getChildren().add(buyL);
 
-        Slider buy = new Slider();
-        buy.setPrefSize(400, 50);
-        buy.setMin(0);
-        buy.setMax(3000000);
-        buy.setValue(0);
-        buy.setShowTickLabels(true);
-        buy.setShowTickMarks(true);
-        buy.setMajorTickUnit((int) buy.getMax() / 5);
-        buy.setMinorTickCount(5);
-        buy.setBlockIncrement((int) buy.getMax() / 50);
-        AnchorPane.setTopAnchor(buy, 225.0);
-        AnchorPane.setLeftAnchor(buy, 5.0);
-        graphWidget.getChildren().add(buy);
+        buySlider = new Slider();
+        buySlider.setPrefSize(400, 50);
+        buySlider.setMin(0);
+        buySlider.setMax(1000);
+        buySlider.setValue(0);
+        buySlider.setShowTickLabels(true);
+        buySlider.setShowTickMarks(true);
+        buySlider.setMajorTickUnit((int) buySlider.getMax() / 5);
+        buySlider.setMinorTickCount(5);
+        buySlider.setBlockIncrement((int) buySlider.getMax() / 50);
+        DecimalFormat money = new DecimalFormat("#,###,###,###,##0");
+//        buySlider.setOnDragDetected(event -> buyL.setText("Buy: " + money.format(buySlider.getValue()) + " Shares"));
+//        buySlider.setOnDragDone(event -> buyL.setText("Buy: " + money.format(buySlider.getValue()) + " Shares"));
+//        buySlider.setOnDragOver(event -> buyL.setText("Buy: " + money.format(buySlider.getValue()) + " Shares"));
+        buyL.textProperty().bind(Bindings.format("Buy: %.0f Shares", buySlider.valueProperty()));
+        AnchorPane.setTopAnchor(buySlider, 225.0);
+        AnchorPane.setLeftAnchor(buySlider, 5.0);
+        graphWidget.getChildren().add(buySlider);
+        slidS.start();
 
         String buttonStyle = "-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;";
 
@@ -200,6 +213,20 @@ public class ClientBuyGUI {
         buyB.setPrefSize(50, 20);
         buyB.setTextFill(Paint.valueOf("White"));
         buyB.setStyle(buttonStyle);
+        buyB.setOnAction(event -> {
+            String name = stock.textProperty().getValue();
+            int quantity = (int) Math.floor(buySlider.getValue());
+            double pps = StockHistory.getPrice(name);
+
+            if (buyOrder.isSelected()) {
+                pps = Double.parseDouble(buyPrice.getText().replaceAll("[^0-9.]", ""));
+                StockManagement.setBuyOrder(name, quantity, pps);
+            } else {
+                StockManagement.buyStock(name, quantity, pps, false);
+            }
+            buyPrice.setText("");
+            buySlider.setValue(0);
+        });
         AnchorPane.setBottomAnchor(buyB, 5.0);
         AnchorPane.setRightAnchor(buyB, 5.0);
         graphWidget.getChildren().add(buyB);
