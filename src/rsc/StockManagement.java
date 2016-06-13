@@ -4,6 +4,7 @@ import fx.client.ClientPortfolioGUI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by james on 6/10/2016.
@@ -26,7 +27,7 @@ public class StockManagement {
         if (!order) {
             PlayerManagement.subtractMoney(pricePerShare * (double) quantity);
         }
-        StockHistory.history.add("Bought "+quantity+" shares of "+stockName+ " for $"+pricePerShare+ " per Share");
+        StockHistory.history.add("Bought " + quantity + " shares of " + stockName + " for $" + pricePerShare + " per Share");
     }
 
     public static void sellStock(String stockName, int quantity, double pricePerShare, boolean order) {
@@ -41,7 +42,7 @@ public class StockManagement {
             }
         }
         PlayerManagement.addMoney(pricePerShare * (double) quantity);
-        StockHistory.history.add("Sold "+quantity+" shares of "+stockName+ " for $"+pricePerShare+ " per Share");
+        StockHistory.history.add("Sold " + quantity + " shares of " + stockName + " for $" + pricePerShare + " per Share");
     }
 
     public static double getOrgPrice(String name) {
@@ -154,6 +155,10 @@ public class StockManagement {
 
     public static ArrayList<Object[]> getSellOrderData() {
         return sellOrders;
+    }
+
+    public static Map<String, Object[]> getOwnedStockData() {
+        return ownedStock;
     }
 
     public static void checkOrders() {
