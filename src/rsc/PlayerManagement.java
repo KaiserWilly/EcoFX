@@ -21,4 +21,8 @@ public class PlayerManagement {
     public static double getMoney() {
         return playerMoney;
     }
+
+    public static double getAssetWorth(){
+        return playerMoney;
+    }
 }

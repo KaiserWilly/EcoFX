@@ -3,8 +3,7 @@ package server;
 import rsc.StockHistory;
 import server.engine.EcoEngine;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by james on 6/10/2016.
@@ -25,6 +24,7 @@ public class ServerValues {
         data.put("SEC", secCount);
         data.put("Market Data", serverD);
         data.put("Usernames", genUsernames());
+        data.put("Leaderboard", clientsData);
         data.put("User Data", new HashMap<String, Object>());
 
         serverData = data;
@@ -40,4 +40,5 @@ public class ServerValues {
             return usernames;
         } catch (Exception e) {return usernames;}
     }
+
 }
