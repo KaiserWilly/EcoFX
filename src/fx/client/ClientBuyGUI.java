@@ -19,11 +19,13 @@ import rsc.StockManagement;
  * Created by james on 4/29/2016.
  */
 public class ClientBuyGUI {
-    public AnchorPane buyAnchorPane = new AnchorPane();
+    public AnchorPane buyAnchorPane = new AnchorPane(), graphWidget = new AnchorPane();
+    ;
     public static AnchorPane stockWidget = new AnchorPane();
     Font aeroMI30 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
     Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
     Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    Font aeroMI18 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
     Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
     Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
     Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
@@ -31,6 +33,8 @@ public class ClientBuyGUI {
     public static ClientBuyTasks.sliderService slidS = new ClientBuyTasks.sliderService();
     public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
     public static Slider buySlider;
+    public static ScrollPane sPane;
+    public static Label price, pChange;
     boolean opened = false;
 
     public AnchorPane createPane() {
@@ -81,7 +85,7 @@ public class ClientBuyGUI {
         AnchorPane.setLeftAnchor(change, 200.0);
         stockPane.getChildren().add(change);
 
-        ScrollPane sPane = new ScrollPane();
+        sPane = new ScrollPane();
         sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
         sPane.setPrefSize(440.0, 460.0);
         sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -107,6 +111,7 @@ public class ClientBuyGUI {
         graphPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         graphPane.setPrefSize(450.0, 478.0);
         graphPane.getChildren().add(graphWidget());
+        graphPane.visibleProperty().bind(graphWidget.managedProperty());
         AnchorPane.setTopAnchor(graphPane, 5.0);
         AnchorPane.setRightAnchor(graphPane, 5.0);
         return graphPane;
@@ -114,7 +119,6 @@ public class ClientBuyGUI {
     }
 
     public AnchorPane graphWidget() {
-        AnchorPane graphWidget = new AnchorPane();
         graphWidget.setStyle("-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5; -fx-background-color: #333333;");
         graphWidget.setPrefSize(430, 350);
         AnchorPane.setTopAnchor(graphWidget, 10.0);
@@ -124,12 +128,58 @@ public class ClientBuyGUI {
         stock.setFont(aeroMI30);
         stock.setTextFill(Paint.valueOf("White"));
         stock.textProperty().bind(graphS.messageProperty());
-        stock.setPrefSize(250, 30);
+        stock.setPrefSize(150, 30);
         stock.setTextAlignment(TextAlignment.LEFT);
         stock.setAlignment(Pos.CENTER_LEFT);
         AnchorPane.setTopAnchor(stock, 10.0);
-        AnchorPane.setLeftAnchor(stock, 55.0);
+        AnchorPane.setLeftAnchor(stock, 75.0);
         graphWidget.getChildren().add(stock);
+
+
+        Label priceL = new Label("STOCK PRICE");
+        priceL.setFont(aeroMI10);
+        priceL.setPrefSize(75, 10);
+        priceL.setTextFill(Paint.valueOf("White"));
+        priceL.setAlignment(Pos.CENTER);
+        priceL.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(priceL, 15.0);
+        AnchorPane.setLeftAnchor(priceL, 190.0);
+        graphWidget.getChildren().add(priceL);
+
+
+        Label change = new Label("CHANGE OVER 30S");
+        change.setFont(aeroMI10);
+        change.setPrefSize(75, 10);
+        change.setTextFill(Paint.valueOf("White"));
+        change.setAlignment(Pos.CENTER);
+        change.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(change, 15.0);
+        AnchorPane.setLeftAnchor(change, 270.0);
+        graphWidget.getChildren().add(change);
+
+
+        price = new Label();
+        price.setFont(aeroMI18);
+        price.setTextFill(Paint.valueOf("White"));
+        price.setPrefSize(75.0, 30);
+        price.setTextAlignment(TextAlignment.CENTER);
+        price.setAlignment(Pos.CENTER);
+        AnchorPane.setTopAnchor(price, 20.0);
+        AnchorPane.setLeftAnchor(price, 190.0);
+        graphWidget.getChildren().add(price);
+
+
+        pChange = new Label();
+        pChange.setContentDisplay(ContentDisplay.RIGHT);
+        pChange.setFont(aeroMI18);
+        pChange.setTextFill(Paint.valueOf("White"));
+        pChange.setPrefSize(75.0, 30);
+        pChange.setTextAlignment(TextAlignment.CENTER);
+        pChange.setAlignment(Pos.CENTER);
+        AnchorPane.setTopAnchor(pChange, 20.0);
+        AnchorPane.setLeftAnchor(pChange, 270.0);
+        graphWidget.getChildren().add(pChange);
+
 
         NumberAxis xAxis = new NumberAxis(0.0, 30.0, 2.0);
         NumberAxis yAxis = new NumberAxis(25.0, 30.0, 1.0);
@@ -149,40 +199,49 @@ public class ClientBuyGUI {
         graphWidget.getChildren().add(marketTrend);
 
 
-        Label buyL = new Label("Buy:");
-        buyL.setFont(aeroMI20);
-        buyL.setPrefSize(200, 23);
-        buyL.setTextFill(Paint.valueOf("White"));
-        buyL.setAlignment(Pos.BOTTOM_LEFT);
-        buyL.setTextAlignment(TextAlignment.LEFT);
-        AnchorPane.setTopAnchor(buyL, 205.0);
-        AnchorPane.setLeftAnchor(buyL, 5.0);
-        graphWidget.getChildren().add(buyL);
-
         buySlider = new Slider();
         buySlider.setPrefSize(400, 50);
         buySlider.setMin(0);
-        buySlider.setMax(1000);
+        buySlider.setMax(10);
         buySlider.setValue(0);
         buySlider.setShowTickLabels(true);
         buySlider.setShowTickMarks(true);
         buySlider.setMajorTickUnit((int) buySlider.getMax() / 5);
         buySlider.setMinorTickCount(5);
         buySlider.setBlockIncrement((int) buySlider.getMax() / 50);
-        buyL.textProperty().bind(Bindings.format("Buy: %.0f Shares", buySlider.valueProperty()));
         AnchorPane.setTopAnchor(buySlider, 225.0);
         AnchorPane.setLeftAnchor(buySlider, 5.0);
         graphWidget.getChildren().add(buySlider);
+        graphWidget.managedProperty().bind(Bindings.greaterThan(buySlider.maxProperty(), 10.0));
         slidS.start();
 
-        String buttonStyle = "-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;";
+        Label buyL = new Label("Buy:");
+        buyL.setFont(aeroMI20);
+        buyL.setPrefSize(200, 23);
+        buyL.setTextFill(Paint.valueOf("White"));
+        buyL.setAlignment(Pos.BOTTOM_LEFT);
+        buyL.setTextAlignment(TextAlignment.LEFT);
+        buyL.textProperty().bind(Bindings.format("Buy: %.0f Shares", buySlider.valueProperty()));
+        AnchorPane.setTopAnchor(buyL, 205.0);
+        AnchorPane.setLeftAnchor(buyL, 5.0);
+        graphWidget.getChildren().add(buyL);
 
+        Label sellOrderTitle = new Label("TARGET PRICE PER SHARE");
+        sellOrderTitle.setFont(aeroMI10);
+        sellOrderTitle.setPrefSize(120, 10);
+        sellOrderTitle.setTextFill(Paint.valueOf("White"));
+        sellOrderTitle.setAlignment(Pos.CENTER);
+        sellOrderTitle.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setLeftAnchor(sellOrderTitle, 145.0);
+        AnchorPane.setBottomAnchor(sellOrderTitle, 37.0);
+        graphWidget.getChildren().add(sellOrderTitle);
 
         TextField sellOrderPrice = new TextField();
+        sellOrderPrice.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null;");
         sellOrderPrice.setPrefSize(100, 25);
         sellOrderPrice.setAlignment(Pos.CENTER);
         sellOrderPrice.setFont(aeroMI14);
-        AnchorPane.setLeftAnchor(sellOrderPrice, 125.0);
+        AnchorPane.setLeftAnchor(sellOrderPrice, 155.0);
         AnchorPane.setBottomAnchor(sellOrderPrice, 50.0);
         graphWidget.getChildren().add(sellOrderPrice);
 
@@ -206,21 +265,23 @@ public class ClientBuyGUI {
         buyB.setFont(aeroMI14);
         buyB.setPrefSize(50, 20);
         buyB.setTextFill(Paint.valueOf("White"));
-        buyB.setStyle(buttonStyle);
+        buyB.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
         buyB.setOnAction(event -> {
             String name = stock.textProperty().getValue();
             int quantity = (int) Math.floor(buySlider.getValue());
             double pps = StockHistory.getPrice(name);
-
-            if (buyOrderCB.isSelected()) {
-                pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
-                StockManagement.setBuyOrder(name, quantity, pps);
-            } else {
-                StockManagement.buyStock(name, quantity, pps, false);
+            if (quantity > 0) {
+                if (buyOrderCB.isSelected()) {
+                    pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
+                    StockManagement.setBuyOrder(name, quantity, pps);
+                } else {
+                    StockManagement.buyStock(name, quantity, pps, false);
+                }
             }
             sellOrderPrice.setText("");
             buySlider.setValue(0);
             buyOrderCB.setSelected(false);
+            ClientFrameGUI.resetWidgets();
 
         });
         AnchorPane.setBottomAnchor(buyB, 5.0);

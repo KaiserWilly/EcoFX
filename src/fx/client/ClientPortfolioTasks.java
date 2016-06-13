@@ -29,11 +29,11 @@ public class ClientPortfolioTasks {
 
     public static class portfolioService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        public boolean change = false;
 
         @Override
         protected Task<Void> createTask() {
@@ -42,9 +42,14 @@ public class ClientPortfolioTasks {
                 protected Void call() throws Exception {
 
                     ArrayList<String> stockNames = StockManagement.ownedStockN;
-                    if (stockNames.size() > 0) {
-                        Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
-                        Platform.runLater(() -> {
+                    AnchorPane portfolioWidget = new AnchorPane();
+                    portfolioWidget.setPrefSize(440, 1725);
+                    AnchorPane.setTopAnchor(portfolioWidget, 0.0);
+                    AnchorPane.setLeftAnchor(portfolioWidget, 0.0);
+                    Platform.runLater(() -> {
+                        if (stockNames.size() > 0) {
+                            portfolioWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
+                            Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                             double height = 0.0;
                             if (ClientPortfolioGUI.portfolioWidget.getChildren().size() > 0) {
                                 ClientPortfolioGUI.portfolioWidget.getChildren().remove(0, ClientPortfolioGUI.portfolioWidget.getChildren().size());
@@ -109,11 +114,23 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientPortfolioGUI.portfolioWidget.getChildren().add(widgetPane);
+                                portfolioWidget.getChildren().add(widgetPane);
                             }
-                        });
-                    }
-                    while (count == Values.secCount) {
+                        } else {
+                            portfolioWidget.setPrefSize(440, 240);
+                            Label noStocks = new Label("No stocks in portfolio!");
+                            noStocks.setPrefSize(415, 35);
+                            noStocks.setFont(stockNF);
+                            noStocks.setTextFill(Paint.valueOf("White"));
+                            noStocks.setAlignment(Pos.CENTER);
+                            noStocks.setTextAlignment(TextAlignment.CENTER);
+                            AnchorPane.setLeftAnchor(noStocks, 0.0);
+                            AnchorPane.setTopAnchor(noStocks, 175.0);
+                            portfolioWidget.getChildren().add(noStocks);
+                        }
+                        ClientPortfolioGUI.portPane.setContent(portfolioWidget);
+                    });
+                    while (count == Values.secCount && !change) {
                         Thread.sleep(50);
                     }
                     count = Values.secCount;
@@ -141,11 +158,11 @@ public class ClientPortfolioTasks {
 
     public static class buyOrderService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        public boolean change = false;
 
         @Override
         protected Task<Void> createTask() {
@@ -154,9 +171,15 @@ public class ClientPortfolioTasks {
                 protected Void call() throws Exception {
 
                     ArrayList<String> stockNames = StockManagement.buyOrderN;
-                    if (stockNames.size() > 0) {
-                        Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
-                        Platform.runLater(() -> {
+                    AnchorPane buyWidget = new AnchorPane();
+                    buyWidget.setPrefSize(440, 1725);
+                    AnchorPane.setTopAnchor(buyWidget, 0.0);
+                    AnchorPane.setLeftAnchor(buyWidget, 0.0);
+                    Platform.runLater(() -> {
+                        if (stockNames.size() > 0) {
+                            buyWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
+                            Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
+
                             double height = 0.0;
                             if (ClientPortfolioGUI.buyOrderWidget.getChildren().size() > 0) {
                                 ClientPortfolioGUI.buyOrderWidget.getChildren().remove(0, ClientPortfolioGUI.buyOrderWidget.getChildren().size());
@@ -214,11 +237,23 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientPortfolioGUI.buyOrderWidget.getChildren().add(widgetPane);
+                                buyWidget.getChildren().add(widgetPane);
                             }
-                        });
-                    }
-                    while (count == Values.secCount) {
+                        } else {
+                            buyWidget.setPrefSize(440, 240);
+                            Label noStocks = new Label("No buy orders!");
+                            noStocks.setPrefSize(415, 35);
+                            noStocks.setFont(stockNF);
+                            noStocks.setTextFill(Paint.valueOf("White"));
+                            noStocks.setAlignment(Pos.CENTER);
+                            noStocks.setTextAlignment(TextAlignment.CENTER);
+                            AnchorPane.setLeftAnchor(noStocks, 0.0);
+                            AnchorPane.setTopAnchor(noStocks, 175.0);
+                            buyWidget.getChildren().add(noStocks);
+                        }
+                        ClientPortfolioGUI.buyPane.setContent(buyWidget);
+                    });
+                    while (count == Values.secCount && !change) {
                         Thread.sleep(50);
                     }
                     count = Values.secCount;
@@ -241,6 +276,7 @@ public class ClientPortfolioTasks {
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        public boolean change = false;
 
         @Override
         protected Task<Void> createTask() {
@@ -248,17 +284,17 @@ public class ClientPortfolioTasks {
                 @Override
                 protected Void call() throws Exception {
 
-                    ArrayList<String> stockNames = StockManagement.ownedStockN;
-                    if (stockNames.size() > 0) {
-                        Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
-                        Platform.runLater(() -> {
+                    ArrayList<String> stockNames = StockManagement.sellOrderN;
+                    AnchorPane sellWidget = new AnchorPane();
+                    sellWidget.setPrefSize(440, 1725);
+                    AnchorPane.setTopAnchor(sellWidget, 0.0);
+                    AnchorPane.setLeftAnchor(sellWidget, 0.0);
+                    Platform.runLater(() -> {
+                        if (stockNames.size() > 0) {
+                            sellWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
+                            Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                             double height = 0.0;
-                            if (ClientPortfolioGUI.sellOrderWidget.getChildren().size() > 0) {
-                                ClientPortfolioGUI.sellOrderWidget.getChildren().remove(0, ClientPortfolioGUI.sellOrderWidget.getChildren().size());
-                            }
-
                             for (String name : stockNames) {
-
                                 AnchorPane widgetPane = new AnchorPane();
                                 widgetPane.setPrefSize(415.0, 35.0);
                                 String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #333333;";
@@ -284,20 +320,13 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(price, 100.0);
                                 widgetPane.getChildren().add(price);
 
-                                double pC = getPProfit(name);
-                                Label pChange;
-                                if (pC < 0.0) {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
-                                } else {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
-                                }
-                                pChange.setContentDisplay(ContentDisplay.RIGHT);
+                                Label pChange = new Label(money.format(StockManagement.sellOrderTargetPPS(name)));
                                 pChange.setFont(priceF);
                                 pChange.setTextFill(Paint.valueOf("White"));
                                 pChange.setPrefSize(75.0, 35.0);
                                 pChange.setTextAlignment(TextAlignment.CENTER);
                                 pChange.setAlignment(Pos.CENTER);
-                                AnchorPane.setTopAnchor(pChange, 0.0);
+                                AnchorPane.setTopAnchor(price, 0.0);
                                 AnchorPane.setLeftAnchor(pChange, 200.0);
                                 widgetPane.getChildren().add(pChange);
 
@@ -316,11 +345,23 @@ public class ClientPortfolioTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientPortfolioGUI.sellOrderWidget.getChildren().add(widgetPane);
+                                sellWidget.getChildren().add(widgetPane);
                             }
-                        });
-                    }
-                    while (count == Values.secCount) {
+                        } else {
+                            sellWidget.setPrefSize(440, 240);
+                            Label noStocks = new Label("No sell orders!");
+                            noStocks.setPrefSize(415, 35);
+                            noStocks.setFont(stockNF);
+                            noStocks.setTextFill(Paint.valueOf("White"));
+                            noStocks.setAlignment(Pos.CENTER);
+                            noStocks.setTextAlignment(TextAlignment.CENTER);
+                            AnchorPane.setLeftAnchor(noStocks, 0.0);
+                            AnchorPane.setTopAnchor(noStocks, 175.0);
+                            sellWidget.getChildren().add(noStocks);
+                        }
+                        ClientPortfolioGUI.sellPane.setContent(sellWidget);
+                    });
+                    while (count == Values.secCount && !change) {
                         Thread.sleep(50);
                     }
                     count = Values.secCount;
@@ -338,11 +379,89 @@ public class ClientPortfolioTasks {
         }
 
         double getPProfit(String name) {
-            Object[] orderData = StockManagement.buyOrderNameData(name);
+            Object[] orderData = StockManagement.sellOrderNameData(name);
             double tPPS = (double) orderData[2], orgPPS = (double) orderData[3];
             int quantity = (int) orderData[1];
 
             return (((double) quantity * tPPS) - ((double) quantity * orgPPS));
+        }
+    }
+
+    public static class historyService extends Service<Void> {
+        DecimalFormat money = new DecimalFormat("$#,###,##0.00");
+        DecimalFormat perc = new DecimalFormat("#,##0.0");
+        int count = -1;
+        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+        public boolean change = false;
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+
+                    ArrayList<String> stockNames = StockHistory.history;
+                    AnchorPane sellWidget = new AnchorPane();
+                    sellWidget.setPrefSize(440, 1725);
+                    AnchorPane.setTopAnchor(sellWidget, 0.0);
+                    AnchorPane.setLeftAnchor(sellWidget, 0.0);
+                    Platform.runLater(() -> {
+                        if (stockNames.size() > 0) {
+                            sellWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
+                            Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
+                            double height = 0.0;
+                            for (String name : stockNames) {
+                                AnchorPane widgetPane = new AnchorPane();
+                                widgetPane.setPrefSize(415.0, 20.0);
+                                String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #333333;";
+                                widgetPane.setStyle(graphPaneStyle);
+
+                                Label stock = new Label(name);
+                                stock.setFont(buttonF);
+                                stock.setTextFill(Paint.valueOf("White"));
+                                stock.setPrefSize(300.0, 20.0);
+                                stock.setTextAlignment(TextAlignment.CENTER);
+                                stock.setAlignment(Pos.CENTER);
+                                AnchorPane.setTopAnchor(stock, 0.0);
+                                AnchorPane.setLeftAnchor(stock, 0.0);
+                                widgetPane.getChildren().add(stock);
+
+                                AnchorPane.setLeftAnchor(widgetPane, 0.0);
+                                AnchorPane.setTopAnchor(widgetPane, height);
+                                height += 28.0;
+                                sellWidget.getChildren().add(widgetPane);
+                            }
+                        } else {
+                            sellWidget.setPrefSize(440, 240);
+                            Label noStocks = new Label("No history!");
+                            noStocks.setPrefSize(415, 35);
+                            noStocks.setFont(stockNF);
+                            noStocks.setTextFill(Paint.valueOf("White"));
+                            noStocks.setAlignment(Pos.CENTER);
+                            noStocks.setTextAlignment(TextAlignment.CENTER);
+                            AnchorPane.setLeftAnchor(noStocks, 0.0);
+                            AnchorPane.setTopAnchor(noStocks, 175.0);
+                            sellWidget.getChildren().add(noStocks);
+                        }
+                        ClientPortfolioGUI.historyPane.setContent(sellWidget);
+                    });
+                    while (count == Values.secCount && !change) {
+                        Thread.sleep(50);
+                    }
+                    count = Values.secCount;
+                    return null;
+                }
+            }
+
+                    ;
+        }
+
+        @Override
+        protected void succeeded() {
+            reset();
+            start();
         }
     }
 }

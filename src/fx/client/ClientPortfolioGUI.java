@@ -18,18 +18,20 @@ import javafx.util.Duration;
  */
 public class ClientPortfolioGUI {
     public AnchorPane portfolioAnchorPane = new AnchorPane();
-    public static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane();
+    public static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane(), historyWidget = new AnchorPane();
     Font aeroMI30 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
     Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
     Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
     Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
     Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
     Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
-//    public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
+    //    public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
     public static ClientPortfolioTasks.portfolioService portS = new ClientPortfolioTasks.portfolioService();
     public static ClientPortfolioTasks.buyOrderService buyS = new ClientPortfolioTasks.buyOrderService();
     public static ClientPortfolioTasks.sellOrderService sellS = new ClientPortfolioTasks.sellOrderService();
+    public static ClientPortfolioTasks.historyService histS = new ClientPortfolioTasks.historyService();
     public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    public static ScrollPane portPane, buyPane, sellPane, historyPane;
     boolean opened = false;
 
     public AnchorPane createPane() {
@@ -47,7 +49,7 @@ public class ClientPortfolioGUI {
         AnchorPane tabPane = new AnchorPane();
         tabPane.setPrefSize(450, 478);
         AnchorPane.setTopAnchor(tabPane, 5.0);
-        AnchorPane.setLeftAnchor(tabPane, 5.0);
+        AnchorPane.setLeftAnchor(tabPane, 270.0);
 
         Tab port = new Tab("Portfolio");
         port.setContent(portfolioPane());
@@ -58,7 +60,11 @@ public class ClientPortfolioGUI {
         Tab sell = new Tab("Sell Orders");
         sell.setContent(sellOrderPane());
 
+        Tab log = new Tab("History");
+        log.setContent(historyPane());
+
         TabPane tab = new TabPane();
+        tab.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tab.getStylesheets().add("/rsc/StylesheetTabPane.css");
         tab.setPrefSize(450, 478);
         AnchorPane.setTopAnchor(tab, 0.0);
@@ -67,6 +73,7 @@ public class ClientPortfolioGUI {
         tab.getTabs().add(port);
         tab.getTabs().add(buy);
         tab.getTabs().add(sell);
+        tab.getTabs().add(log);
 
         tabPane.getChildren().add(tab);
 
@@ -113,15 +120,15 @@ public class ClientPortfolioGUI {
         AnchorPane.setLeftAnchor(change, 215.0);
         stockPane.getChildren().add(change);
 
-        ScrollPane sPane = new ScrollPane();
-        sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
-        sPane.setPrefSize(440.0, 418.0);
-        sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        sPane.setFitToWidth(true);
-        sPane.setContent(portfolioWidget());
-        AnchorPane.setTopAnchor(sPane, 10.0);
-        AnchorPane.setLeftAnchor(sPane, 5.0);
-        stockPane.getChildren().add(sPane);
+        portPane = new ScrollPane();
+        portPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        portPane.setPrefSize(440.0, 418.0);
+        portPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        portPane.setFitToWidth(true);
+        portPane.setContent(portfolioWidget());
+        AnchorPane.setTopAnchor(portPane, 10.0);
+        AnchorPane.setLeftAnchor(portPane, 5.0);
+        stockPane.getChildren().add(portPane);
         return stockPane;
     }
 
@@ -168,18 +175,18 @@ public class ClientPortfolioGUI {
         change.setAlignment(Pos.CENTER);
         change.setTextAlignment(TextAlignment.CENTER);
         AnchorPane.setTopAnchor(change, -1.0);
-        AnchorPane.setLeftAnchor(change, 200.0);
+        AnchorPane.setLeftAnchor(change, 205.0);
         stockPane.getChildren().add(change);
 
-        ScrollPane sPane = new ScrollPane();
-        sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
-        sPane.setPrefSize(440.0, 418.0);
-        sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        sPane.setFitToWidth(true);
-        sPane.setContent(buyOrderWidget());
-        AnchorPane.setTopAnchor(sPane, 10.0);
-        AnchorPane.setLeftAnchor(sPane, 5.0);
-        stockPane.getChildren().add(sPane);
+        buyPane = new ScrollPane();
+        buyPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        buyPane.setPrefSize(440.0, 418.0);
+        buyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        buyPane.setFitToWidth(true);
+        buyPane.setContent(buyOrderWidget());
+        AnchorPane.setTopAnchor(buyPane, 10.0);
+        AnchorPane.setLeftAnchor(buyPane, 5.0);
+        stockPane.getChildren().add(buyPane);
         return stockPane;
     }
 
@@ -226,18 +233,18 @@ public class ClientPortfolioGUI {
         change.setAlignment(Pos.CENTER);
         change.setTextAlignment(TextAlignment.CENTER);
         AnchorPane.setTopAnchor(change, -1.0);
-        AnchorPane.setLeftAnchor(change, 200.0);
+        AnchorPane.setLeftAnchor(change, 205.0);
         stockPane.getChildren().add(change);
 
-        ScrollPane sPane = new ScrollPane();
-        sPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
-        sPane.setPrefSize(440.0, 418.0);
-        sPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        sPane.setFitToWidth(true);
-        sPane.setContent(sellOrderWidget());
-        AnchorPane.setTopAnchor(sPane, 10.0);
-        AnchorPane.setLeftAnchor(sPane, 5.0);
-        stockPane.getChildren().add(sPane);
+        sellPane = new ScrollPane();
+        sellPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        sellPane.setPrefSize(440.0, 418.0);
+        sellPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        sellPane.setFitToWidth(true);
+        sellPane.setContent(sellOrderWidget());
+        AnchorPane.setTopAnchor(sellPane, 10.0);
+        AnchorPane.setLeftAnchor(sellPane, 5.0);
+        stockPane.getChildren().add(sellPane);
         return stockPane;
     }
 
@@ -246,6 +253,33 @@ public class ClientPortfolioGUI {
         AnchorPane.setTopAnchor(sellOrderWidget, 0.0);
         AnchorPane.setLeftAnchor(sellOrderWidget, 0.0);
         return sellOrderWidget;
+    }
+
+    public AnchorPane historyPane() {
+        AnchorPane hPane = new AnchorPane();
+        hPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
+        hPane.setPrefSize(450.0, 478.0);
+        AnchorPane.setTopAnchor(hPane, 5.0);
+        AnchorPane.setLeftAnchor(hPane, 5.0);
+
+
+        historyPane = new ScrollPane();
+        historyPane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        historyPane.setPrefSize(440.0, 418.0);
+        historyPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        historyPane.setFitToWidth(true);
+        historyPane.setContent(historyWidget());
+        AnchorPane.setTopAnchor(historyPane, 10.0);
+        AnchorPane.setLeftAnchor(historyPane, 5.0);
+        hPane.getChildren().add(historyPane);
+        return hPane;
+    }
+
+    public AnchorPane historyWidget() {
+        historyWidget.setPrefSize(440, 1725);
+        AnchorPane.setTopAnchor(historyWidget, 0.0);
+        AnchorPane.setLeftAnchor(historyWidget, 0.0);
+        return historyWidget;
     }
 
     public void setOpacity(double opacity) {
@@ -257,7 +291,8 @@ public class ClientPortfolioGUI {
             opened = true;
             portS.start();
             buyS.start();
-//            sellS.start();
+            sellS.start();
+            histS.start();
         }
         portfolioAnchorPane.setVisible(true);
         FadeTransition in = new FadeTransition(Duration.millis(250), portfolioAnchorPane);

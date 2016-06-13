@@ -30,7 +30,7 @@ public class ClientFrameGUI {
     public static ClientFrameTasks.serverService servS;
     static ClientFrameTasks.cohService cohS = new ClientFrameTasks.cohService();
     AnchorPane overviewP, portfolioP, buyP, sellP;
-    Font aeroM20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
 
     public AnchorPane clientPane() {
 
@@ -121,25 +121,16 @@ public class ClientFrameGUI {
         totalAssets.textProperty().bind(cohS.messageProperty());
         totalAssets.setPadding(new Insets(0, 0, 0, 20));
         totalAssets.setTextFill(Paint.valueOf("White"));
-        totalAssets.setFont(aeroM20);
+        totalAssets.setFont(aeroMI20);
         bar.getItems().add(totalAssets);
 
         bar.getItems().add(createSeparator());
 
-//        String[] stockArray = new String[]{
-//                "AARP",
-//                "ACID",
-//                "CORN",
-//                "WILL"
-//        };
-//        for (int i = 0; i <= 3; i++) {
-//            Label stock = new Label(stockArray[i] + "  2.27  0.9%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
-//            stock.setContentDisplay(ContentDisplay.RIGHT);
-//            stock.setPadding(new Insets(0, 20, 0, 0));
-//            stock.setTextFill(Paint.valueOf("White"));
-//            stock.setFont(aeroM20);
-//            bar.getItems().add(stock);
-//        }
+            Label news = new Label("News:");
+            news.setPadding(new Insets(0, 20, 0, 0));
+            news.setTextFill(Paint.valueOf("White"));
+            news.setFont(aeroMI20);
+            bar.getItems().add(news);
 
         bar.setPrefSize(1000, 20);
         bar.getStylesheets().add("rsc/StylesheetClient.css");
@@ -197,6 +188,17 @@ public class ClientFrameGUI {
 //        sep.setEffect(new DropShadow(2.0,2.0,2.0, Color.BLACK));
         sep.setPadding(new Insets(0, 10, 0, 10));
         return sep;
+    }
+
+    public static void resetWidgets() {
+        ClientPortfolioGUI.histS.change = true;
+        ClientPortfolioGUI.buyS.change = true;
+        ClientPortfolioGUI.sellS.change = true;
+        ClientPortfolioGUI.portS.change = true;
+        ClientBuyGUI.slidS.change = true;
+        ClientSellGUI.slidS.change = true;
+        ClientSellGUI.widS.change = true;
+
     }
 
 

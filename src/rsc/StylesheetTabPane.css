@@ -23,7 +23,7 @@
 
 .tab-pane .tab:selected
 {
-    -fx-background-color: #333333;
+    -fx-background-color: #373737;
 }
 
 .tab .tab-label {

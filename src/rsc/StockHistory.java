@@ -8,6 +8,7 @@ import java.util.HashMap;
  */
 public class StockHistory {
     static HashMap<String, double[]> stockHistory = new HashMap<>();
+    public static ArrayList<String> history = new ArrayList<>();
 
     public static void addHistory(HashMap<String, Object> stockMap) {
         int i;
@@ -53,7 +54,11 @@ public class StockHistory {
 
     public static double getPrice(String key) {
         double[] history = stockHistory.get(key);
-        return history[0];
+        try {
+            return history[0];
+        } catch (NullPointerException e) {
+            return 0.0;
+        }
 
     }
 

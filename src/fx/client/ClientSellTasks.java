@@ -15,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import rsc.PlayerManagement;
 import rsc.StockHistory;
 import rsc.StockManagement;
 import rsc.Values;
@@ -34,6 +33,7 @@ public class ClientSellTasks {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
         DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
+        public boolean change = false;
         Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
@@ -45,16 +45,15 @@ public class ClientSellTasks {
                 protected Void call() throws Exception {
 
                     ArrayList<String> stockNames = StockManagement.ownedStockN;
-                    if (stockNames.size() > 0) {
-                        Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
-                        Platform.runLater(() -> {
+                    AnchorPane sellWidget = new AnchorPane();
+                    AnchorPane.setTopAnchor(sellWidget, 0.0);
+                    AnchorPane.setLeftAnchor(sellWidget, 0.0);
+                    Platform.runLater(() -> {
+                        if (stockNames.size() > 0) {
+                            sellWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
+                            Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                             double height = 0.0;
-                            if (ClientSellGUI.stockWidget.getChildren().size() > 0) {
-                                ClientSellGUI.stockWidget.getChildren().remove(0, ClientSellGUI.stockWidget.getChildren().size());
-                            }
-
                             for (String name : stockNames) {
-
                                 AnchorPane widgetPane = new AnchorPane();
                                 widgetPane.setPrefSize(415.0, 35.0);
                                 String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #333333;";
@@ -83,9 +82,9 @@ public class ClientSellTasks {
                                 double pC = getPChange(name);
                                 Label pChange;
                                 if (pC < 0.0) {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientSellTasks.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
                                 } else {
-                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                                    pChange = new Label(perc.format(Math.abs(pC)) + "%", new ImageView(new Image(ClientSellTasks.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
                                 }
                                 pChange.setContentDisplay(ContentDisplay.RIGHT);
                                 pChange.setFont(priceF);
@@ -112,19 +111,30 @@ public class ClientSellTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientSellGUI.stockWidget.getChildren().add(widgetPane);
+                                sellWidget.getChildren().add(widgetPane);
                             }
-                        });
-                    }
-                    while (count == Values.secCount) {
+                        } else {
+                            sellWidget.setPrefSize(440, 240);
+                            Label noStocks = new Label("No stocks to sell!");
+                            noStocks.setPrefSize(415, 35);
+                            noStocks.setFont(stockNF);
+                            noStocks.setTextFill(Paint.valueOf("White"));
+                            noStocks.setAlignment(Pos.CENTER);
+                            noStocks.setTextAlignment(TextAlignment.CENTER);
+                            AnchorPane.setLeftAnchor(noStocks, 0.0);
+                            AnchorPane.setTopAnchor(noStocks, 200.0);
+                            sellWidget.getChildren().add(noStocks);
+                        }
+                        ClientSellGUI.stockP.setContent(sellWidget);
+                    });
+                    while (count == Values.secCount && !change) {
                         Thread.sleep(50);
                     }
+                    change = false;
                     count = Values.secCount;
                     return null;
                 }
-            }
-
-                    ;
+            };
         }
 
         @Override
@@ -139,7 +149,6 @@ public class ClientSellTasks {
                 if (history[i] == 0.0) {
                     return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
                 }
-
             }
             return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
 
@@ -150,6 +159,7 @@ public class ClientSellTasks {
         int count = 0;
         public String changeName = "<Select Stock>";
         private String name = "<Select Stock>";
+        DecimalFormat money = new DecimalFormat("$#,###,##0.00");
 
         @Override
         protected Task<Void> createTask() {
@@ -158,6 +168,19 @@ public class ClientSellTasks {
                 protected Void call() throws Exception {
                     updateMessage(name);
                     Platform.runLater(() -> {
+                        double pC = getPChange(name);
+                        ClientSellGUI.pChange.setText(money.format(Math.abs(pC)));
+                        if (pC < 0.0) {
+                            ClientSellGUI.pChange.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+
+                        } else {
+                            ClientSellGUI.pChange.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                        }
+                        ClientSellGUI.pChange.setContentDisplay(ContentDisplay.RIGHT);
+
+                        ClientSellGUI.price.setText(money.format(StockHistory.getPrice(name)));
+
+
                         if (Values.stockNamesNC.contains(name)) {
                             double[] history = StockHistory.getHistory(name);
                             ClientSellGUI.markData.getData().remove(0, ClientSellGUI.markData.getData().size());
@@ -182,11 +205,30 @@ public class ClientSellTasks {
             reset();
             start();
         }
+        double getPChange(String name) {
+            double[] history = StockHistory.getHistory(name);
+            for (int i = 0; i < history.length; i++) {
+                if (history[i] == 0.0) {
+//                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
+                    try {
+                        return history[0] - history[i - 1];
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        return 0.0;
+                    }
+                }
+
+            }
+//            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
+            return history[0] - history[history.length - 1];
+
+        }
     }
+
     public static class sliderService extends Service<Void> {
         int count = 0;
         private String name = "<Select Stock>";
         double max;
+        boolean change = false;
 
         @Override
         protected Task<Void> createTask() {
@@ -195,14 +237,14 @@ public class ClientSellTasks {
                 protected Void call() throws Exception {
                     ArrayList<String> stockN = Values.stockNamesNC;
                     Platform.runLater(() -> {
-                        if (stockN.contains(name)) {
-                            ClientSellGUI.sellSlider.setMajorTickUnit((int) PlayerManagement.getMoney() / StockHistory.getPrice(name));
-                            ClientSellGUI.sellSlider.setMax(Math.floor(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
+                        if (stockN.contains(name) && StockManagement.getOwnedQty(name) != -1) {
+                            ClientSellGUI.sellSlider.setMajorTickUnit((int) StockManagement.getOwnedQty(name) / 5);
+                            ClientSellGUI.sellSlider.setMax(StockManagement.getOwnedQty(name));
                         } else {
-                            ClientSellGUI.sellSlider.setMax(0);
+                            ClientSellGUI.sellSlider.setMax(10);
                         }
                     });
-                    while (name.equals(ClientSellGUI.graphS.changeName)) {
+                    while (name.equals(ClientSellGUI.graphS.changeName) && !change) {
                         Thread.sleep(50);
                     }
                     name = ClientSellGUI.graphS.changeName;

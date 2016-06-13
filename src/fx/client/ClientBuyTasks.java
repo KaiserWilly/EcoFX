@@ -45,14 +45,15 @@ public class ClientBuyTasks {
                 protected Void call() throws Exception {
 
                     ArrayList<String> stockNames = Values.stockNamesNC;
-                    if (stockNames.size() > 0) {
-                        Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
-                        Platform.runLater(() -> {
-                            double height = 0.0;
-                            if (ClientBuyGUI.stockWidget.getChildren().size() > 0) {
-                                ClientBuyGUI.stockWidget.getChildren().remove(0, ClientBuyGUI.stockWidget.getChildren().size());
-                            }
+                    AnchorPane buyWidget = new AnchorPane();
+                    AnchorPane.setTopAnchor(buyWidget, 0.0);
+                    AnchorPane.setLeftAnchor(buyWidget, 0.0);
+                    Platform.runLater(() -> {
 
+                        if (stockNames.size() > 0) {
+                            buyWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
+                            Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
+                            double height = 0.0;
                             for (String name : stockNames) {
 
                                 AnchorPane widgetPane = new AnchorPane();
@@ -112,10 +113,22 @@ public class ClientBuyTasks {
                                 AnchorPane.setLeftAnchor(widgetPane, 0.0);
                                 AnchorPane.setTopAnchor(widgetPane, height);
                                 height += 42.0;
-                                ClientBuyGUI.stockWidget.getChildren().add(widgetPane);
+                                buyWidget.getChildren().add(widgetPane);
                             }
-                        });
-                    }
+                        } else {
+                            buyWidget.setPrefSize(440, 240);
+                            Label noStocks = new Label("No stocks to buy!");
+                            noStocks.setPrefSize(415, 35);
+                            noStocks.setFont(stockNF);
+                            noStocks.setTextFill(Paint.valueOf("White"));
+                            noStocks.setAlignment(Pos.CENTER);
+                            noStocks.setTextAlignment(TextAlignment.CENTER);
+                            AnchorPane.setLeftAnchor(noStocks, 0.0);
+                            AnchorPane.setTopAnchor(noStocks, 200.0);
+                            buyWidget.getChildren().add(noStocks);
+                        }
+                        ClientBuyGUI.sPane.setContent(buyWidget);
+                    });
                     while (count == Values.secCount) {
                         Thread.sleep(50);
                     }
@@ -152,6 +165,7 @@ public class ClientBuyTasks {
         int count = 0;
         public String changeName = "<Select Stock>";
         private String name = "<Select Stock>";
+        DecimalFormat money = new DecimalFormat("$#,###,##0.00");
 
         @Override
         protected Task<Void> createTask() {
@@ -160,6 +174,18 @@ public class ClientBuyTasks {
                 protected Void call() throws Exception {
                     updateMessage(name);
                     Platform.runLater(() -> {
+                        double pC = getPChange(name);
+                        ClientBuyGUI.pChange.setText(money.format(Math.abs(pC)));
+                        if (pC < 0.0) {
+                            ClientBuyGUI.pChange.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+
+                        } else {
+                            ClientBuyGUI.pChange.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                        }
+                        ClientBuyGUI.pChange.setContentDisplay(ContentDisplay.RIGHT);
+
+                        ClientBuyGUI.price.setText(money.format(StockHistory.getPrice(name)));
+
                         if (Values.stockNamesNC.contains(name)) {
                             double[] history = StockHistory.getHistory(name);
                             ClientBuyGUI.markData.getData().remove(0, ClientBuyGUI.markData.getData().size());
@@ -184,12 +210,31 @@ public class ClientBuyTasks {
             reset();
             start();
         }
+
+        double getPChange(String name) {
+            double[] history = StockHistory.getHistory(name);
+            for (int i = 0; i < history.length; i++) {
+                if (history[i] == 0.0) {
+//                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
+                    try {
+                        return history[0] - history[i - 1];
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        return 0.0;
+                    }
+                }
+
+            }
+//            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
+            return history[0] - history[history.length - 1];
+
+        }
     }
 
     public static class sliderService extends Service<Void> {
         int count = 0;
         private String name = "<Select Stock>";
         double max;
+        public boolean change = false;
 
         @Override
         protected Task<Void> createTask() {
@@ -202,10 +247,10 @@ public class ClientBuyTasks {
                             ClientBuyGUI.buySlider.setMajorTickUnit((int) PlayerManagement.getMoney() / StockHistory.getPrice(name));
                             ClientBuyGUI.buySlider.setMax(Math.floor(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
                         } else {
-                            ClientBuyGUI.buySlider.setMax(0);
+                            ClientBuyGUI.buySlider.setMax(10);
                         }
                     });
-                    while (name.equals(ClientBuyGUI.graphS.changeName)) {
+                    while (name.equals(ClientBuyGUI.graphS.changeName) && !change) {
                         Thread.sleep(50);
                     }
                     name = ClientBuyGUI.graphS.changeName;
