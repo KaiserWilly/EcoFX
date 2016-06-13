@@ -5,7 +5,6 @@ import rsc.Values;
 import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Created 12/27/15
@@ -18,7 +17,7 @@ public class ServerMain {
 
     public static void startServer() {
         int ID = 0;
-
+        System.out.println();
         try {
             ServerFile.showTimeStamp("Starting Server");
             Values.consoleQueue.add("Starting Server");

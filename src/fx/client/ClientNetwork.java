@@ -7,10 +7,8 @@ import rsc.Values;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
 
 /**
  * Created by james on 4/30/2016.
@@ -26,51 +24,22 @@ public class ClientNetwork {
             ObjectInputStream in = new ObjectInputStream(is);
             System.out.println("Permanent Connection Made!");
 
-            OutputStream outputStream = clientSocket.getOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(outputStream);
-
             while (true) {
                 HashMap<String, Object> serverData = (HashMap<String, Object>) in.readObject();
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
                 StockManagement.checkOrders();
-
-                ArrayList<String> names = (ArrayList<String>)serverData.get("Usernames");
-
-                ArrayList<Object[]> clientData = (ArrayList<Object[]>) serverData.get("Leaderboard");
-
-                ArrayList<Object[]> leaderboardData = leaderBoardSort(clientData);
-
                 Values.secCount = (int) serverData.get("SEC");
-                System.out.println(Values.secCount);
-
-                out.writeObject(getUserData());
-
             }
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Failed to Connect!");
         }
-    }
-
-    static ArrayList<Object[]> leaderBoardSort(ArrayList<Object[]> data) {
-
-        try {
-            Collections.sort(data, (o1, o2) -> {
-                Double assetValue1 = (Double)o1[2];
-                Double assetValue2 = (Double)o2[2];
-
-                return assetValue2.compareTo(assetValue1);
-            });
-        } catch (Exception e) {}
-
-        return data;
     }
 
     static HashMap<String, Object> getUserData() {
         HashMap<String, Object> playerData = new HashMap<>();
         playerData.put("Name", PlayerManagement.name);
         playerData.put("Trades", 255);
-        playerData.put("Assets", PlayerManagement.getAssetWorth());
+        playerData.put("Assets", 135750);
         return playerData;
     }
 }
