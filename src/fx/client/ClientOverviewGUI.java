@@ -2,17 +2,15 @@ package fx.client;
 
 import fx.server.ServerGUI;
 import javafx.animation.FadeTransition;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,10 +32,13 @@ public class ClientOverviewGUI {
     Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
     Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
     Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
+    Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
     public AnchorPane overviewAnchorPane = new AnchorPane();
     public static XYChart.Series<Number, Number> avgMarData = new XYChart.Series<>();
     public static ClientOverviewTasks.graphService graphS = new ClientOverviewTasks.graphService();
+    public static ClientOverviewTasks.tableService tabS = new ClientOverviewTasks.tableService();
     public boolean opened = false;
+    public static ScrollPane tablePane;
     DropShadow dsSmall = new DropShadow(2.0, 1.0, 1.0, Color.BLACK);
 
     public AnchorPane createPane() {
@@ -194,53 +195,78 @@ public class ClientOverviewGUI {
 
     public AnchorPane rankPane() {
         AnchorPane rankPane = new AnchorPane();
-        String graphPaneStyle = "-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; ";
+        String graphPaneStyle = "-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;";
         rankPane.setStyle(graphPaneStyle);
-        rankPane.setPrefSize(488, 350);
-
-        ObservableList<playerRank> data = FXCollections.observableArrayList(
-                new playerRank("1", "337", "The Kaiser", "$125,300", "0.9%"),
-                new playerRank("2", "302", "Mandalute", "$122,900", "0.2%"),
-                new playerRank("3", "254", "TheGamerzRevolution", "$111,600", "0.1%"),
-                new playerRank("4", "113", "E-Dubble", "$99,300", "-0.3%")
-        );
-
-        String[] columnNames = new String[]{"Rank", "Trades", "Name", "Assets", "Asset Change over 30s"};
-        String[] propertyValue = new String[]{"rank", "trades", "changeName", "assets", "assetChange"};
-        int[] columnWidth = new int[]{50, 50, 125, 75, 163};
-
-        TableView<playerRank> rankView = new TableView<>();
-        rankView.setItems(data);
-
-        for (int i = 0; i < 5; i++) {
-            TableColumn column = new TableColumn();
-            column.setText(columnNames[i]);
-            column.setMinWidth(columnWidth[i]);
-            column.setStyle("-fx-alignment: CENTER;");
-            column.setCellValueFactory(new PropertyValueFactory(propertyValue[i]));
-            rankView.getColumns().add(column);
-        }
-        rankView.setPrefSize(470, 300);
-        rankView.setEditable(false);
-        rankView.getStylesheets().add("rsc/StylesheetTable.css");
-        AnchorPane.setTopAnchor(rankView, 35.0);
-        AnchorPane.setLeftAnchor(rankView, 7.0);
-        rankPane.getChildren().add(rankView);
+        rankPane.setPrefSize(450, 478);
 
         Label rankL = new Label("Server Rankings");
-        rankL.setPrefSize(480, 25);
+        rankL.setPrefSize(450, 25);
         rankL.setTextFill(Paint.valueOf("White"));
         rankL.setFont(aeroMI20);
         rankL.setAlignment(Pos.CENTER);
         rankL.setTextAlignment(TextAlignment.CENTER);
-        AnchorPane.setTopAnchor(rankL, 5.0);
-        AnchorPane.setLeftAnchor(rankL, 5.0);
+        AnchorPane.setTopAnchor(rankL, 0.0);
+        AnchorPane.setLeftAnchor(rankL, 0.0);
         rankPane.getChildren().add(rankL);
+
+
+        Label title = new Label("RANK");
+        title.setFont(aeroMI10);
+        title.setPrefSize(50, 10);
+        title.setTextFill(Paint.valueOf("White"));
+        title.setAlignment(Pos.CENTER);
+        title.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(title, 28.0);
+        AnchorPane.setLeftAnchor(title, 5.0);
+        rankPane.getChildren().add(title);
+
+        Label price = new Label("TRADES");
+        price.setFont(aeroMI10);
+        price.setPrefSize(50, 10);
+        price.setTextFill(Paint.valueOf("White"));
+        price.setAlignment(Pos.CENTER);
+        price.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(price, 28.0);
+        AnchorPane.setLeftAnchor(price, 75.0);
+        rankPane.getChildren().add(price);
+
+        Label change = new Label("PLAYER NAME");
+        change.setFont(aeroMI10);
+        change.setPrefSize(75, 10);
+        change.setTextFill(Paint.valueOf("White"));
+        change.setAlignment(Pos.CENTER);
+        change.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(change, 28.0);
+        AnchorPane.setLeftAnchor(change, 140.0);
+        rankPane.getChildren().add(change);
+
+        Label assets = new Label("ASSETS");
+        assets.setFont(aeroMI10);
+        assets.setPrefSize(75, 10);
+        assets.setTextFill(Paint.valueOf("White"));
+        assets.setAlignment(Pos.CENTER);
+        assets.setTextAlignment(TextAlignment.CENTER);
+        AnchorPane.setTopAnchor(assets, 28.0);
+        AnchorPane.setLeftAnchor(assets, 175.0);
+        rankPane.getChildren().add(assets);
+
+
+        tablePane = new ScrollPane();
+        tablePane.getStylesheets().add("rsc/StylesheetScrollPane.css");
+        tablePane.setPrefSize(440, 420);
+        tablePane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        tablePane.setFitToWidth(true);
+        tablePane.setContent(new AnchorPane());
+        AnchorPane.setTopAnchor(tablePane, 38.0);
+        AnchorPane.setLeftAnchor(tablePane, 5.0);
+        rankPane.getChildren().add(tablePane);
+
 
         AnchorPane.setTopAnchor(rankPane, 5.0);
         AnchorPane.setLeftAnchor(rankPane, 0.0);
         return rankPane;
     }
+
 
     public AnchorPane holdingsPane() {
         AnchorPane holdingsPane = new AnchorPane();
@@ -302,42 +328,6 @@ public class ClientOverviewGUI {
 
     public void startServices() {
         graphS.start();
+        tabS.start();
     }
-
-    public static class playerRank {
-        private StringProperty rank;
-        private StringProperty trades;
-        private StringProperty name;
-        private StringProperty assets;
-        private StringProperty assetChange;
-
-        public playerRank(String rank, String trades, String name, String assets, String assetChange) {
-            this.rank = new SimpleStringProperty(rank);
-            this.trades = new SimpleStringProperty(trades);
-            this.name = new SimpleStringProperty(name);
-            this.assets = new SimpleStringProperty(assets);
-            this.assetChange = new SimpleStringProperty(assetChange);
-        }
-
-        public StringProperty rankProperty() {
-            return rank;
-        }
-
-        public StringProperty tradesProperty() {
-            return trades;
-        }
-
-        public StringProperty nameProperty() {
-            return name;
-        }
-
-        public StringProperty assetsProperty() {
-            return assets;
-        }
-
-        public StringProperty assetChangeProperty() {
-            return assetChange;
-        }
-    }
-
 }

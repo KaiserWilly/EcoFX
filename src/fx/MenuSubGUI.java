@@ -87,7 +87,9 @@ public class MenuSubGUI {
                     if (ip.getText().length() > 0) {
                         Values.ip = ip.getText();
                     }
-                    PlayerManagement.name = username.getText();
+                    if (username.getText().length() > 0) {
+                        PlayerManagement.name = username.getText();
+                    }
                     System.out.println("Going to join a game with the IP address: " + Values.ip);
                     FrameGUI.setScene("Client");
                 });

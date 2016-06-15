@@ -7,8 +7,10 @@ import java.util.Map;
  * Created by james on 6/12/2016.
  */
 public class PlayerManagement {
-    private static double playerMoney = 100000.00;
+    private static Double playerMoney = 100000.00;
     public static String name = "BillyBob";
+    public static ArrayList<Object[]> leaderboardData = new ArrayList<>();
+    public static Integer trades = 0;
 
     public static void subtractMoney(double money) {
         if (money > playerMoney) {
@@ -25,7 +27,7 @@ public class PlayerManagement {
         return playerMoney;
     }
 
-    public static double getAssetWorth() {
+    public static Double getAssetWorth() {
         double value = playerMoney;
         ArrayList<String> oSN = StockManagement.ownedStockN;
         Map<String, Object[]> oSM = StockManagement.getOwnedStockData();
@@ -33,15 +35,15 @@ public class PlayerManagement {
 
         for (String name : oSN) {
             Object[] data = oSM.get(name);
-            value += (double) data[0] * StockHistory.getPrice(name);
+            value += Double.parseDouble(String.valueOf(data[0])) * StockHistory.getPrice(name);
         }
 
         for (Object[] data : buyOrderData) {
-            value += (double) data[1] * StockHistory.getPrice((String) data[0]);
+            value += Double.parseDouble(String.valueOf(data[1])) * StockHistory.getPrice((String) data[0]);
         }
 
         for (Object[] data : sellOrderData) {
-            value += (double) data[1] * StockHistory.getPrice((String) data[0]);
+            value += Double.parseDouble(String.valueOf(data[1])) * StockHistory.getPrice((String) data[0]);
         }
 
         return value;

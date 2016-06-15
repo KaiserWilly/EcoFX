@@ -22,9 +22,8 @@ public class ServerTimer {
         return new TimerTask() {
             @Override
             public void run() {
-                ServerValues.secCount++;
                 ServerValues.genServerData();
-//                ServerFile.showTimeStamp("Data Update Sent; SEC: " + Values.secCount);
+                ServerValues.secCount++;
             }
         };
     }

@@ -3,8 +3,7 @@ package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -37,19 +36,18 @@ public class ServerClientHandler extends Thread {
             while (true) {
                 if (secCount < ServerValues.secCount) {
                     secCount = ServerValues.secCount;
-                    System.out.println(secCount);
-                    out.writeObject(ServerValues.serverData); //Writes The Stock Data To The Client
+                    out.writeObject(ServerValues.getServerData()); //Writes The Stock Data To The Client
                     out.reset(); //Resets the Output Stream to clear to markData inside
-
                     HashMap<String, Object> userData = (HashMap<String, Object>) in.readObject();
                     Object[] data = {userData.get("Name"), userData.get("Trades"), userData.get("Assets")};
+                    System.out.println(Arrays.toString(data));
                     ServerValues.clientsData.set(ID, data);
-
                 }
                 Thread.sleep(50); //Sleeps the socket
             }
         } catch (SocketException e) {
             ServerFile.showTimeStamp("Socket Error on Socket ID: " + ID);
+            ServerValues.clientsData.set(ID, new Object[]{"", 0, 0});
         } catch (Exception e) {
             e.printStackTrace();
         }

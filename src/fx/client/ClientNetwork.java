@@ -22,7 +22,6 @@ public class ClientNetwork {
 
     static void connentToServer(String ip) {
         try {
-            System.out.println("Entered Client/Server Class");
             Socket clientSocket = new Socket(ip, 1180);
             InputStream is = clientSocket.getInputStream();
             ObjectInputStream in = new ObjectInputStream(is);
@@ -31,16 +30,23 @@ public class ClientNetwork {
             System.out.println("Permanent Connection Made!");
 
             while (true) {
-                HashMap<String, Object> serverData = (HashMap<String, Object>) in.readObject();
+                Object rawServerData = in.readObject();
+                HashMap<String, Object> serverData = (HashMap<String, Object>) rawServerData;
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
+                System.out.println(StockHistory.getPrice("Composite"));
                 StockManagement.checkOrders();
-                Values.secCount = (int) serverData.get("SEC");
+
                 out.writeObject(getUserData());
-                ArrayList<Object[]> clientData = (ArrayList<Object[]>) serverData.get("Leaderboard");
-                ArrayList<Object[]> leaderboardData = leaderBoardSort(clientData);
+                out.flush();
+                ArrayList<Object[]> leaderData = (ArrayList<Object[]>) serverData.get("Leaderboard");
+                if (leaderData != null) {
+                    PlayerManagement.leaderboardData = leaderBoardSort(leaderData);
+                }
+                Values.secCount = (Integer) serverData.get("SEC");
+                Thread.sleep(50);
             }
         } catch (Exception e) {
-            System.out.println("Failed to Connect!");
+            e.printStackTrace();
         }
     }
 
@@ -60,7 +66,7 @@ public class ClientNetwork {
     static HashMap<String, Object> getUserData() {
         HashMap<String, Object> playerData = new HashMap<>();
         playerData.put("Name", PlayerManagement.name);
-        playerData.put("Trades", 255);
+        playerData.put("Trades", PlayerManagement.trades);
         playerData.put("Assets", PlayerManagement.getAssetWorth());
         return playerData;
     }

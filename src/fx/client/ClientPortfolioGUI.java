@@ -2,7 +2,6 @@ package fx.client;
 
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -19,18 +18,11 @@ import javafx.util.Duration;
 public class ClientPortfolioGUI {
     public AnchorPane portfolioAnchorPane = new AnchorPane();
     public static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane(), historyWidget = new AnchorPane();
-    Font aeroMI30 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
-    Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
-    Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
     Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
-    //    public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
     public static ClientPortfolioTasks.portfolioService portS = new ClientPortfolioTasks.portfolioService();
     public static ClientPortfolioTasks.buyOrderService buyS = new ClientPortfolioTasks.buyOrderService();
     public static ClientPortfolioTasks.sellOrderService sellS = new ClientPortfolioTasks.sellOrderService();
     public static ClientPortfolioTasks.historyService histS = new ClientPortfolioTasks.historyService();
-    public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
     public static ScrollPane portPane, buyPane, sellPane, historyPane;
     boolean opened = false;
 
