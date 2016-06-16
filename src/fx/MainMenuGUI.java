@@ -42,9 +42,9 @@ public class MainMenuGUI {
         buttonBox.setPadding(new Insets(8));
         buttonBox.setSpacing(1);
         AnchorPane.setLeftAnchor(buttonBox, 5.0);
-        AnchorPane.setBottomAnchor(buttonBox, 5.0);
+        AnchorPane.setBottomAnchor(buttonBox, 30.0);
 
-        menuButt = new Button[8];
+        menuButt = new Button[3];
         for (int i = 0; i < menuButt.length; i++) {
             menuButt[i] = createMenuButton(i);
             VBox.setMargin(menuButt[i], new Insets(0, 0, 0, 4));
@@ -84,32 +84,17 @@ public class MainMenuGUI {
         String[] menuButtonPaths = new String[]{
                 "rsc/menu/main/menuplaybutton.png",
                 "rsc/menu/main/menuhostbutton.png",
-                "rsc/menu/main/menueditbutton.png",
-                "rsc/menu/main/menuchangebutton.png",
-                "rsc/menu/main/menuextrasbutton.png",
-                "rsc/menu/main/menuhelpbutton.png",
-                "rsc/menu/main/menucreditsbutton.png",
-                "rsc/menu/main/menusettingsbutton.png"
+                "rsc/menu/main/menucreditsbutton.png"
         };
         String[] menuButtHoverPaths = new String[]{
                 "rsc/menu/main/menuplaybuttonhover.png",
                 "rsc/menu/main/menuhostbuttonhover.png",
-                "rsc/menu/main/menueditbuttonhover.png",
-                "rsc/menu/main/menuchangebuttonhover.png",
-                "rsc/menu/main/menuextrasbuttonhover.png",
-                "rsc/menu/main/menuhelpbuttonhover.png",
-                "rsc/menu/main/menucreditsbuttonhover.png",
-                "rsc/menu/main/menusettingsbuttonhover.png"
+                "rsc/menu/main/menucreditsbuttonhover.png"
         };
         String[] menuButtNames = new String[]{
                 "Play",
                 "Host",
-                "EditP",
-                "ChangeP",
-                "Extras",
-                "Help",
-                "Credits",
-                "Settings"
+                "Credits"
         };
 
 

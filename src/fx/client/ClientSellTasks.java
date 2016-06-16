@@ -238,10 +238,10 @@ public class ClientSellTasks {
                     ArrayList<String> stockN = Values.stockNamesNC;
                     Platform.runLater(() -> {
                         if (stockN.contains(name) && StockManagement.getOwnedQty(name) != -1) {
-                            ClientSellGUI.sellSlider.setMajorTickUnit((int) StockManagement.getOwnedQty(name) / 5);
+                            ClientSellGUI.sellSlider.setMajorTickUnit(StockManagement.getOwnedQty(name) / 5);
                             ClientSellGUI.sellSlider.setMax(StockManagement.getOwnedQty(name));
                         } else {
-                            ClientSellGUI.sellSlider.setMax(10);
+                            ClientSellGUI.sellSlider.setMax(.9);
                         }
                     });
                     while (name.equals(ClientSellGUI.graphS.changeName) && !change) {

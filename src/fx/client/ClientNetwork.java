@@ -33,15 +33,13 @@ public class ClientNetwork {
                 Object rawServerData = in.readObject();
                 HashMap<String, Object> serverData = (HashMap<String, Object>) rawServerData;
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
-                System.out.println(StockHistory.getPrice("Composite"));
                 StockManagement.checkOrders();
-
-                out.writeObject(getUserData());
-                out.flush();
                 ArrayList<Object[]> leaderData = (ArrayList<Object[]>) serverData.get("Leaderboard");
                 if (leaderData != null) {
                     PlayerManagement.leaderboardData = leaderBoardSort(leaderData);
                 }
+                out.writeObject(getUserData());
+                out.flush();
                 Values.secCount = (Integer) serverData.get("SEC");
                 Thread.sleep(50);
             }

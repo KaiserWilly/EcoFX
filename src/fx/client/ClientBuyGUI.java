@@ -202,17 +202,17 @@ public class ClientBuyGUI {
         buySlider = new Slider();
         buySlider.setPrefSize(400, 50);
         buySlider.setMin(0);
-        buySlider.setMax(10);
+        buySlider.setMax(0.9);
         buySlider.setValue(0);
         buySlider.setShowTickLabels(true);
         buySlider.setShowTickMarks(true);
-        buySlider.setMajorTickUnit((int) buySlider.getMax() / 5);
+        buySlider.setMajorTickUnit(buySlider.getMax() / 5.0);
         buySlider.setMinorTickCount(5);
-        buySlider.setBlockIncrement((int) buySlider.getMax() / 50);
+        buySlider.setBlockIncrement(buySlider.getMax() / 50.0);
         AnchorPane.setTopAnchor(buySlider, 225.0);
         AnchorPane.setLeftAnchor(buySlider, 5.0);
         graphWidget.getChildren().add(buySlider);
-        graphWidget.managedProperty().bind(Bindings.greaterThan(buySlider.maxProperty(), 10.0));
+        graphWidget.managedProperty().bind(Bindings.greaterThanOrEqual(buySlider.maxProperty(), 1.0));
         slidS.start();
 
         Label buyL = new Label("Buy:");
@@ -271,6 +271,7 @@ public class ClientBuyGUI {
             int quantity = (int) Math.floor(buySlider.getValue());
             double pps = StockHistory.getPrice(name);
             if (quantity > 0) {
+                System.out.println(buyOrderCB.isSelected());
                 if (buyOrderCB.isSelected()) {
                     pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
                     StockManagement.setBuyOrder(name, quantity, pps);

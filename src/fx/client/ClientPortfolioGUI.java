@@ -15,7 +15,7 @@ import javafx.util.Duration;
 /**
  * Created by james on 4/29/2016.
  */
-public class ClientPortfolioGUI {
+public class ClientPortfolioGUI{
     public AnchorPane portfolioAnchorPane = new AnchorPane();
     public static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane(), historyWidget = new AnchorPane();
     Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);

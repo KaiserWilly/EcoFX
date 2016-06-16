@@ -1,6 +1,5 @@
 package rsc;
 
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 public class Values {
     public final static double VERSION = 1.3;
     public static int secCount = 0, stockCount = 0;
-    public static ArrayList<String> playerList = new ArrayList<>();
     public static ArrayList<String> consoleQueue = new ArrayList<>();
     public static String seed = "0", maxP = "10", mode = "con", ip = "0.0.0.0", currentStockName = "Composite";
     public static ArrayList<String> stockNames = new ArrayList<>(), stockNamesNC = new ArrayList<>();

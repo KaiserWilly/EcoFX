@@ -247,10 +247,10 @@ public class ClientBuyTasks {
                             ClientBuyGUI.buySlider.setMajorTickUnit((int) PlayerManagement.getMoney() / StockHistory.getPrice(name));
                             ClientBuyGUI.buySlider.setMax(Math.floor(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
                         } else {
-                            ClientBuyGUI.buySlider.setMax(10);
+                            ClientBuyGUI.buySlider.setMax(.9);
                         }
                     });
-                    while (name.equals(ClientBuyGUI.graphS.changeName) && !change) {
+                    while (name.equals(ClientBuyGUI.graphS.changeName) && !change && count == Values.secCount) {
                         Thread.sleep(50);
                     }
                     name = ClientBuyGUI.graphS.changeName;

@@ -4,18 +4,17 @@ import rsc.StockHistory;
 import server.engine.EcoEngine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
  * Created by james on 6/10/2016.
  */
 public class ServerValues {
-    static HashMap<String, Object> serverData = new HashMap<>();
-    static ArrayList<String> usernames = new ArrayList<>();
+    public static ArrayList<String> playerList = new ArrayList<>();
+    private static HashMap<String, Object> serverData = new HashMap<>();
     public static Integer secCount = 0;
-
-    static public ArrayList<Object[]> clientsData = new ArrayList<>();
+    public static ArrayList<Object[]> clientsData = new ArrayList<>();
 
     public static void genServerData() {
         HashMap<String, Object> data;
@@ -25,31 +24,22 @@ public class ServerValues {
         data = new HashMap<>();
         data.put("SEC", secCount);
         data.put("Market Data", serverD);
-        serverData.put("Leaderboard", filterClientData(clientsData));
-        serverData.put("Usernames", genUsernames());
-        data.put("User Data", new HashMap<String, Object>());
-        System.out.println(Arrays.toString(StockHistory.getHistory("Composite")));
-
+        data.put("Leaderboard", filterClientData(clientsData));
+        playerList = genUsernames(filterClientData(clientsData));
         serverData = data;
     }
 
     public static HashMap<String, Object> getServerData() {
-        HashMap<String, Object> data = serverData;
-        return data;
+        return serverData;
     }
 
-    public static ArrayList<String> genUsernames() {
-        try {
-            usernames.clear();
-            for (Object[] data : clientsData) {
-                if (!data[0].equals("")) {
-                    usernames.add(data[0].toString());
-                }
-            }
-            return usernames;
-        } catch (Exception e) {
-            return usernames;
+    public static ArrayList<String> genUsernames(ArrayList<Object[]> data) {
+        ArrayList<String> uN = new ArrayList<>();
+        for (Object[] raw : data) {
+            uN.add((String) raw[0]);
         }
+        Collections.sort(uN, String.CASE_INSENSITIVE_ORDER);
+        return uN;
     }
 
     public static ArrayList<Object[]> filterClientData(ArrayList<Object[]> data) {
@@ -61,5 +51,13 @@ public class ServerValues {
             }
         }
         return filteredData;
+    }
+
+    public static void addClient() {
+        clientsData.add(new Object[]{"", 0, 0});
+    }
+
+    public static void refreshClientData(Object[] data, int ID) {
+        ServerValues.clientsData.set(ID, data);
     }
 }

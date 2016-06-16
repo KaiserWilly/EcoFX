@@ -2,6 +2,7 @@ package rsc;
 
 import fx.client.ClientPortfolioGUI;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
  * Created by james on 6/10/2016.
  */
 public class StockManagement {
+    static DecimalFormat money = new DecimalFormat("$#,###,##0.00");
     public static ArrayList<String> ownedStockN = new ArrayList<>(), buyOrderN = new ArrayList<>(), sellOrderN = new ArrayList<>();
     private static HashMap<String, Object[]> ownedStock = new HashMap<>();
     private static ArrayList<Object[]> buyOrders = new ArrayList<>(), sellOrders = new ArrayList<>();
@@ -27,7 +29,8 @@ public class StockManagement {
         if (!order) {
             PlayerManagement.subtractMoney(pricePerShare * (double) quantity);
         }
-        StockHistory.history.add("Bought " + quantity + " shares of " + stockName + " for $" + pricePerShare + " per Share");
+        StockHistory.history.add("Bought " + quantity + " shares of " + stockName + " for " + money.format(pricePerShare) + " per Share");
+        PlayerManagement.trades++;
     }
 
     public static void sellStock(String stockName, int quantity, double pricePerShare, boolean order) {
@@ -42,7 +45,8 @@ public class StockManagement {
             }
         }
         PlayerManagement.addMoney(pricePerShare * (double) quantity);
-        StockHistory.history.add("Sold " + quantity + " shares of " + stockName + " for $" + pricePerShare + " per Share");
+        StockHistory.history.add("Sold " + quantity + " shares of " + stockName + " for $" + money.format(pricePerShare) + " per Share");
+        PlayerManagement.trades++;
     }
 
     public static double getOrgPrice(String name) {
@@ -168,7 +172,7 @@ public class StockManagement {
             if (pps <= (double) orderData[2]) {
                 buyStock((String) orderData[0], (int) orderData[1], pps, true);
                 buyOrders.remove(i);
-                buyOrderN.remove((String) orderData[0]);
+                buyOrderN.remove(orderData[0]);
                 ClientPortfolioGUI.portS.change = true;
                 ClientPortfolioGUI.buyS.change = true;
                 i--; //Compensate for shift due to removal

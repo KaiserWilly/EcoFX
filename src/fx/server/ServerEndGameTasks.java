@@ -1,63 +1,26 @@
-package fx.client;
+package fx.server;
 
 import fx.MenuSubGUI;
+import fx.client.ClientFrameGUI;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.geometry.Pos;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import rsc.PlayerManagement;
-import rsc.StockHistory;
-import rsc.Values;
+import server.ServerValues;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Arrays;
 
 /**
- * Created by james on 4/30/2016.
+ * Created by james on 6/15/2016.
  */
-public class ClientOverviewTasks {
-
-    public static class graphService extends Service<Void> {
-        int count = 0;
-        String name = "Composite";
-
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    updateMessage(name);
-                    Platform.runLater(() -> {
-                        double[] history = StockHistory.getHistory(name);
-                        ClientOverviewGUI.avgMarData.getData().remove(0, ClientOverviewGUI.avgMarData.getData().size());
-                        for (int i = 0; i < history.length; i++) {
-                            if (history[i] != 0.0)
-                                ClientOverviewGUI.avgMarData.getData().add(new XYChart.Data<>(i * 2, history[i]));
-                        }
-                    });
-                    while (count == Values.secCount && Objects.equals(name, Values.currentStockName)) {
-                        Thread.sleep(10);
-                    }
-                    count = Values.secCount;
-                    name = Values.currentStockName;
-                    return null;
-                }
-            };
-        }
-
-        @Override
-        protected void succeeded() {
-            reset();
-            start();
-        }
-    }
+public class ServerEndGameTasks {
 
     public static class tableService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
@@ -74,7 +37,7 @@ public class ClientOverviewTasks {
                 @Override
                 protected Void call() throws Exception {
 
-                    ArrayList<Object[]> stockNames = PlayerManagement.leaderboardData;
+                    ArrayList<Object[]> stockNames = ServerValues.filterClientData(ServerValues.clientsData);
                     AnchorPane sellWidget = new AnchorPane();
                     AnchorPane.setTopAnchor(sellWidget, 0.0);
                     AnchorPane.setLeftAnchor(sellWidget, 0.0);
@@ -84,6 +47,7 @@ public class ClientOverviewTasks {
                             double height = 0.0;
                             int rank = 1;
                             for (Object[] data : stockNames) {
+                                System.out.println(Arrays.toString(data));
                                 AnchorPane widgetPane = new AnchorPane();
                                 widgetPane.setPrefSize(415.0, 30.0);
                                 String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #333333;";
@@ -141,61 +105,28 @@ public class ClientOverviewTasks {
 
                             AnchorPane widgetPane = new AnchorPane();
                             widgetPane.setPrefSize(415.0, 30.0);
-                            String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #333333;";
+                            String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #444444;";
                             widgetPane.setStyle(graphPaneStyle);
 
-                            Label rankL = new Label(String.valueOf(1));
+                            Label rankL = new Label("No Players were on when server stopped!");
                             rankL.setFont(stockNF);
                             rankL.setTextFill(Paint.valueOf("White"));
-                            rankL.setPrefSize(50.0, 30.0);
+                            rankL.setPrefSize(415, 30.0);
                             rankL.setTextAlignment(TextAlignment.CENTER);
                             rankL.setAlignment(Pos.CENTER);
-                            AnchorPane.setTopAnchor(rankL, 0.0);
+                            AnchorPane.setTopAnchor(rankL, 50.0);
                             AnchorPane.setLeftAnchor(rankL, 0.0);
                             widgetPane.getChildren().add(rankL);
 
-                            Label trades = new Label(String.valueOf(PlayerManagement.trades));
-                            trades.setFont(priceF);
-                            trades.setTextFill(Paint.valueOf("White"));
-                            trades.setPrefSize(50.0, 30.0);
-                            trades.setTextAlignment(TextAlignment.CENTER);
-                            trades.setAlignment(Pos.CENTER);
-                            AnchorPane.setTopAnchor(trades, 0.0);
-                            AnchorPane.setLeftAnchor(trades, 60.0);
-                            widgetPane.getChildren().add(trades);
-
-                            Label name = new Label(PlayerManagement.name);
-                            name.setFont(priceF);
-                            name.setTextFill(Paint.valueOf("White"));
-                            name.setPrefSize(120.0, 30.0);
-                            name.setTextAlignment(TextAlignment.CENTER);
-                            name.setAlignment(Pos.CENTER);
-                            AnchorPane.setTopAnchor(name, 0.0);
-                            AnchorPane.setLeftAnchor(name, 120.0);
-                            widgetPane.getChildren().add(name);
-
-                            Label assets = new Label(money.format(PlayerManagement.getAssetWorth()));
-                            assets.setFont(priceF);
-                            assets.setTextFill(Paint.valueOf("White"));
-                            assets.setPrefSize(125.0, 30.0);
-                            assets.setTextAlignment(TextAlignment.CENTER);
-                            assets.setAlignment(Pos.CENTER);
-                            AnchorPane.setTopAnchor(assets, 0.0);
-                            AnchorPane.setLeftAnchor(assets, 250.0);
-                            widgetPane.getChildren().add(assets);
 
 
                             AnchorPane.setLeftAnchor(widgetPane, 0.0);
                             AnchorPane.setTopAnchor(widgetPane, 0.0);
                             sellWidget.getChildren().add(widgetPane);
                         }
-                        ClientOverviewGUI.tablePane.setContent(sellWidget);
+                        ServerEndGameGUI.endGamePane.setContent(sellWidget);
                     });
-                    while (count == Values.secCount && !change) {
-                        Thread.sleep(50);
-                    }
-                    change = false;
-                    count = Values.secCount;
+                    Thread.sleep(500);
                     return null;
                 }
             };

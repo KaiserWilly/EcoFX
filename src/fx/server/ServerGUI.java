@@ -27,6 +27,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import rsc.Values;
+import server.ServerTimer;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -224,12 +225,15 @@ public class ServerGUI extends Application {
                     pausePlay.setGraphic(new ImageView(new Image(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverplayhover.png"))));
                     pausePlay.setOnMouseExited(e -> pausePlay.setGraphic(new ImageView(new Image(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverplay.png")))));
                     pausePlay.setOnMouseEntered(e -> pausePlay.setGraphic(new ImageView(new Image(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverplayhover.png")))));
+                    ServerTimer.pauseTimer();
                     break;
                 case "Pause":
                     pausePlay.setId("Start");
                     pausePlay.setGraphic(new ImageView(new Image(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverpausehover.png"))));
                     pausePlay.setOnMouseExited(e -> pausePlay.setGraphic(new ImageView(new Image(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverpause.png")))));
                     pausePlay.setOnMouseEntered(e -> pausePlay.setGraphic(new ImageView(new Image(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverpausehover.png")))));
+                    ServerTimer.resumeTimer();
+
                     break;
 
             }
@@ -238,30 +242,23 @@ public class ServerGUI extends Application {
         pausePlay.setBorder(null);
         pausePlay.setEffect(ds);
         AnchorPane.setLeftAnchor(pausePlay, 660.0);
-        AnchorPane.setBottomAnchor(pausePlay, 103.0);
+        AnchorPane.setBottomAnchor(pausePlay, 63.0);
         serverAnchorPane.getChildren().add(pausePlay);
 
         Button endGame = new Button();
         endGame.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverendgame.png"))));
         endGame.setOnMouseExited(e -> endGame.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverendgame.png")))));
         endGame.setOnMouseEntered(e -> endGame.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/server/serverendgamehover.png")))));
+        endGame.setOnAction(event -> {
+            ServerTimer.stopTimer();
+            FrameGUI.setScene("End");
+        });
         endGame.setBackground(null);
         endGame.setBorder(null);
         endGame.setEffect(ds);
         AnchorPane.setLeftAnchor(endGame, 660.0);
         AnchorPane.setBottomAnchor(endGame, 23.0);
         serverAnchorPane.getChildren().add(endGame);
-
-        Button saveGame = new Button();
-        saveGame.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/server/serversavegame.png"))));
-        saveGame.setOnMouseExited(e -> saveGame.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/server/serversavegame.png")))));
-        saveGame.setOnMouseEntered(e -> saveGame.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/server/serversavegamehover.png")))));
-        saveGame.setBackground(null);
-        saveGame.setBorder(null);
-        saveGame.setEffect(ds);
-        AnchorPane.setLeftAnchor(saveGame, 660.0);
-        AnchorPane.setBottomAnchor(saveGame, 63.0);
-        serverAnchorPane.getChildren().add(saveGame);
 
         serverAnchorPane.managedProperty().bind(serverAnchorPane.visibleProperty());
         serverAnchorPane.setVisible(false);
@@ -284,6 +281,9 @@ public class ServerGUI extends Application {
             switch (newPane) {
                 case "Menu":
                     FrameGUI.menu.open();
+                    break;
+                case "End":
+                    FrameGUI.end.open();
                     break;
             }
         });

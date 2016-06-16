@@ -65,7 +65,7 @@ public class ServerTasks {
     }
 
     public static class consoleService extends Service<Void> {
-        String[] consoleTextA = new String[30];
+        String[] consoleTextA = new String[28];
 
         @Override
         protected Task<Void> createTask() {
@@ -154,11 +154,11 @@ public class ServerTasks {
             return new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    updateMessage(PrintToList(Values.playerList));
-                    while (size == Values.playerList.size()) {
+                    updateMessage(PrintToList(ServerValues.playerList));
+                    while (size == ServerValues.playerList.size()) {
                         Thread.sleep(50);
                     }
-                    size = Values.playerList.size();
+                    size = ServerValues.playerList.size();
                     return null;
                 }
             };
@@ -193,10 +193,10 @@ public class ServerTasks {
                 @Override
                 protected Void call() throws Exception {
                     updateMessage("Player Count: " + size);
-                    while (getSize() == Values.playerList.size()) {
+                    while (getSize() == ServerValues.playerList.size()) {
                         Thread.sleep(50);
                     }
-                    size = Values.playerList.size();
+                    size = ServerValues.playerList.size();
                     return null;
                 }
             };

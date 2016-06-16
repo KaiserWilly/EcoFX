@@ -1,6 +1,7 @@
 package fx;
 
 import fx.client.ClientFrameGUI;
+import fx.server.ServerEndGameGUI;
 import fx.server.ServerGUI;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -21,10 +22,11 @@ public class FrameGUI extends Application {
     public static MainMenuGUI menu = new MainMenuGUI();
     public static ServerGUI server = new ServerGUI();
     public static ClientFrameGUI client = new ClientFrameGUI();
+    public static ServerEndGameGUI end = new ServerEndGameGUI();
     static String curScene = "Menu";
     static StackPane stack;
     static Scene scene;
-    static Node menuP, clientP, serverP;
+    static Node menuP, clientP, serverP, endP;
 
     public static void run(String[] args) {
         launch(args);
@@ -55,10 +57,14 @@ public class FrameGUI extends Application {
         stack.getChildren().add(serverP);
         menuP = menu.menuPane();
         stack.getChildren().add(menuP);
+        endP = end.createPane();
+        stack.getChildren().add(endP);
+
 
         client.setOpacity(0.0);
         server.setOpacity(0.0);
         menu.setOpacity(0.0);
+        end.setOpacity(0.0);
         scene = new Scene(stack, 1000, 600);
         scene.getStylesheets().add("rsc/StylesheetRoot.css");
         return scene;

@@ -3,7 +3,6 @@ package server;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -13,7 +12,7 @@ import java.util.HashMap;
  * ServerClientHandler: Class containing code that interacts with the client
  */
 public class ServerClientHandler extends Thread {
-    private int ID;
+    private int id;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Object[] fill = new Object[1];
@@ -21,7 +20,7 @@ public class ServerClientHandler extends Thread {
     public ServerClientHandler(Socket socket, int id) throws IOException {
         OutputStream outputStream = socket.getOutputStream();
         out = new ObjectOutputStream(outputStream);
-        ID = id;
+        this.id = id;
 
         InputStream inputStream = socket.getInputStream();
         in = new ObjectInputStream(inputStream);
@@ -31,7 +30,7 @@ public class ServerClientHandler extends Thread {
         try {
             int secCount = 0;
             System.out.println("New client connected!");
-            ServerValues.clientsData.add(fill);
+            ServerValues.addClient();
 
             while (true) {
                 if (secCount < ServerValues.secCount) {
@@ -40,14 +39,13 @@ public class ServerClientHandler extends Thread {
                     out.reset(); //Resets the Output Stream to clear to markData inside
                     HashMap<String, Object> userData = (HashMap<String, Object>) in.readObject();
                     Object[] data = {userData.get("Name"), userData.get("Trades"), userData.get("Assets")};
-                    System.out.println(Arrays.toString(data));
-                    ServerValues.clientsData.set(ID, data);
+                    ServerValues.refreshClientData(data, id);
                 }
                 Thread.sleep(50); //Sleeps the socket
             }
         } catch (SocketException e) {
-            ServerFile.showTimeStamp("Socket Error on Socket ID: " + ID);
-            ServerValues.clientsData.set(ID, new Object[]{"", 0, 0});
+            ServerFile.showTimeStamp("Socket Error on Socket ID: " + id);
+            ServerValues.refreshClientData(new Object[]{"", 0, 0}, id);
         } catch (Exception e) {
             e.printStackTrace();
         }
