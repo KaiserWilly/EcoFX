@@ -273,8 +273,12 @@ public class ClientBuyGUI {
             if (quantity > 0) {
                 System.out.println(buyOrderCB.isSelected());
                 if (buyOrderCB.isSelected()) {
-                    pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
-                    StockManagement.setBuyOrder(name, quantity, pps);
+                    try {
+                        pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
+                        StockManagement.setBuyOrder(name, quantity, pps);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input!");
+                    }
                 } else {
                     StockManagement.buyStock(name, quantity, pps, false);
                 }

@@ -21,11 +21,15 @@ public class ServerValues {
         server.engine.EcoEngine.genereateData();
         HashMap<String, Object> serverD = EcoEngine.getData();
         StockHistory.addHistory(serverD);
+
         data = new HashMap<>();
         data.put("SEC", secCount);
         data.put("Market Data", serverD);
         data.put("Leaderboard", filterClientData(clientsData));
+        data.put("Message", "");  //Put the message to be broadcast so that it replaces the empty string
+
         playerList = genUsernames(filterClientData(clientsData));
+
         serverData = data;
     }
 

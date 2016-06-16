@@ -29,6 +29,7 @@ public class ClientFrameGUI {
     static ClientSellGUI sell = new ClientSellGUI();
     public static ClientFrameTasks.serverService servS;
     static ClientFrameTasks.cohService cohS = new ClientFrameTasks.cohService();
+    static ClientFrameTasks.messageService mesS = new ClientFrameTasks.messageService();
     AnchorPane overviewP, portfolioP, buyP, sellP;
     Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
 
@@ -108,9 +109,7 @@ public class ClientFrameGUI {
         servS = new ClientFrameTasks.serverService(Values.ip);
         servS.start();
         cohS.start();
-    }
-
-    public void close(String newPane) {
+        mesS.start();
     }
 
     public ToolBar createToolBarHeader() {
@@ -126,11 +125,12 @@ public class ClientFrameGUI {
 
         bar.getItems().add(createSeparator());
 
-            Label news = new Label("News:");
-            news.setPadding(new Insets(0, 20, 0, 0));
-            news.setTextFill(Paint.valueOf("White"));
-            news.setFont(aeroMI20);
-            bar.getItems().add(news);
+        Label news = new Label();
+        news.textProperty().bind(mesS.messageProperty());
+        news.setPadding(new Insets(0, 20, 0, 0));
+        news.setTextFill(Paint.valueOf("White"));
+        news.setFont(aeroMI20);
+        bar.getItems().add(news);
 
         bar.setPrefSize(1000, 20);
         bar.getStylesheets().add("rsc/StylesheetClient.css");

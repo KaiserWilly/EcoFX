@@ -221,16 +221,17 @@ public class ClientPortfolioTasks {
                                 widgetPane.getChildren().add(pChange);
 
                                 Button cancel = new Button("Cancel Order");
+
+                                cancel.setFont(buttonF);
+                                cancel.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
+                                cancel.setPrefSize(75, 25);
+                                cancel.setTextFill(Paint.valueOf("White"));
+                                cancel.setAlignment(Pos.CENTER);
+                                cancel.setTextAlignment(TextAlignment.CENTER);
                                 cancel.setOnAction(event -> {
                                     StockManagement.cancelBuyOrder(name);
                                     change = true;
                                 });
-                                cancel.setFont(buttonF);
-                                cancel.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
-                                cancel.setPrefSize(100, 25);
-                                cancel.setTextFill(Paint.valueOf("White"));
-                                cancel.setAlignment(Pos.CENTER);
-                                cancel.setTextAlignment(TextAlignment.CENTER);
                                 AnchorPane.setTopAnchor(cancel, 3.0);
                                 AnchorPane.setRightAnchor(cancel, 15.0);
                                 widgetPane.getChildren().add(cancel);

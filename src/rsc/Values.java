@@ -14,9 +14,9 @@ import java.util.HashMap;
  * EcoMain: Class containing code that handles global variables
  */
 public class Values {
-    public final static double VERSION = 1.3;
+    public final static double VERSION = 2.0;
     public static int secCount = 0, stockCount = 0;
-    public static ArrayList<String> consoleQueue = new ArrayList<>();
+    public static ArrayList<String> consoleQueue = new ArrayList<>(), messageQueue = new ArrayList<>();
     public static String seed = "0", maxP = "10", mode = "con", ip = "0.0.0.0", currentStockName = "Composite";
     public static ArrayList<String> stockNames = new ArrayList<>(), stockNamesNC = new ArrayList<>();
 

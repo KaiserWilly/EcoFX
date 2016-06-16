@@ -261,8 +261,12 @@ public class ClientSellGUI {
             double pps = StockHistory.getPrice(name);
             if (quantity > 0) {
                 if (sellOrderCB.isSelected()) {
-                    pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
-                    StockManagement.setSellOrder(name, quantity, pps);
+                    try {
+                        pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
+                        StockManagement.setSellOrder(name, quantity, pps);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input!");
+                    }
                 } else {
                     StockManagement.sellStock(name, quantity, pps, false);
                 }

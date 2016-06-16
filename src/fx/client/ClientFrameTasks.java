@@ -3,6 +3,7 @@ package fx.client;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import rsc.PlayerManagement;
+import rsc.Values;
 
 import java.text.DecimalFormat;
 
@@ -58,4 +59,33 @@ public class ClientFrameTasks {
             start();
         }
     }
+
+    public static class messageService extends Service<Void> {
+
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    updateMessage("News:");
+                    while (Values.messageQueue.size() == 0) {
+                        Thread.sleep(50);
+                    }
+                    updateMessage("News: " + Values.messageQueue.get(0));
+                    int count = Values.secCount;
+                    while (Values.secCount - count < 2) {
+                        Thread.sleep(50);
+                    }
+                    return null;
+                }
+            };
+        }
+
+        @Override
+        protected void succeeded() {
+            reset();
+            start();
+        }
+    }
 }
+

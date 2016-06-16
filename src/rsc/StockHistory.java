@@ -11,10 +11,10 @@ public class StockHistory {
     public static ArrayList<String> history = new ArrayList<>();
 
     public static void addHistory(HashMap<String, Object> stockMap) {
-        int i;
         double composite = 0;
+        ArrayList<String> localNames = Values.stockNamesNC;
         ArrayList<String> stockN = (ArrayList<String>) stockMap.get("Names");
-        for (i = 0; i < stockN.size(); i++) {
+        for (int i = 0; i < stockN.size(); i++) {
             String name = stockN.get(i);
             Object[] stock = (Object[]) stockMap.get(name);
             if (!stockHistory.containsKey(name)) {
@@ -28,9 +28,16 @@ public class StockHistory {
                 System.arraycopy(history, 0, history, 1, history.length - 1);
                 history[0] = (double) stock[1];
                 stockHistory.replace(name, history);
+                localNames.remove(name);
             }
+
             composite += (double) stock[1];
         }
+
+        for (String localName : localNames) {
+            stockHistory.remove(localName);
+        }
+
         composite = composite / stockN.size();
         if (!stockHistory.containsKey("Composite")) {
             double[] history = new double[16];

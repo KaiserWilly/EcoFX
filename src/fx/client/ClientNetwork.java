@@ -35,8 +35,16 @@ public class ClientNetwork {
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
                 StockManagement.checkOrders();
                 ArrayList<Object[]> leaderData = (ArrayList<Object[]>) serverData.get("Leaderboard");
+
+
                 if (leaderData != null) {
                     PlayerManagement.leaderboardData = leaderBoardSort(leaderData);
+                }
+                String message = (String) serverData.get("Message");
+                if (!message.equals(null)) {
+                    if (message.length() > 0) {
+                        Values.messageQueue.add(message);
+                    }
                 }
                 out.writeObject(getUserData());
                 out.flush();
