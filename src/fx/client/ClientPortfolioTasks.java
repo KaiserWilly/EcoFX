@@ -224,7 +224,7 @@ public class ClientPortfolioTasks {
 
                                 cancel.setFont(buttonF);
                                 cancel.setStyle("-fx-focus-color: transparent; -fx-faint-focus-color: transparent; -fx-effect: null; -fx-base: #444444;");
-                                cancel.setPrefSize(75, 25);
+                                cancel.setPrefSize(100, 25);
                                 cancel.setTextFill(Paint.valueOf("White"));
                                 cancel.setAlignment(Pos.CENTER);
                                 cancel.setTextAlignment(TextAlignment.CENTER);
