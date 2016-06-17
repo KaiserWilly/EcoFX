@@ -12,7 +12,6 @@ public class StockHistory {
 
     public static void addHistory(HashMap<String, Object> stockMap) {
         double composite = 0;
-        ArrayList<String> localNames = Values.stockNamesNC;
         ArrayList<String> stockN = (ArrayList<String>) stockMap.get("Names");
         for (int i = 0; i < stockN.size(); i++) {
             String name = stockN.get(i);
@@ -28,14 +27,9 @@ public class StockHistory {
                 System.arraycopy(history, 0, history, 1, history.length - 1);
                 history[0] = (double) stock[1];
                 stockHistory.replace(name, history);
-                localNames.remove(name);
             }
 
             composite += (double) stock[1];
-        }
-
-        for (String localName : localNames) {
-            stockHistory.remove(localName);
         }
 
         composite = composite / stockN.size();
@@ -50,6 +44,12 @@ public class StockHistory {
             history[0] = composite;
             stockHistory.replace("Composite", history);
         }
+    }
+
+    public static void removeStock(String name){
+        Values.stockNamesNC.remove(name);
+        Values.stockNames.remove(name);
+        stockHistory.remove(name);
     }
 
     public static double[] getHistory(String key) {

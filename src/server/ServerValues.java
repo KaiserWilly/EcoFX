@@ -27,6 +27,7 @@ public class ServerValues {
         data.put("Market Data", serverD);
         data.put("Leaderboard", filterClientData(clientsData));
         data.put("Message", "");  //Put the message to be broadcast so that it replaces the empty string
+        data.put("Remove", ""); //Put names of stocks that are being removed
 
         playerList = genUsernames(filterClientData(clientsData));
 

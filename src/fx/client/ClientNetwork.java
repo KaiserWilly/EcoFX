@@ -32,6 +32,9 @@ public class ClientNetwork {
             while (true) {
                 Object rawServerData = in.readObject();
                 HashMap<String, Object> serverData = (HashMap<String, Object>) rawServerData;
+                if (((String) serverData.get("Remove")).length() > 0) {
+                    StockHistory.removeStock((String) serverData.get("Remove"));
+                }
                 StockHistory.addHistory((HashMap<String, Object>) serverData.get("Market Data"));
                 StockManagement.checkOrders();
                 ArrayList<Object[]> leaderData = (ArrayList<Object[]>) serverData.get("Leaderboard");

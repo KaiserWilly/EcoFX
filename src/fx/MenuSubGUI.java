@@ -123,7 +123,7 @@ public class MenuSubGUI {
                 VBox.setMargin(heading, new Insets(0, 0, 0, 175));
 
                 try {
-                    Label ipaL = new Label("Server Host IP: " + InetAddress.getLocalHost().getHostAddress() + ":1180");
+                    Label ipaL = new Label("Server Host IP: " + InetAddress.getLocalHost().getHostAddress());
                     ipaL.setFont(aeroMI18);
                     ipaL.setTextFill(Paint.valueOf("White"));
                     ipaL.setPrefSize(300, 30);
