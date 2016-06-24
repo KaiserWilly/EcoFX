@@ -21,22 +21,22 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by james on 4/2/2016.
+ * Created 3/11/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * SubMenuGUI: Manage and display submenus
  */
 public class MenuSubGUI {
-    static DropShadow ds = new DropShadow(5.0, 3.0, 3.0, Color.BLACK);
-    static Font aeroMI18 = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-    static Font aeroMI10 = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    public static TextField seed;
-    public static String modeSettings = "con", modeServer = "con";
+    private static DropShadow ds = new DropShadow(5.0, 3.0, 3.0, Color.BLACK);
+    private static Font aeroMI18 = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
 
-    public static VBox getSubmenu(String src) {
+    static VBox getSubmenu(String src) {//Return submenu, based on parameters
         Label heading;
         VBox base = new VBox();
         base.setPrefSize(500, 550);
         base.setPadding(new Insets(20, 0, 0, 0));
         base.setSpacing(20);
-        switch (src) {
+        switch (src) {//Return pane based on submenu
             case "Play":
                 heading = new Label();
                 heading.setEffect(ds);
@@ -192,9 +192,5 @@ public class MenuSubGUI {
                 break;
         }
         return base;
-    }
-
-    public static void setNode(String settingmode) {
-        modeSettings = settingmode;
     }
 }

@@ -1,14 +1,11 @@
 package fx.server;
 
 import fx.FrameGUI;
-import fx.MenuSubGUI;
 import javafx.animation.FadeTransition;
-import javafx.application.Application;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -19,12 +16,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import rsc.Values;
 import server.ServerTimer;
@@ -33,53 +28,38 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Created by james on 4/4/2016.
+ * Created 4/28/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ServerGUI: Diplaying and managing the UI of the server
  */
-public class ServerGUI extends Application {
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class ServerGUI {
 
-    Stage baseStage;
-    static Font aeroMI24 = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-    static Font aeroMI18 = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-    static Font aeroMI12 = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 15);
+    private static Font aeroMI24 = Font.loadFont(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+    private static Font aeroMI18 = Font.loadFont(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+    private static Font aeroMI12 = Font.loadFont(ServerGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 15);
 
-    String seedS, maxPS, modeS;
     private Label console, secCount;
-    DropShadow ds = new DropShadow(5.0, 3.0, 3.0, Color.BLACK);
-    DropShadow dsSmall = new DropShadow(2.0, 1.0, 1.0, Color.BLACK);
+    private DropShadow ds;
+    private DropShadow dsSmall = new DropShadow(2.0, 1.0, 1.0, Color.BLACK);
     private AnchorPane serverAnchorPane = new AnchorPane();
     private static ServerTasks.SECService secS = new ServerTasks.SECService();
     private static ServerTasks.consoleService conS = new ServerTasks.consoleService();
     private static controllerService troS = new controllerService();
     private static ServerTasks.serverService serS;
-    public static ServerTasks.playerListService plaLiS = new ServerTasks.playerListService();
+    private static ServerTasks.playerListService plaLiS = new ServerTasks.playerListService();
     private static ServerTasks.playerLabelService plaLaS = new ServerTasks.playerLabelService();
-    public static initializerService iniS = new initializerService();
-    public static ServerTasks.graphService graS = new ServerTasks.graphService();
-    public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
-    public static LineChart<Number, Number> marketTrend;
-    public static NumberAxis yAxis;
+    private static initializerService iniS = new initializerService();
+    private static ServerTasks.graphService graS = new ServerTasks.graphService();
+    static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    private static LineChart<Number, Number> marketTrend;
+    private static NumberAxis yAxis;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        StackPane stack = new StackPane();
-        stack.setPadding(new Insets(0, 0, 30, 0));
-        stack.getChildren().add(serverPane());
-        Scene scene = new Scene(stack, 1000, 600);
-        scene.getStylesheets().add("rsc/StylesheetRoot.css");
-        baseStage = primaryStage;
-        baseStage.setScene(scene);
-        baseStage.setTitle("Echo Economics v1.1");
-        baseStage.setMaxHeight(600);
-        baseStage.setMinHeight(600);
-        baseStage.setMaxWidth(1000);
-        baseStage.setMinWidth(1000);
-        baseStage.show();
+    public ServerGUI() {
+        ds = new DropShadow(5.0, 3.0, 3.0, Color.BLACK);
     }
 
-    public AnchorPane serverPane() {
+    public AnchorPane serverPane() {//Base layer of the server UI
         serverAnchorPane.setPadding(new Insets(0, 0, 0, 0));
 
         console = new Label();
@@ -181,7 +161,7 @@ public class ServerGUI extends Application {
         serverAnchorPane.getChildren().add(playerList);
 
 
-        Label ipaL = null;
+        Label ipaL;
         try {
             ipaL = new Label("Server Host IP: " + InetAddress.getLocalHost().getHostAddress());
             ipaL.setFont(aeroMI18);
@@ -306,7 +286,7 @@ public class ServerGUI extends Application {
         in.play();
     }
 
-    public static class initializerService extends Service<Void> {
+    private static class initializerService extends Service<Void> {
 
         @Override
         protected Task<Void> createTask() {
@@ -322,8 +302,7 @@ public class ServerGUI extends Application {
     }
 
 
-    public static class controllerService extends Service<Void> {
-//        int count = 0;
+    private static class controllerService extends Service<Void> {
 
         @Override
         protected Task<Void> createTask() {

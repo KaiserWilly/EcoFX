@@ -8,14 +8,16 @@ import rsc.Values;
 import java.text.DecimalFormat;
 
 /**
- * Created by james on 4/30/2016.
+ * Created 4/4/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientFrameTasks: Services that control updates of Frame UI, as well as starting client network.
  */
-public class ClientFrameTasks {
+class ClientFrameTasks {
 
-    public static class serverService extends Service<Void> {
+    static class ServerService extends Service<Void> { //Start Server
         String ip = null;
-
-        public serverService(String serverIP) {
+        ServerService(String serverIP) {
             ip = serverIP;
         }
 
@@ -31,7 +33,7 @@ public class ClientFrameTasks {
         }
     }
 
-    public static class cohService extends Service<Void> {
+    static class CohService extends Service<Void> {//Update Cash on Hand
         double coh = 100000.00;
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
 
@@ -60,7 +62,7 @@ public class ClientFrameTasks {
         }
     }
 
-    public static class messageService extends Service<Void> {
+    static class MessageService extends Service<Void> {//Handles incoming messages from server
 
         @Override
         protected Task<Void> createTask() {

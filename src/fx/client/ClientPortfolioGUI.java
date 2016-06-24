@@ -13,30 +13,33 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 /**
- * Created by james on 4/29/2016.
+ * Created 4/11/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientPortfolioGUI: Styles, Manages, and displays graphical components of the Portfolio pane
+ * Also ties Services to nodes that need to be updated
  */
-public class ClientPortfolioGUI{
-    public AnchorPane portfolioAnchorPane = new AnchorPane();
-    public static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane(), historyWidget = new AnchorPane();
-    Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    public static ClientPortfolioTasks.portfolioService portS = new ClientPortfolioTasks.portfolioService();
-    public static ClientPortfolioTasks.buyOrderService buyS = new ClientPortfolioTasks.buyOrderService();
-    public static ClientPortfolioTasks.sellOrderService sellS = new ClientPortfolioTasks.sellOrderService();
-    public static ClientPortfolioTasks.historyService histS = new ClientPortfolioTasks.historyService();
-    public static ScrollPane portPane, buyPane, sellPane, historyPane;
-    boolean opened = false;
 
-    public AnchorPane createPane() {
+public class ClientPortfolioGUI{
+    public static ClientPortfolioTasks.PortfolioService portS = new ClientPortfolioTasks.PortfolioService();
+    public static ClientPortfolioTasks.BuyOrderService buyS = new ClientPortfolioTasks.BuyOrderService();
+    static AnchorPane portfolioWidget = new AnchorPane(), buyOrderWidget = new AnchorPane(), sellOrderWidget = new AnchorPane(), historyWidget = new AnchorPane();
+    static ClientPortfolioTasks.SellOrderService sellS = new ClientPortfolioTasks.SellOrderService();
+    static ClientPortfolioTasks.HistoryService histS = new ClientPortfolioTasks.HistoryService();
+    static ScrollPane portPane, buyPane, sellPane, historyPane;
+    private AnchorPane portfolioAnchorPane = new AnchorPane();
+    private Font aeroMI10 = Font.loadFont(ClientPortfolioGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
+    private boolean opened = false;
+
+    AnchorPane createPane() { //Basic and lowest level of pane
         portfolioAnchorPane.setPrefSize(980, 490);
         portfolioAnchorPane.getChildren().add(tabbedPane());
-
-
         portfolioAnchorPane.managedProperty().bind(portfolioAnchorPane.visibleProperty());
         portfolioAnchorPane.setVisible(false);
         return portfolioAnchorPane;
     }
 
-    public AnchorPane tabbedPane() {
+    private AnchorPane tabbedPane() {
 
         AnchorPane tabPane = new AnchorPane();
         tabPane.setPrefSize(450, 478);
@@ -73,7 +76,7 @@ public class ClientPortfolioGUI{
         return tabPane;
     }
 
-    public AnchorPane portfolioPane() {
+    private AnchorPane portfolioPane() {
 
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
@@ -124,14 +127,14 @@ public class ClientPortfolioGUI{
         return stockPane;
     }
 
-    public AnchorPane portfolioWidget() {
+    private AnchorPane portfolioWidget() {
         portfolioWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(portfolioWidget, 0.0);
         AnchorPane.setLeftAnchor(portfolioWidget, 0.0);
         return portfolioWidget;
     }
 
-    public AnchorPane buyOrderPane() {
+    private AnchorPane buyOrderPane() {
 
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
@@ -182,14 +185,14 @@ public class ClientPortfolioGUI{
         return stockPane;
     }
 
-    public AnchorPane buyOrderWidget() {
+    private AnchorPane buyOrderWidget() {
         buyOrderWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(buyOrderWidget, 0.0);
         AnchorPane.setLeftAnchor(buyOrderWidget, 0.0);
         return buyOrderWidget;
     }
 
-    public AnchorPane sellOrderPane() {
+    private AnchorPane sellOrderPane() {
 
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
@@ -240,14 +243,14 @@ public class ClientPortfolioGUI{
         return stockPane;
     }
 
-    public AnchorPane sellOrderWidget() {
+    private AnchorPane sellOrderWidget() {
         sellOrderWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(sellOrderWidget, 0.0);
         AnchorPane.setLeftAnchor(sellOrderWidget, 0.0);
         return sellOrderWidget;
     }
 
-    public AnchorPane historyPane() {
+    private AnchorPane historyPane() {
         AnchorPane hPane = new AnchorPane();
         hPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         hPane.setPrefSize(450.0, 478.0);
@@ -267,7 +270,7 @@ public class ClientPortfolioGUI{
         return hPane;
     }
 
-    public AnchorPane historyWidget() {
+    private AnchorPane historyWidget() {
         historyWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(historyWidget, 0.0);
         AnchorPane.setLeftAnchor(historyWidget, 0.0);
@@ -278,7 +281,7 @@ public class ClientPortfolioGUI{
         portfolioAnchorPane.setOpacity(opacity);
     }
 
-    public void open() {
+    void open() {
         if (!opened) {
             opened = true;
             portS.start();
@@ -295,7 +298,7 @@ public class ClientPortfolioGUI{
         in.play();
     }
 
-    public void close(String newPane) {
+    void close(String newPane) {
         FadeTransition out = new FadeTransition(Duration.millis(250), portfolioAnchorPane);
         out.setFromValue(1.0);
         out.setToValue(0.0);

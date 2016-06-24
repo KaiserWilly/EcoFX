@@ -16,25 +16,28 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 import rsc.Values;
 
-/**
- * Created by james on 4/26/2016.
+ /**
+ * Created 4/2/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientFrameGUI: Generates the frame of the client, including both header and footer.
+ * Also acts as a frame for all client panes.
  */
 public class ClientFrameGUI {
-    static String curScene = "Overview";
-    AnchorPane clientAnchorPane = new AnchorPane();
-    public StackPane clientStack = new StackPane();
+    private static String curScene = "Overview";
+    private AnchorPane clientAnchorPane = new AnchorPane();
+    private StackPane clientStack = new StackPane();
     static ClientOverviewGUI overview = new ClientOverviewGUI();
     static ClientPortfolioGUI portfolio = new ClientPortfolioGUI();
     static ClientBuyGUI buy = new ClientBuyGUI();
     static ClientSellGUI sell = new ClientSellGUI();
-    public static ClientFrameTasks.serverService servS;
-    static ClientFrameTasks.cohService cohS = new ClientFrameTasks.cohService();
-    static ClientFrameTasks.messageService mesS = new ClientFrameTasks.messageService();
-    AnchorPane overviewP, portfolioP, buyP, sellP;
-    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    private static ClientFrameTasks.ServerService servS;
+    static ClientFrameTasks.CohService cohS = new ClientFrameTasks.CohService();
+    static ClientFrameTasks.MessageService mesS = new ClientFrameTasks.MessageService();
+    private AnchorPane overviewP, portfolioP, buyP, sellP;
+    private Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
 
-    public AnchorPane clientPane() {
-
+    public AnchorPane clientPane() { //Header and footer of client pane
         ToolBar header = createToolBarHeader();
         AnchorPane.setTopAnchor(header, 0.0);
         AnchorPane.setLeftAnchor(header, 0.0);
@@ -55,7 +58,7 @@ public class ClientFrameGUI {
         return clientAnchorPane;
     }
 
-    public StackPane createStack() {
+    private StackPane createStack() {
         StackPane stack = new StackPane();
         stack.setPrefSize(980, 490);
         sellP = sell.createPane();
@@ -76,7 +79,7 @@ public class ClientFrameGUI {
         return stack;
     }
 
-    public static void setScene(String scene) {
+    public static void setScene(String scene) {// Change current pane of client
         switch (curScene) {
             case "Overview":
                 overview.close(scene);
@@ -96,9 +99,9 @@ public class ClientFrameGUI {
 
     public void setOpacity(double opacity) {
         clientAnchorPane.setOpacity(opacity);
-    }
+    }//Change opacuty of client pane
 
-    public void open() {
+    public void open() {//Display client pane
         clientAnchorPane.setVisible(true);
         FadeTransition in = new FadeTransition(Duration.millis(250), clientAnchorPane);
         in.setFromValue(0.0);
@@ -106,13 +109,13 @@ public class ClientFrameGUI {
         in.setCycleCount(1);
         in.setAutoReverse(false);
         in.play();
-        servS = new ClientFrameTasks.serverService(Values.ip);
+        servS = new ClientFrameTasks.ServerService(Values.ip);
         servS.start();
         cohS.start();
         mesS.start();
     }
 
-    public ToolBar createToolBarHeader() {
+    private ToolBar createToolBarHeader() {//Return header of client
         ToolBar bar = new ToolBar();
         bar.setId("header");
         bar.setStyle("-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5; -fx-background-color: #333333;");
@@ -138,7 +141,7 @@ public class ClientFrameGUI {
         return bar;
     }
 
-    public ToolBar createToolBarFooter() {
+    private ToolBar createToolBarFooter() {//Return footer of client
         ToolBar bar = new ToolBar();
         bar.setId("footer");
         HBox layout = new HBox();
@@ -177,20 +180,17 @@ public class ClientFrameGUI {
         bar.getItems().add(layout);
         bar.setPrefSize(1000, 25);
         bar.getStylesheets().add("rsc/StylesheetClient.css");
-
-
         return bar;
     }
 
-    public Label createSeparator() {
+    private Label createSeparator() {//Create new separator
         Label sep = new Label();
         sep.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/frame/toolbarseparator-01.png"))));
-//        sep.setEffect(new DropShadow(2.0,2.0,2.0, Color.BLACK));
         sep.setPadding(new Insets(0, 10, 0, 10));
         return sep;
     }
 
-    public static void resetWidgets() {
+    static void resetWidgets() { //Force UI widgets to update
         ClientPortfolioGUI.histS.change = true;
         ClientPortfolioGUI.buyS.change = true;
         ClientPortfolioGUI.sellS.change = true;

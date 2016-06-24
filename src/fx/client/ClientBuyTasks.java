@@ -25,16 +25,19 @@ import java.util.Collections;
 import java.util.Objects;
 
 /**
- * Created by james on 6/10/2016.
+ * Created 4/26/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * GUIBuyTasks: Services and Tasks that dynamically control the UI for the Buy Pane.
+ * Services run adjacent, and work with, the FX application thread.
  */
-public class ClientBuyTasks {
-    static String currentStock = null;
 
-    public static class widgetService extends Service<Void> {
+class ClientBuyTasks {
+
+    static class WidgetService extends Service<Void> { //Controls table of stocks
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("$#,###,##0.00");
         int count = -1;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font stockNF = Font.loadFont(ClientBuyTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
         Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
 
@@ -49,8 +52,7 @@ public class ClientBuyTasks {
                     AnchorPane.setTopAnchor(buyWidget, 0.0);
                     AnchorPane.setLeftAnchor(buyWidget, 0.0);
                     Platform.runLater(() -> {
-
-                        if (stockNames.size() > 0) {
+                        if (stockNames.size() > 0) { //If there are stocks to buy
                             buyWidget.setPrefSize(440, 34.5 * (double) stockNames.size());
                             Collections.sort(stockNames, String.CASE_INSENSITIVE_ORDER);
                             double height = 0.0;
@@ -84,9 +86,9 @@ public class ClientBuyTasks {
                                 double pC = getPChange(name);
                                 Label pChange;
                                 if (pC < 0.0) {
-                                    pChange = new Label(perc.format(Math.abs(pC)) /*+ "%"*/, new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
+                                    pChange = new Label(money.format(Math.abs(pC)) /*+ "%"*/, new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
                                 } else {
-                                    pChange = new Label(perc.format(Math.abs(pC)) /*+ "%"*/, new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                                    pChange = new Label(money.format(Math.abs(pC)) /*+ "%"*/, new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
                                 }
                                 pChange.setContentDisplay(ContentDisplay.RIGHT);
                                 pChange.setFont(priceF);
@@ -115,7 +117,7 @@ public class ClientBuyTasks {
                                 height += 42.0;
                                 buyWidget.getChildren().add(widgetPane);
                             }
-                        } else {
+                        } else { //There are no available stocks to buy
                             buyWidget.setPrefSize(440, 240);
                             Label noStocks = new Label("No stocks to buy!");
                             noStocks.setPrefSize(415, 35);
@@ -135,35 +137,29 @@ public class ClientBuyTasks {
                     count = Values.secCount;
                     return null;
                 }
-            }
-
-                    ;
+            };
         }
 
         @Override
-        protected void succeeded() {
+        protected void succeeded() { //Run upon task completion
             reset();
             start();
         }
 
-        double getPChange(String name) {
+        double getPChange(String name) { //Calculate & change over last 30 seconds
             double[] history = StockHistory.getHistory(name);
             for (int i = 0; i < history.length; i++) {
                 if (history[i] == 0.0) {
-//                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
                     return history[0] - history[i - 1];
                 }
-
             }
-//            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
             return history[0] - history[history.length - 1];
-
         }
     }
 
-    public static class graphService extends Service<Void> {
+    static class GraphService extends Service<Void> { //Controls graph and other detailed stock info
         int count = 0;
-        public String changeName = "<Select Stock>";
+        String changeName = "<Select Stock>";
         private String name = "<Select Stock>";
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
 
@@ -175,14 +171,13 @@ public class ClientBuyTasks {
                     updateMessage(name);
                     Platform.runLater(() -> {
                         double pC = getPChange(name);
-                        ClientBuyGUI.pChange.setText(money.format(Math.abs(pC)));
+                        ClientBuyGUI.changeOverS.setText(money.format(Math.abs(pC)));
                         if (pC < 0.0) {
-                            ClientBuyGUI.pChange.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
-
+                            ClientBuyGUI.changeOverS.setGraphic(new ImageView(new Image(ClientBuyTasks.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockdownarrow-01.png"))));
                         } else {
-                            ClientBuyGUI.pChange.setGraphic(new ImageView(new Image(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
+                            ClientBuyGUI.changeOverS.setGraphic(new ImageView(new Image(ClientBuyTasks.class.getClassLoader().getResourceAsStream("rsc/client/main/clientstockuparrow-01.png"))));
                         }
-                        ClientBuyGUI.pChange.setContentDisplay(ContentDisplay.RIGHT);
+                        ClientBuyGUI.changeOverS.setContentDisplay(ContentDisplay.RIGHT);
 
                         ClientBuyGUI.price.setText(money.format(StockHistory.getPrice(name)));
 
@@ -206,7 +201,7 @@ public class ClientBuyTasks {
         }
 
         @Override
-        protected void succeeded() {
+        protected void succeeded() { //Run upon Service completion
             reset();
             start();
         }
@@ -215,25 +210,20 @@ public class ClientBuyTasks {
             double[] history = StockHistory.getHistory(name);
             for (int i = 0; i < history.length; i++) {
                 if (history[i] == 0.0) {
-//                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
                     try {
                         return history[0] - history[i - 1];
                     } catch (ArrayIndexOutOfBoundsException e) {
                         return 0.0;
                     }
                 }
-
             }
-//            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
             return history[0] - history[history.length - 1];
-
         }
     }
 
-    public static class sliderService extends Service<Void> {
+    static class SliderService extends Service<Void> { //Controls Buy Pane slider
         int count = 0;
         private String name = "<Select Stock>";
-        double max;
         public boolean change = false;
 
         @Override
@@ -260,7 +250,7 @@ public class ClientBuyTasks {
         }
 
         @Override
-        protected void succeeded() {
+        protected void succeeded() { //Run upon task completion
             reset();
             start();
         }

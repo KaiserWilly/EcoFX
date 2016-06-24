@@ -16,12 +16,15 @@ import java.util.Calendar;
 import java.util.Objects;
 
 /**
- * Created by isenhartjd on 4/15/2016.
+ * Created 5/1/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ServerTasks: Update and control ServerUI panel, serverside
  */
 
-public class ServerTasks {
+class ServerTasks {
 
-    public static class serverService extends Service<Void> {
+    static class serverService extends Service<Void> {//Start Server
 
         @Override
         protected Task<Void> createTask() {
@@ -35,7 +38,7 @@ public class ServerTasks {
         }
     }
 
-    public static class SECService extends Service<Void> {
+    static class SECService extends Service<Void> { //Update SEC Count
         int count = -1;
 
         @Override
@@ -64,7 +67,7 @@ public class ServerTasks {
         }
     }
 
-    public static class consoleService extends Service<Void> {
+    static class consoleService extends Service<Void> { //Update console
         String[] consoleTextA = new String[28];
 
         @Override
@@ -85,7 +88,7 @@ public class ServerTasks {
             };
         }
 
-        public String printToConsole(String command) {
+        String printToConsole(String command) { //Format console output
             String result;
             if (!command.equals("")) {
                 Calendar now = Calendar.getInstance();
@@ -110,7 +113,7 @@ public class ServerTasks {
         }
     }
 
-    public static class graphService extends Service<Void> {
+    static class graphService extends Service<Void> { //Update graph and ame widget
         int count = 0;
         String name = "Composite";
 
@@ -145,7 +148,7 @@ public class ServerTasks {
         }
     }
 
-    public static class playerListService extends Service<Void> {
+    static class playerListService extends Service<Void> {//Control playet Lists
         int size = 0;
 
 
@@ -164,7 +167,7 @@ public class ServerTasks {
             };
         }
 
-        public String PrintToList(ArrayList<String> playerList) {
+        String PrintToList(ArrayList<String> playerList) {
             StringBuilder listText = new StringBuilder();
             for (int i = (playerList.size() - 1); i >= 0; i--) {
                 listText.append(playerList.get(i)).append("\n");
@@ -179,7 +182,7 @@ public class ServerTasks {
         }
     }
 
-    public static class playerLabelService extends Service<Void> {
+    static class playerLabelService extends Service<Void> {//Coltrol player List label
         int size = -1;
 
 

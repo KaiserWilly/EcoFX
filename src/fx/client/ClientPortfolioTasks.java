@@ -1,6 +1,5 @@
 package fx.client;
 
-import fx.MenuSubGUI;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -23,16 +22,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Created by james on 6/11/2016.
+ * Created 4/12/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientPortfolioTasks: Services that update nodes in the
  */
-public class ClientPortfolioTasks {
+class ClientPortfolioTasks {
 
-    public static class portfolioService extends Service<Void> {
+   public static class PortfolioService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
         int count = -1;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        Font stockNF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         public boolean change = false;
 
         @Override
@@ -154,12 +155,12 @@ public class ClientPortfolioTasks {
         }
     }
 
-    public static class buyOrderService extends Service<Void> {
+    public static class BuyOrderService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
         int count = -1;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        Font stockNF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+        Font buttonF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
         public boolean change = false;
 
         @Override
@@ -271,13 +272,12 @@ public class ClientPortfolioTasks {
         }
     }
 
-    public static class sellOrderService extends Service<Void> {
+    static class SellOrderService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        Font stockNF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+        Font buttonF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
         public boolean change = false;
 
         @Override
@@ -374,9 +374,7 @@ public class ClientPortfolioTasks {
                     count = Values.secCount;
                     return null;
                 }
-            }
-
-                    ;
+            };
         }
 
         @Override
@@ -384,23 +382,12 @@ public class ClientPortfolioTasks {
             reset();
             start();
         }
-
-        double getPProfit(String name) {
-            Object[] orderData = StockManagement.sellOrderNameData(name);
-            double tPPS = (double) orderData[2], orgPPS = (double) orderData[3];
-            int quantity = (int) orderData[1];
-
-            return (((double) quantity * tPPS) - ((double) quantity * orgPPS));
-        }
     }
 
-    public static class historyService extends Service<Void> {
-        DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.00");
+    static class HistoryService extends Service<Void> {
         int count = -1;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+        Font stockNF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font buttonF = Font.loadFont(ClientPortfolioTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
         public boolean change = false;
 
         @Override

@@ -2,7 +2,10 @@ import fx.FrameGUI;
 import javafx.scene.text.Font;
 
 /**
- * Created by james on 4/3/2016.
+ * Created 1/30/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * StartDev: Start class of entire application
  */
 public class StartDev {
     public static void main(String[] args) {

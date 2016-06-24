@@ -1,6 +1,5 @@
 package fx.client;
 
-import fx.MenuSubGUI;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -25,18 +24,21 @@ import java.util.Collections;
 import java.util.Objects;
 
 /**
- * Created by james on 6/10/2016.
+ * Created 4/20/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientSellTasks: Services and Tasks that update components on the client's sell pane.
  */
-public class ClientSellTasks {
+class ClientSellTasks {
 
-    public static class widgetService extends Service<Void> {
+    static class WidgetService extends Service<Void> {
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
         DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
         public boolean change = false;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        Font stockNF = Font.loadFont(ClientSellTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(ClientSellTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+        Font buttonF = Font.loadFont(ClientSellTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
 
         @Override
         protected Task<Void> createTask() {
@@ -155,9 +157,9 @@ public class ClientSellTasks {
         }
     }
 
-    public static class graphService extends Service<Void> {
+    static class GraphService extends Service<Void> {
         int count = 0;
-        public String changeName = "<Select Stock>";
+        String changeName = "<Select Stock>";
         private String name = "<Select Stock>";
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
 
@@ -209,7 +211,6 @@ public class ClientSellTasks {
             double[] history = StockHistory.getHistory(name);
             for (int i = 0; i < history.length; i++) {
                 if (history[i] == 0.0) {
-//                    return ((history[0] / history[i - 1]) * (double) 100) - 100.0;
                     try {
                         return history[0] - history[i - 1];
                     } catch (ArrayIndexOutOfBoundsException e) {
@@ -218,16 +219,13 @@ public class ClientSellTasks {
                 }
 
             }
-//            return ((history[0] / history[history.length - 1]) * (double) 100) - 100.0;
             return history[0] - history[history.length - 1];
 
         }
     }
 
-    public static class sliderService extends Service<Void> {
-        int count = 0;
+    static class sliderService extends Service<Void> {
         private String name = "<Select Stock>";
-        double max;
         boolean change = false;
 
         @Override

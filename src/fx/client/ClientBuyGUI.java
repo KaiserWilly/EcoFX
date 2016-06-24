@@ -16,39 +16,38 @@ import rsc.StockHistory;
 import rsc.StockManagement;
 
 /**
- * Created by james on 4/29/2016.
+ * Created 4/6/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * GUIBuy: Manages Buy Pane on client. Contains code to style and display
+ * the graphical components, and ties in the services that update the pane.
  */
-public class ClientBuyGUI {
-    public AnchorPane buyAnchorPane = new AnchorPane(), graphWidget = new AnchorPane();
-    ;
-    public static AnchorPane stockWidget = new AnchorPane();
-    Font aeroMI30 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
-    Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
-    Font aeroMI18 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-    Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
-    Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
-    public static ClientBuyTasks.graphService graphS = new ClientBuyTasks.graphService();
-    public static ClientBuyTasks.sliderService slidS = new ClientBuyTasks.sliderService();
-    public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
-    public static Slider buySlider;
-    public static ScrollPane sPane;
-    public static Label price, pChange;
-    boolean opened = false;
+class ClientBuyGUI {
+    private AnchorPane buyAnchorPane = new AnchorPane(), graphWidget = new AnchorPane();
+    private static AnchorPane stockWidget = new AnchorPane();
+    private Font aeroMI30 = Font.loadFont(ClientBuyGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
+    private Font aeroMI20 = Font.loadFont(ClientBuyGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    private Font aeroMI18 = Font.loadFont(ClientBuyGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+    private Font aeroMI14 = Font.loadFont(ClientBuyGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+    private Font aeroMI10 = Font.loadFont(ClientBuyGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
+    static ClientBuyTasks.GraphService graphS = new ClientBuyTasks.GraphService();
+    static ClientBuyTasks.SliderService slidS = new ClientBuyTasks.SliderService();
+    static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    static Slider buySlider;
+    static ScrollPane sPane;
+    static Label price, changeOverS;
+    private boolean opened = false;
 
-    public AnchorPane createPane() {
+    AnchorPane createPane() { //Return the Buy pane back to the client
         buyAnchorPane.setPrefSize(980, 490);
         buyAnchorPane.getChildren().add(stockPane());
         buyAnchorPane.getChildren().add(graphPane());
-
-
         buyAnchorPane.managedProperty().bind(buyAnchorPane.visibleProperty());
         buyAnchorPane.setVisible(false);
         return buyAnchorPane;
     }
 
-    public AnchorPane stockPane() {
+    private AnchorPane stockPane() { // Return table of available stocks to buy pane
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         stockPane.setPrefSize(450.0, 478.0);
@@ -97,16 +96,16 @@ public class ClientBuyGUI {
         return stockPane;
     }
 
-    public AnchorPane stockWidget() {
+    private AnchorPane stockWidget() {//Initial content of StockWidget ScrollPane
         stockWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(stockWidget, 0.0);
         AnchorPane.setLeftAnchor(stockWidget, 0.0);
-        ClientBuyTasks.widgetService widS = new ClientBuyTasks.widgetService();
+        ClientBuyTasks.WidgetService widS = new ClientBuyTasks.WidgetService();
         widS.start();
         return stockWidget;
     }
 
-    public AnchorPane graphPane() {
+    private AnchorPane graphPane() {//Return panel with additional details of selected stock to Buy pane
         AnchorPane graphPane = new AnchorPane();
         graphPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         graphPane.setPrefSize(450.0, 478.0);
@@ -118,7 +117,7 @@ public class ClientBuyGUI {
 
     }
 
-    public AnchorPane graphWidget() {
+    private AnchorPane graphWidget() {//Internal components of the graph pane
         graphWidget.setStyle("-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5; -fx-background-color: #333333;");
         graphWidget.setPrefSize(430, 350);
         AnchorPane.setTopAnchor(graphWidget, 10.0);
@@ -169,16 +168,16 @@ public class ClientBuyGUI {
         graphWidget.getChildren().add(price);
 
 
-        pChange = new Label();
-        pChange.setContentDisplay(ContentDisplay.RIGHT);
-        pChange.setFont(aeroMI18);
-        pChange.setTextFill(Paint.valueOf("White"));
-        pChange.setPrefSize(75.0, 30);
-        pChange.setTextAlignment(TextAlignment.CENTER);
-        pChange.setAlignment(Pos.CENTER);
-        AnchorPane.setTopAnchor(pChange, 20.0);
-        AnchorPane.setLeftAnchor(pChange, 270.0);
-        graphWidget.getChildren().add(pChange);
+        changeOverS = new Label();
+        changeOverS.setContentDisplay(ContentDisplay.RIGHT);
+        changeOverS.setFont(aeroMI18);
+        changeOverS.setTextFill(Paint.valueOf("White"));
+        changeOverS.setPrefSize(75.0, 30);
+        changeOverS.setTextAlignment(TextAlignment.CENTER);
+        changeOverS.setAlignment(Pos.CENTER);
+        AnchorPane.setTopAnchor(changeOverS, 20.0);
+        AnchorPane.setLeftAnchor(changeOverS, 270.0);
+        graphWidget.getChildren().add(changeOverS);
 
 
         NumberAxis xAxis = new NumberAxis(0.0, 30.0, 2.0);
@@ -270,16 +269,16 @@ public class ClientBuyGUI {
             String name = stock.textProperty().getValue();
             int quantity = (int) Math.floor(buySlider.getValue());
             double pps = StockHistory.getPrice(name);
-            if (quantity > 0) {
+            if (quantity > 0) { // If quantity is a valid number
                 System.out.println(buyOrderCB.isSelected());
-                if (buyOrderCB.isSelected()) {
+                if (buyOrderCB.isSelected()) { // If request is a buy order
                     try {
                         pps = Double.parseDouble(sellOrderPrice.getText().replaceAll("[^0-9.]", ""));
                         StockManagement.setBuyOrder(name, quantity, pps);
                     } catch (NumberFormatException e) {
                         System.out.println("Invalid input!");
                     }
-                } else {
+                } else { //Request to buy stock
                     StockManagement.buyStock(name, quantity, pps, false);
                 }
             }
@@ -298,16 +297,16 @@ public class ClientBuyGUI {
 
     public void setOpacity(double opacity) {
         buyAnchorPane.setOpacity(opacity);
-    }
+    } //Set opacity of entire pane
 
-    public void open() {
+    void open() { // Display buy pane
 
-        if (!opened) {
+        if (!opened) { //If pane has never been opened
             opened = true;
             startServices();
         }
         buyAnchorPane.setVisible(true);
-        FadeTransition in = new FadeTransition(Duration.millis(250), buyAnchorPane);
+        FadeTransition in = new FadeTransition(Duration.millis(250), buyAnchorPane); // Pane transition
         in.setFromValue(0.0);
         in.setToValue(1.0);
         in.setCycleCount(1);
@@ -315,7 +314,7 @@ public class ClientBuyGUI {
         in.play();
     }
 
-    public void close(String newPane) {
+    void close(String newPane) { //If pane is being closed/minimized
         FadeTransition out = new FadeTransition(Duration.millis(250), buyAnchorPane);
         out.setFromValue(1.0);
         out.setToValue(0.0);
@@ -341,7 +340,7 @@ public class ClientBuyGUI {
         out.play();
     }
 
-    void startServices() {
+    private void startServices() {
         graphS.start();
-    }
+    } //Start Component services
 }

@@ -1,6 +1,5 @@
 package fx.client;
 
-import fx.MenuSubGUI;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -20,11 +19,14 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * Created by james on 4/30/2016.
+ * Created 4/9/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientOverviewTasks: Services and tasks that update the Overview Pane
  */
-public class ClientOverviewTasks {
+class ClientOverviewTasks {
 
-    public static class graphService extends Service<Void> {
+    static class GraphService extends Service<Void> { //Update graph and selection widget
         int count = 0;
         String name = "Composite";
 
@@ -59,14 +61,12 @@ public class ClientOverviewTasks {
         }
     }
 
-    public static class tableService extends Service<Void> {
+    static class RankService extends Service<Void> {//Update leaderboard widget
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.0");
         int count = -1;
         public boolean change = false;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        Font stockNF = Font.loadFont(ClientOverviewTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(ClientOverviewTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
 
         @Override
         protected Task<Void> createTask() {
@@ -207,32 +207,5 @@ public class ClientOverviewTasks {
             start();
         }
     }
-
-    public static class messageService extends Service<Void> {
-
-        @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
-                @Override
-                protected Void call() throws Exception {
-                    updateMessage("News:");
-                    while (Values.messageQueue.size() == 0) {
-                        Thread.sleep(50);
-                    }
-                    updateMessage("News: " + Values.messageQueue.get(0));
-                    int count = Values.secCount;
-                    while (Values.secCount - count < 2) {
-                        Thread.sleep(50);
-                    }
-                    return null;
-                }
-            };
-        }
-
-        @Override
-        protected void succeeded() {
-            reset();
-            start();
-        }
-    }
 }
+

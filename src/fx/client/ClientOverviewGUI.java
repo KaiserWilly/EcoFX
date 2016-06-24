@@ -23,26 +23,27 @@ import javafx.util.Duration;
 import rsc.Values;
 
 /**
- * Created by james on 4/29/2016.
+ * Created 4/7/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ *ClientOverviewGUI: Styling, managing, and displaying graphical components of the Overview pane.
+ * Also ties components to services in order to update on the fly.
  */
-public class ClientOverviewGUI {
+class ClientOverviewGUI {
 
-    Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
-    Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
-    Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
-    Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    public AnchorPane overviewAnchorPane = new AnchorPane();
-    public static XYChart.Series<Number, Number> avgMarData = new XYChart.Series<>();
-    public static ClientOverviewTasks.graphService graphS = new ClientOverviewTasks.graphService();
-    public static ClientOverviewTasks.tableService tabS = new ClientOverviewTasks.tableService();
-    public boolean opened = false;
-    public static ScrollPane tablePane;
-    DropShadow dsSmall = new DropShadow(2.0, 1.0, 1.0, Color.BLACK);
+    private Font aeroMI24 = Font.loadFont(ClientOverviewGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+    private Font aeroMI20 = Font.loadFont(ClientOverviewGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    private Font aeroMI10 = Font.loadFont(ClientOverviewGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
+    private AnchorPane overviewAnchorPane = new AnchorPane();
+    static XYChart.Series<Number, Number> avgMarData = new XYChart.Series<>();
+    private static ClientOverviewTasks.GraphService graphS = new ClientOverviewTasks.GraphService();
+    private static ClientOverviewTasks.RankService tabS = new ClientOverviewTasks.RankService();
+    private boolean opened = false;
+    static ScrollPane tablePane;
+    private DropShadow dsSmall = new DropShadow(2.0, 1.0, 1.0, Color.BLACK);
 
-    public AnchorPane createPane() {
+    AnchorPane createPane() {//Basic pane setup
         overviewAnchorPane.setPrefSize(980, 490);
-
         overviewAnchorPane.getChildren().add(graphPane());
         overviewAnchorPane.getChildren().add(rankPane());
         overviewAnchorPane.managedProperty().bind(overviewAnchorPane.visibleProperty());
@@ -50,7 +51,7 @@ public class ClientOverviewGUI {
         return overviewAnchorPane;
     }
 
-    public AnchorPane graphPane() {
+    private AnchorPane graphPane() {//Pane containing graph widget
         AnchorPane graphPane = new AnchorPane();
         String graphPaneStyle = "-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;";
         graphPane.setStyle(graphPaneStyle);
@@ -62,7 +63,7 @@ public class ClientOverviewGUI {
         return graphPane;
     }
 
-    public AnchorPane graphWidget() {
+    private AnchorPane graphWidget() {
         AnchorPane graphWidget = new AnchorPane();
         String graphPaneStyle = "-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #333333;";
         graphWidget.setStyle(graphPaneStyle);
@@ -129,7 +130,7 @@ public class ClientOverviewGUI {
         return graphWidget;
     }
 
-    public AnchorPane rankPane() {
+    private AnchorPane rankPane() {//Pane containing leaderboards
         AnchorPane rankPane = new AnchorPane();
         String graphPaneStyle = "-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;";
         rankPane.setStyle(graphPaneStyle);
@@ -208,7 +209,7 @@ public class ClientOverviewGUI {
         overviewAnchorPane.setOpacity(opacity);
     }
 
-    public void open() {
+    void open() {
         overviewAnchorPane.setVisible(true);
         FadeTransition in = new FadeTransition(Duration.millis(250), overviewAnchorPane);
         in.setFromValue(0.0);
@@ -224,7 +225,7 @@ public class ClientOverviewGUI {
         in.play();
     }
 
-    public void close(String newPane) {
+    void close(String newPane) {
         FadeTransition out = new FadeTransition(Duration.millis(250), overviewAnchorPane);
         out.setFromValue(1.0);
         out.setToValue(0.0);
@@ -250,7 +251,7 @@ public class ClientOverviewGUI {
         out.play();
     }
 
-    public void startServices() {
+    private void startServices() {
         graphS.start();
         tabS.start();
     }

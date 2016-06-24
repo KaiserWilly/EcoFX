@@ -14,27 +14,29 @@ import rsc.Values;
 
 
 /**
- * Created by james on 3/16/2016.
+ * Created 1/25/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * FrameGUI: Control and display application frame.
  */
 public class FrameGUI extends Application {
 
-    static Stage baseStage;
     public static MainMenuGUI menu = new MainMenuGUI();
     public static ServerGUI server = new ServerGUI();
     public static ClientFrameGUI client = new ClientFrameGUI();
     public static ServerEndGameGUI end = new ServerEndGameGUI();
-    static String curScene = "Menu";
-    static StackPane stack;
+    private static String curScene = "Menu";
+    private static StackPane stack;
     static Scene scene;
-    static Node menuP, clientP, serverP, endP;
+    private static Node menuP, clientP, serverP, endP;
 
     public static void run(String[] args) {
         launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        baseStage = primaryStage;
+    public void start(Stage primaryStage) throws Exception {//Create application
+        Stage baseStage = primaryStage;
         baseStage.setTitle("Echonomics v" + Values.VERSION);
         baseStage.getIcons().add(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/frame/EcoIcon-01.png")));
         baseStage.setScene(createScene());
@@ -48,7 +50,7 @@ public class FrameGUI extends Application {
 
     }
 
-    public static Scene createScene() {
+    private static Scene createScene() {//Ground layer of scene
         stack = new StackPane();
         stack.setPadding(new Insets(0, 0, 30, 0));
         clientP = client.clientPane();
@@ -70,7 +72,7 @@ public class FrameGUI extends Application {
         return scene;
     }
 
-    public static void setScene(String scene) {
+    public static void setScene(String scene) {//Switch layers of application
         switch (curScene) {
             case "Menu":
                 menu.close(scene);

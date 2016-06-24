@@ -15,12 +15,12 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * Created by james on 4/30/2016.
+ * Created
  */
 
-public class ClientNetwork {
+class ClientNetwork {
 
-    static void connentToServer(String ip) {
+    static void connentToServer(String ip) { //Attempt to open connection with server
         try {
             Socket clientSocket = new Socket(ip, 1180);
             InputStream is = clientSocket.getInputStream();
@@ -29,7 +29,7 @@ public class ClientNetwork {
             ObjectOutputStream out = new ObjectOutputStream(outputStream);
             System.out.println("Permanent Connection Made!");
 
-            while (true) {
+            while (true) { //Communicate to server indefinitely
                 Object rawServerData = in.readObject();
                 HashMap<String, Object> serverData = (HashMap<String, Object>) rawServerData;
                 if (((String) serverData.get("Remove")).length() > 0) {
@@ -44,10 +44,8 @@ public class ClientNetwork {
                     PlayerManagement.leaderboardData = leaderBoardSort(leaderData);
                 }
                 String message = (String) serverData.get("Message");
-                if (!message.equals(null)) {
-                    if (message.length() > 0) {
-                        Values.messageQueue.add(message);
-                    }
+                if (message.length() > 0) {
+                    Values.messageQueue.add(message);
                 }
                 out.writeObject(getUserData());
                 out.flush();
@@ -59,20 +57,20 @@ public class ClientNetwork {
         }
     }
 
-    static ArrayList<Object[]> leaderBoardSort(ArrayList<Object[]> data) {
+    private static ArrayList<Object[]> leaderBoardSort(ArrayList<Object[]> data) { //Sort incoming leaderboard data
         try {
             Collections.sort(data, (o1, o2) -> {
                 Double assetValue1 = (Double) o1[2];
                 Double assetValue2 = (Double) o2[2];
                 return assetValue2.compareTo(assetValue1);
             });
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         return data;
     }
 
-    static HashMap<String, Object> getUserData() {
+    private static HashMap<String, Object> getUserData() {
         HashMap<String, Object> playerData = new HashMap<>();
         playerData.put("Name", PlayerManagement.name);
         playerData.put("Trades", PlayerManagement.trades);

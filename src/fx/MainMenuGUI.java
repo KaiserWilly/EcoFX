@@ -3,7 +3,6 @@ package fx;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
@@ -17,27 +16,29 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 /**
- * Created by james on 4/5/2016.
+ * Created 3/28/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * MainMenuGUI: Manage application MenuUI
  */
 public class MainMenuGUI {
 
 
-    VBox buttonBox = new VBox();
-    VBox logoBox = new VBox();
-    AnchorPane menuAnchorPane = new AnchorPane();
-    DropShadow ds = new DropShadow(5.0, 3.0, 3.0, Color.BLACK), logoE = new DropShadow(5.0, 1.0, 1.0, Color.BLACK);
-    static VBox subMenu;
-    static Label statBorder;
-    static Label logo;
-    static Button returnButton;
-    static ParallelTransition mainMenuTo = new ParallelTransition();
-    static ParallelTransition mainMenuFrom = new ParallelTransition();
-    static Rectangle subRec;
-    static Double subMenuOpacity = 0.2;
-    static Button[] menuButt;
-    static Scene scene;
+    private VBox buttonBox = new VBox();
+    private VBox logoBox = new VBox();
+    private AnchorPane menuAnchorPane = new AnchorPane();
+    private DropShadow ds = new DropShadow(5.0, 3.0, 3.0, Color.BLACK), logoE = new DropShadow(5.0, 1.0, 1.0, Color.BLACK);
+    private static VBox subMenu;
+    private static Label statBorder;
+    private static Label logo;
+    private static Button returnButton;
+    private static ParallelTransition mainMenuTo = new ParallelTransition();
+    private static ParallelTransition mainMenuFrom = new ParallelTransition();
+    private static Rectangle subRec;
+    private static Double subMenuOpacity = 0.2;
+    private static Button[] menuButt;
 
-    public AnchorPane menuPane() {
+    AnchorPane menuPane() {//Lowest level of menu UI
 
         buttonBox.setPadding(new Insets(8));
         buttonBox.setSpacing(1);
@@ -54,7 +55,6 @@ public class MainMenuGUI {
 
         logo = new Label();
         logo.setGraphic(new ImageView(new Image(FrameGUI.class.getClassLoader().getResourceAsStream("rsc/menu/main/EcoBanner.png"))));
-//        logo.setEffect(logoE);
         VBox.setMargin(logo, new Insets(4, 4, 0, 0));
         logoBox.getChildren().add(logo);
         AnchorPane.setRightAnchor(logoBox, 150.0);
@@ -80,7 +80,7 @@ public class MainMenuGUI {
         return menuAnchorPane;
     }
 
-    public Button createMenuButton(int index) {
+    private Button createMenuButton(int index) {
         String[] menuButtonPaths = new String[]{
                 "rsc/menu/main/menuplaybutton.png",
                 "rsc/menu/main/menuhostbutton.png",
@@ -110,7 +110,7 @@ public class MainMenuGUI {
         return menuButtTempate;
     }
 
-    public void handleButtonClick(String src) {
+    private void handleButtonClick(String src) {//Handle menu interaction
         mainMenuTo = new ParallelTransition();
 
         returnButton = new Button();
@@ -146,7 +146,7 @@ public class MainMenuGUI {
 
     }
 
-    public static void transitionMenuTo(Boolean returnButt) {
+    private static void transitionMenuTo(Boolean returnButt) {//Transition to submenu
         FadeTransition subMenuBackTo = new FadeTransition(Duration.millis(250), subRec);
         subMenuBackTo.setFromValue(0.0);
         subMenuBackTo.setToValue(subMenuOpacity);
@@ -194,7 +194,7 @@ public class MainMenuGUI {
         }
     }
 
-    public static void transitionMenuFrom() {
+    private static void transitionMenuFrom() {//transition from submenu
         FadeTransition subMenuBackFrom = new FadeTransition(Duration.millis(250), subRec);
         subMenuBackFrom.setFromValue(subMenuOpacity);
         subMenuBackFrom.setToValue(0.0);
@@ -240,47 +240,23 @@ public class MainMenuGUI {
         mainMenuFrom.getChildren().add(returnButtonFrom);
     }
 
-    public void setLayersTo() {
-        subRec.toFront();
+    private void setLayersTo() {//Align layers for submenu
+         subRec.toFront();
         subMenu.toFront();
         returnButton.toFront();
     }
 
-    public void setLayersFrom() {
+    private void setLayersFrom() {//align layers for main menu
         subMenu.toBack();
         returnButton.toBack();
         subRec.toBack();
-    }
-
-    public void setSceneStyle(String style) {
-        switch (style) {
-            case "Normal":
-                try {
-                    FrameGUI.scene.getStylesheets().remove("rsc/StylesheetMLG.css");
-                } catch (Exception e) {
-                    System.out.println("No other stylesheet detected!");
-                }
-                FrameGUI.scene.getStylesheets().add("rsc/StylesheetRoot.css");
-                break;
-            case "420":
-                try {
-                    FrameGUI.scene.getStylesheets().remove("rsc/StylesheetRoot.css");
-                } catch (Exception e) {
-                    System.out.println("No other stylesheet detected!");
-                }
-                FrameGUI.scene.getStylesheets().add("rsc/StylesheetMLG.css");
-                break;
-
-        }
-
-
     }
 
     public void setOpacity(double opacity) {
         menuAnchorPane.setOpacity(opacity);
     }
 
-    public void close(String newPane) {
+    void close(String newPane) {
         FadeTransition out = new FadeTransition(Duration.millis(250), menuAnchorPane);
         out.setFromValue(1.0);
         out.setToValue(0.0);

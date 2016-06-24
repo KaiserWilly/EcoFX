@@ -1,7 +1,5 @@
 package fx.server;
 
-import fx.MenuSubGUI;
-import fx.client.ClientFrameGUI;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -18,18 +16,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by james on 6/15/2016.
+ * Created 5/15/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ServerEndGameTasks: Update serverside final game rankings.
  */
-public class ServerEndGameTasks {
+class ServerEndGameTasks {
 
-    public static class tableService extends Service<Void> {
+    static class tableService extends Service<Void> {//Update leaderboard table.
         DecimalFormat money = new DecimalFormat("$#,###,##0.00");
-        DecimalFormat perc = new DecimalFormat("#,##0.0");
-        int count = -1;
         public boolean change = false;
-        Font stockNF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-        Font priceF = Font.loadFont(MenuSubGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-        Font buttonF = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+        Font stockNF = Font.loadFont(ServerEndGameTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
+        Font priceF = Font.loadFont(ServerEndGameTasks.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
 
         @Override
         protected Task<Void> createTask() {
@@ -117,7 +115,6 @@ public class ServerEndGameTasks {
                             AnchorPane.setTopAnchor(rankL, 50.0);
                             AnchorPane.setLeftAnchor(rankL, 0.0);
                             widgetPane.getChildren().add(rankL);
-
 
 
                             AnchorPane.setLeftAnchor(widgetPane, 0.0);

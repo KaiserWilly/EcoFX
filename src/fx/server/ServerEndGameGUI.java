@@ -1,6 +1,5 @@
 package fx.server;
 
-import fx.client.ClientFrameGUI;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -12,16 +11,19 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 /**
- * Created by james on 6/15/2016.
+ * Created 5/13/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ServerEndGameGUI: Displays the final rankings at the end of the game, serverside.
  */
 public class ServerEndGameGUI {
-    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
-    Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    ServerEndGameTasks.tableService tabS = new ServerEndGameTasks.tableService();
-    AnchorPane endGameAnchorPane = new AnchorPane(), gameWidget = new AnchorPane();
-    public static ScrollPane endGamePane;
+    private Font aeroMI20 = Font.loadFont(ServerEndGameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    private Font aeroMI10 = Font.loadFont(ServerEndGameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
+    private ServerEndGameTasks.tableService tabS = new ServerEndGameTasks.tableService();
+    private AnchorPane endGameAnchorPane = new AnchorPane(), gameWidget = new AnchorPane();
+    static ScrollPane endGamePane;
 
-    public AnchorPane createPane() {
+    public AnchorPane createPane() {//Basic and lowest level of pane
         endGameAnchorPane.setPrefSize(980, 490);
         endGameAnchorPane.getChildren().add(gamePane());
         endGameAnchorPane.managedProperty().bind(endGameAnchorPane.visibleProperty());
@@ -29,8 +31,7 @@ public class ServerEndGameGUI {
         return endGameAnchorPane;
     }
 
-    public AnchorPane gamePane() {
-
+    private AnchorPane gamePane() {//Pane displaying final rankings
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         stockPane.setPrefSize(450.0, 478.0);
@@ -101,7 +102,7 @@ public class ServerEndGameGUI {
         return stockPane;
     }
 
-    public AnchorPane portfolioWidget() {
+    private AnchorPane portfolioWidget() {//Original scrollpane contents
         gameWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(gameWidget, 0.0);
         AnchorPane.setLeftAnchor(gameWidget, 0.0);
@@ -113,7 +114,7 @@ public class ServerEndGameGUI {
         endGameAnchorPane.setOpacity(opacity);
     }
 
-    public void open() {
+    void open() {
         endGameAnchorPane.setVisible(true);
         FadeTransition in = new FadeTransition(Duration.millis(250), endGameAnchorPane);
         in.setFromValue(0.0);

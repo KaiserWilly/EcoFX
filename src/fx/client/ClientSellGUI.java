@@ -15,30 +15,33 @@ import javafx.util.Duration;
 import rsc.StockHistory;
 import rsc.StockManagement;
 
-/**
- * Created by james on 4/29/2016.
- */
-public class ClientSellGUI {
-    public AnchorPane sellAnchorPane = new AnchorPane(), graphWidget = new AnchorPane();
-    ;
-    public static AnchorPane stockWidget = new AnchorPane();
-    Font aeroMI30 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
-    Font aeroMI24 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 24);
-    Font aeroMI20 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
-    Font aeroMI18 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
-    Font aeroMI14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
-    Font aeroMI10 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
-    Font aeroM14 = Font.loadFont(ClientFrameGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroM.ttf"), 14);
-    public static ClientSellTasks.widgetService widS = new ClientSellTasks.widgetService();
-    public static ClientSellTasks.graphService graphS = new ClientSellTasks.graphService();
-    public static ClientSellTasks.sliderService slidS = new ClientSellTasks.sliderService();
-    public static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
-    public static Slider sellSlider;
-    public static ScrollPane stockP;
-    public static Label price, pChange;
-    boolean opened = false;
 
-    public AnchorPane createPane() {
+/**
+ * Created 4/15/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientSellGUI: Styles, Manages, and Displays content for the Sell pane
+ * Also ties Services to nodes that must be updated
+ */
+
+class ClientSellGUI {
+    private AnchorPane sellAnchorPane = new AnchorPane(), graphWidget = new AnchorPane();
+    private static AnchorPane stockWidget = new AnchorPane();
+    private Font aeroMI30 = Font.loadFont(ClientSellGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 40);
+    private Font aeroMI20 = Font.loadFont(ClientSellGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 20);
+    private Font aeroMI18 = Font.loadFont(ClientSellGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 18);
+    private Font aeroMI14 = Font.loadFont(ClientSellGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 14);
+    private Font aeroMI10 = Font.loadFont(ClientSellGUI.class.getClassLoader().getResourceAsStream("rsc/fonts/aeroMI.ttf"), 10);
+    static ClientSellTasks.WidgetService widS = new ClientSellTasks.WidgetService();
+    static ClientSellTasks.GraphService graphS = new ClientSellTasks.GraphService();
+    static ClientSellTasks.sliderService slidS = new ClientSellTasks.sliderService();
+    static XYChart.Series<Number, Number> markData = new XYChart.Series<>();
+    static Slider sellSlider;
+    static ScrollPane stockP;
+    static Label price, pChange;
+    private boolean opened = false;
+
+    AnchorPane createPane() {
         sellAnchorPane.setPrefSize(980, 490);
         sellAnchorPane.getChildren().add(stockPane());
         sellAnchorPane.getChildren().add(graphPane());
@@ -49,7 +52,7 @@ public class ClientSellGUI {
         return sellAnchorPane;
     }
 
-    public AnchorPane stockPane() {
+    private AnchorPane stockPane() {
         AnchorPane stockPane = new AnchorPane();
         stockPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         stockPane.setPrefSize(450.0, 478.0);
@@ -99,14 +102,14 @@ public class ClientSellGUI {
         return stockPane;
     }
 
-    public AnchorPane stockWidget() {
+    private AnchorPane stockWidget() {
         stockWidget.setPrefSize(440, 1725);
         AnchorPane.setTopAnchor(stockWidget, 0.0);
         AnchorPane.setLeftAnchor(stockWidget, 0.0);
         return stockWidget;
     }
 
-    public AnchorPane graphPane() {
+    private AnchorPane graphPane() {
         AnchorPane graphPane = new AnchorPane();
         graphPane.setStyle("-fx-border-radius: 10 10 10 10; -fx-background-radius: 10 10 10 10; -fx-background-color: #444444;");
         graphPane.setPrefSize(450.0, 478.0);
@@ -118,7 +121,7 @@ public class ClientSellGUI {
 
     }
 
-    public AnchorPane graphWidget() {
+    private AnchorPane graphWidget() {
         graphWidget.setStyle("-fx-border-radius: 5 5 5 5; -fx-background-radius: 5 5 5 5; -fx-background-color: #333333;");
         graphWidget.setPrefSize(430, 350);
         AnchorPane.setTopAnchor(graphWidget, 10.0);
@@ -287,7 +290,7 @@ public class ClientSellGUI {
         sellAnchorPane.setOpacity(opacity);
     }
 
-    public void open() {
+    void open() {
         if (!opened) {
             graphS.start();
             widS.start();
@@ -302,7 +305,7 @@ public class ClientSellGUI {
         in.play();
     }
 
-    public void close(String newPane) {
+    void close(String newPane) {
         FadeTransition out = new FadeTransition(Duration.millis(250), sellAnchorPane);
         out.setFromValue(1.0);
         out.setToValue(0.0);
