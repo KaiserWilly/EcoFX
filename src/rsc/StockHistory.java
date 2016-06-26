@@ -10,7 +10,7 @@ public class StockHistory {
     static HashMap<String, double[]> stockHistory = new HashMap<>();
     public static ArrayList<String> history = new ArrayList<>();
 
-    public static void addHistory(HashMap<String, Object> stockMap) {
+    public static void addHistory(HashMap<String, Object> stockMap) { //Adds the history of a chosen stock to the current GUI
         double composite = 0;
         ArrayList<String> stockN = (ArrayList<String>) stockMap.get("Names");
         for (int i = 0; i < stockN.size(); i++) {
@@ -46,20 +46,20 @@ public class StockHistory {
         }
     }
 
-    public static void removeStock(String name){
+    public static void removeStock(String name){ //Removes the history of a chosen stock from the current GUI
         Values.stockNamesNC.remove(name);
         Values.stockNames.remove(name);
         stockHistory.remove(name);
     }
 
-    public static double[] getHistory(String key) {
+    public static double[] getHistory(String key) { //Gets the history of a chosen stock
         if (!stockHistory.containsKey(key)) {
             return new double[30];
         }
         return stockHistory.get(key);
     }
 
-    public static double getPrice(String key) {
+    public static double getPrice(String key) { //Gets the price of a chosen stock
         double[] history = stockHistory.get(key);
         try {
             return history[0];

@@ -48,7 +48,7 @@ public class Values {
         }
     }
 
-    public static String getStockForward() {
+    public static String getStockForward() { //Returns the name of the next stock in the list
         stockCount++;
         if (stockNames.size() == 0) {
             stockCount = 0;
@@ -59,7 +59,7 @@ public class Values {
         return stockNames.get(stockCount);
     }
 
-    public static String getStockBackward() {
+    public static String getStockBackward() { //Returns the name of the previous stock in the list
         stockCount--;
         if (stockNames.size() == 0) {
             stockCount = 0;

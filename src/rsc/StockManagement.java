@@ -16,7 +16,7 @@ public class StockManagement {
     private static HashMap<String, Object[]> ownedStock = new HashMap<>();
     private static ArrayList<Object[]> buyOrders = new ArrayList<>(), sellOrders = new ArrayList<>();
 
-    public static void buyStock(String stockName, int quantity, double pricePerShare, boolean order) {
+    public static void buyStock(String stockName, int quantity, double pricePerShare, boolean order) { //Buys a certain quantity of a specified stock
         if (!ownedStock.containsKey(stockName)) {
             ownedStock.put(stockName, new Object[]{quantity, pricePerShare});
             ownedStockN.add(stockName);
@@ -33,7 +33,7 @@ public class StockManagement {
         PlayerManagement.trades++;
     }
 
-    public static void sellStock(String stockName, int quantity, double pricePerShare, boolean order) {
+    public static void sellStock(String stockName, int quantity, double pricePerShare, boolean order) { //Sells a certain quantity of a specified stock
         if (!order) {
             int org = (int) ownedStock.get(stockName)[0];
             double pps = (double) ownedStock.get(stockName)[1];
@@ -53,7 +53,7 @@ public class StockManagement {
         return (double) ownedStock.get(name)[1];
     }
 
-    public static int getOwnedQty(String name) {
+    public static int getOwnedQty(String name) { //Gets the quantity of a stock the player owns
         try {
             return (int) ownedStock.get(name)[0];
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class StockManagement {
         }
     }
 
-    public static void setBuyOrder(String stockName, int quantity, double pricePerShare) {
+    public static void setBuyOrder(String stockName, int quantity, double pricePerShare) { //Creates a buy order for a certain stock
         double orgPPS = StockHistory.getPrice(stockName);
         Object[] bOrder = new Object[]{stockName, quantity, pricePerShare, orgPPS};
         buyOrders.add(bOrder);
@@ -69,7 +69,7 @@ public class StockManagement {
         PlayerManagement.subtractMoney(pricePerShare * (double) quantity);
     }
 
-    public static double buyOrderTargetPPS(String name) {
+    public static double buyOrderTargetPPS(String name) { //Sets the Price Per Share for the Buy Order
         for (int i = 0; i < buyOrders.size(); i++) {
             Object[] orderData = buyOrders.get(i);
             if (orderData[0].equals(name)) {
@@ -80,7 +80,7 @@ public class StockManagement {
         return 0.0;
     }
 
-    public static double sellOrderTargetPPS(String name) {
+    public static double sellOrderTargetPPS(String name) { //Sets the Price Per Share for the Sell Order
         for (int i = 0; i < sellOrders.size(); i++) {
             Object[] orderData = sellOrders.get(i);
             if (orderData[0].equals(name)) {
@@ -102,7 +102,7 @@ public class StockManagement {
         return null;
     }
 
-    public static void setSellOrder(String stockName, int quantity, double pricePerShare) {
+    public static void setSellOrder(String stockName, int quantity, double pricePerShare) { //Creates a Sell Order for a certain stock
         double orgPPS = StockHistory.getPrice(stockName);
         Object[] sOrder = new Object[]{stockName, quantity, pricePerShare, orgPPS};
         sellOrderN.add(stockName);
@@ -118,7 +118,7 @@ public class StockManagement {
         }
     }
 
-    public static void cancelBuyOrder(String name) {
+    public static void cancelBuyOrder(String name) { //Cancels a buy order for a certain stock
         for (int i = 0; i < buyOrders.size(); i++) {
             Object[] orderData = buyOrders.get(i);
             if (orderData[0].equals(name)) {
@@ -130,7 +130,7 @@ public class StockManagement {
         }
     }
 
-    public static void cancelSellOrder(String name) {
+    public static void cancelSellOrder(String name) { //Cancels a sell order for a certain stock
         for (int i = 0; i < sellOrders.size(); i++) {
             Object[] orderData = sellOrders.get(i);
             if (orderData[0].equals(name)) {
