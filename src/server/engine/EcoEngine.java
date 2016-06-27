@@ -24,7 +24,7 @@ public class EcoEngine {
         initializeEngine(50);
         genereateData();
         System.out.println(stockEvents(24)[0].toString());
-        //System.out.println(ServerValues.messageExcecution(stockEvents(24)));
+        //System.out.println(ServerValues.messageExecution(stockEvents(24)));
 
     }
     EcoEngine(int Stocks) {
@@ -296,7 +296,7 @@ public class EcoEngine {
         return priceToBeChanged;
     }
 
-    public static Object[] stockEvents(int timing) {
+    public static Object[] stockEvents(int timing) {  //Generates a random event seed that is executed in ServerValues.messageExecution
         Random chanceOfEvent = new Random();
         int eventID;
         Object[] event = new Object[2];
@@ -307,10 +307,10 @@ public class EcoEngine {
             if (chanceOfEvent.nextInt(4) == 0) {
                 eventID = chanceOfEvent.nextInt(4);
                 Values.consoleQueue.add(((Integer) eventID).toString());
-                if (eventID == 0) {
+                if (eventID == 0) { //Generates Seed for adding a Stock to the market
                     event[0] = eventID;
                     event[1] = "";
-                } else if (eventID == 1) {
+                } else if (eventID == 1) { //Generates Seed for removing a stock from the market
                     int i = 0;
                     while (true) {
                         if (i >= stockNames.size()) {
@@ -346,7 +346,7 @@ public class EcoEngine {
                         }
                         i++;
                     }
-                } else if (eventID == 2) {
+                } else if (eventID == 2) { //Generates seed for a stock splitting
                     int stockAffected = chanceOfEvent.nextInt(stockNames.size());
 
                     stock = stockNames.get(stockAffected);
