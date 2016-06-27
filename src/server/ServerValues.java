@@ -91,8 +91,6 @@ public class ServerValues {
         if (eventID == 3){ //Passes a general statement to the rest of the application that no new events have occurred
             eventMessage = "No events happening today";
 
-            Values.consoleQueue.add("Nothing");
-
         }
         else if (eventID == 0) { //Creates a new stock to add to the market
             double stockPrice;
