@@ -8,7 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by james on 6/10/2016.
+ * Created 6/10/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * StockManagement: Gives the user their ability to manage their specific stocks
  */
 public class StockManagement {
     static DecimalFormat money = new DecimalFormat("$#,###,##0.00");
@@ -149,6 +152,14 @@ public class StockManagement {
                     ownedStock.replace(stockName, new Object[]{quantity + orgQ, npps});
                 }
                 return;
+            }
+        }
+    }
+    public static void splitStocks(double stockMultiplier, String stockName){
+        if (ownedStock.size() != 0){
+            if (ownedStockN.contains(stockName)) {
+                ownedStock.get(stockName)[0] = (double) ownedStock.get(stockName)[0] * stockMultiplier;
+                ownedStock.get(stockName)[1] = (double) ownedStock.get(stockName)[1] / stockMultiplier;
             }
         }
     }

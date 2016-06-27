@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by james on 5/12/2016.
+ * Created 4/4/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * StockHistory: Creates the history of all the stocks currently in the market, and the market itself.
  */
 public class StockHistory {
-    static HashMap<String, double[]> stockHistory = new HashMap<>();
+    public static HashMap<String, double[]> stockHistory = new HashMap<>();
     public static ArrayList<String> history = new ArrayList<>();
 
     public static void addHistory(HashMap<String, Object> stockMap) { //Adds the history of a chosen stock to the current GUI
