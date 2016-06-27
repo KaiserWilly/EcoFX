@@ -35,6 +35,7 @@ class ClientNetwork {
             while (true) { //Communicate to server indefinitely
                 Object rawServerData = in.readObject();
                 HashMap<String, Object> serverData = (HashMap<String, Object>) rawServerData;
+                System.out.println("Message Received: " +(String) serverData.get("Message"));
                 if (((String) serverData.get("Remove")).length() > 0) {
                     StockHistory.removeStock((String) serverData.get("Remove"));
                 }
@@ -48,7 +49,12 @@ class ClientNetwork {
                 }
                 String message = (String) serverData.get("Message");
                 if (message.length() > 0) {
-                    Values.messageQueue.add(message);
+                    System.out.println("Trying to publish a new message");
+                    try {
+                        Values.messageQueue.set(0, message);
+                    } catch (Exception e) {
+                        Values.messageQueue.add(message);
+                    }
                 }
                 out.writeObject(getUserData());
                 out.flush();

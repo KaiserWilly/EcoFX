@@ -290,7 +290,8 @@ public class EcoEngine {
         double[] previousStockPrices;
         String stock = "";
         if (timing % 24 == 0) {
-            if (chanceOfEvent.nextInt(4) == 0) {
+            int rand = chanceOfEvent.nextInt(4);
+            if (rand == 0) {
                 eventID = chanceOfEvent.nextInt(4);
                 if (eventID == 0) { //Generates Seed for adding a Stock to the market
                     event[0] = eventID;

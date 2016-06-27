@@ -31,7 +31,7 @@ public class ServerValues {
         data.put("SEC", secCount);
         data.put("Market Data", serverD);
         data.put("Leaderboard", filterClientData(clientsData));
-        if (secCount % 24 == 0) {
+        if (secCount % 4 == 0) {
             data.put("Message", messageExecution(server.engine.EcoEngine.stockEvents(secCount)));  //Put the message to be broadcast so that it replaces the empty string
         }
         else{
@@ -175,7 +175,7 @@ public class ServerValues {
             EcoEngine.stockNames.add((String) stockdata[0]);
             EcoEngine.stockInfo.put("Names", EcoEngine.stockNames);
 
-            Values.consoleQueue.add(stockName + "was added");
+            Values.consoleQueue.add(stockName + " was added");
 
             eventMessage = ("Stock " + stockName + " has been added to the market");
         }
