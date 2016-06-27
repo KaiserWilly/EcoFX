@@ -130,7 +130,7 @@ public class EcoEngine {
         stockInfo.put("Names", stockNames);
     }
 
-    public static void simulateStocks() { //Simulating the stocks by randomly changing random stock values
+    public static void simulateStocks() { //Simulating the stocks by changing stock values on a fairly realistic algorithm
         Integer stockVolatility;
         Double originalStockPrice = 0.0;
         Double newStockPrice = 0.0;
@@ -210,9 +210,9 @@ public class EcoEngine {
 
     }
 
-    public static double changeStockPrice(double priceToBeChanged, boolean trending, int directionOfTrend, int currentDurationOfTrend) {
+    public static double changeStockPrice(double priceToBeChanged, boolean trending, int directionOfTrend, int currentDurationOfTrend) { //Changes the price of the stock based on an algorithm, and a random adjustment to keep things interesting
         Random percentageAdjustment = new Random();
-        totalPriceChange = Math.pow(priceToBeChanged, .407); //(-.507)
+        totalPriceChange = Math.pow(priceToBeChanged, -.507);
         totalPriceChange = totalPriceChange / 10;
         if (trending) {
             if (directionOfTrend == 1) { //If direction of trend is 1, the stock is trending up
