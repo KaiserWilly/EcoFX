@@ -11,7 +11,7 @@ import java.util.HashMap;
  * Created 10/29/15
  * Software Development
  * TSA Conference, 2016
- * EcoMain: Class containing code that handles global variables
+ * Values: Class containing code that handles global variables
  */
 public class Values {
     public final static double VERSION = 2.0;

@@ -7,7 +7,7 @@ import javafx.scene.text.Font;
  * TSA Conference, Nashville Tennessee
  * StartDev: Start class of entire application
  */
-public class StartDev {
+public class StartDev { //Runs the entire application
     public static void main(String[] args) {
         Font.loadFont(StartDev.class.getResource("rsc/fonts/aeroM.ttf").toExternalForm(),12);
         FrameGUI.run(args);

@@ -21,7 +21,7 @@ public class ServerValues {
     public static int stockEventID;
     public static String stockEventsAffect;
 
-    public static void genServerData() {
+    public static void genServerData() { //Generates new engine data
         HashMap<String, Object> data;
         server.engine.EcoEngine.genereateData();
         HashMap<String, Object> serverD = EcoEngine.getData();
@@ -47,7 +47,7 @@ public class ServerValues {
         serverData = data;
     }
 
-    public static HashMap<String, Object> getServerData() {
+    public static HashMap<String, Object> getServerData() { //Returns all the current data the server has
         return serverData;
     }
 
@@ -88,13 +88,13 @@ public class ServerValues {
         stockEventsAffect = stockAffected;
 
 
-        if (eventID == 3){
+        if (eventID == 3){ //Passes a general statement to the rest of the application that no new events have occurred
             eventMessage = "No events happening today";
 
             Values.consoleQueue.add("Nothing");
 
         }
-        else if (eventID == 0) {
+        else if (eventID == 0) { //Creates a new stock to add to the market
             double stockPrice;
             int volitility, trend;
 
@@ -181,7 +181,7 @@ public class ServerValues {
 
             eventMessage = ("Stock " + stockName + " has been added to the market");
         }
-        else if (eventID == 1){
+        else if (eventID == 1){ //Removes the stock that was passed from the event seed created by the engine
             EcoEngine.stockInfo.remove(stockAffected);
             EcoEngine.stockNames.remove(stockAffected);
 
@@ -189,7 +189,7 @@ public class ServerValues {
 
             eventMessage = ("Stock " + stockAffected + " has gone bankrupt, and has been removed from the market");
         }
-        else if (eventID == 2){
+        else if (eventID == 2){ //Splits the stock that was passed from the event seed created by the engine
             Random stockMultiplier = new Random();
             int multiplier = stockMultiplier.nextInt(10);
             StockManagement.splitStocks(multiplier, stockAffected);

@@ -4,10 +4,8 @@ import rsc.StockHistory;
 import rsc.Values;
 import server.ServerValues;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -20,13 +18,6 @@ import java.util.Random;
 
 public class EcoEngine {
 
-    public static void main(String[] args) {
-        initializeEngine(50);
-        genereateData();
-        System.out.println(stockEvents(24)[0].toString());
-        //System.out.println(ServerValues.messageExecution(stockEvents(24)));
-
-    }
     EcoEngine(int Stocks) {
         numberOfStocks = Stocks;
     }
@@ -37,23 +28,18 @@ public class EcoEngine {
     public static double totalPriceChange;
     public static ArrayList<String> stockNames;
 
-    public static void initializeEngine(int numStocks) {
+    public static void initializeEngine(int numStocks) { //Initializes the engine by creating the engine stocks
         numberOfStocks = numStocks;
         EcoEngine.createStocks();
     }
 
-    public static HashMap<String, Object> getData() {
+    public static HashMap<String, Object> getData() { //Returns  all stock data in an easily usable way
         return stockInfo;
     }
 
-    public static void genereateData() {
+    public static void genereateData() { //Returns engine data in an easily usable way
         EcoEngine.simulateStocks();
     }
-
-//    public static void generatePotentialStockEvent() {
-//        EcoEngine.stockEvents(ServerValues.secCount);
-//    }
-
 
     public static void createStocks() { //Creates a certain number of stocks, with certain information input into them
         stockInfo = new HashMap<>();

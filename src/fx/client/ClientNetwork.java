@@ -15,7 +15,10 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * Created
+ * Created 6/10/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * ClientNetwork: Connects the client to the server and transfers data from the server to a form that the clients can use
  */
 
 class ClientNetwork {

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by james on 6/12/2016.
+ * Created 6/12/16
+ * Software Development
+ * TSA Conference, Nashville Tennessee
+ * PlayerManagement: Manages all of the player statistics like money, and assets
  */
 public class PlayerManagement {
     private static Double playerMoney = 100000.00;
