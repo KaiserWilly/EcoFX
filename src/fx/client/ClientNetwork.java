@@ -35,7 +35,6 @@ class ClientNetwork {
             while (true) { //Communicate to server indefinitely
                 Object rawServerData = in.readObject();
                 HashMap<String, Object> serverData = (HashMap<String, Object>) rawServerData;
-                System.out.println("Message Received: " +(String) serverData.get("Message"));
                 if (((String) serverData.get("Remove")).length() > 0) {
                     StockHistory.removeStock((String) serverData.get("Remove"));
                 }
