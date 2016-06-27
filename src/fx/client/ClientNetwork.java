@@ -49,7 +49,6 @@ class ClientNetwork {
                 }
                 String message = (String) serverData.get("Message");
                 if (message.length() > 0) {
-                    System.out.println("Trying to publish a new message");
                     try {
                         Values.messageQueue.set(0, message);
                     } catch (Exception e) {
