@@ -48,7 +48,7 @@ public class StockManagement {
             }
         }
         PlayerManagement.addMoney(pricePerShare * (double) quantity);
-        StockHistory.history.add("Sold " + quantity + " shares of " + stockName + " for $" + money.format(pricePerShare) + " per Share");
+        StockHistory.history.add("Sold " + quantity + " shares of " + stockName + " for " + money.format(pricePerShare) + " per Share");
         PlayerManagement.trades++;
     }
 

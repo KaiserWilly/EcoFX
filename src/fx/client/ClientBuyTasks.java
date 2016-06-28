@@ -234,7 +234,7 @@ class ClientBuyTasks {
                     ArrayList<String> stockN = Values.stockNamesNC;
                     Platform.runLater(() -> {
                         if (stockN.contains(name)) {
-                            ClientBuyGUI.buySlider.setMajorTickUnit((int) PlayerManagement.getMoney() / StockHistory.getPrice(name));
+                            ClientBuyGUI.buySlider.setMajorTickUnit((int)Math.ceil(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
                             ClientBuyGUI.buySlider.setMax(Math.floor(PlayerManagement.getMoney() / StockHistory.getPrice(name)));
                         } else {
                             ClientBuyGUI.buySlider.setMax(.9);
