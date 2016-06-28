@@ -1,7 +1,6 @@
 package server.engine;
 
 import rsc.StockHistory;
-import rsc.Values;
 import server.ServerValues;
 
 import java.util.ArrayList;
@@ -18,15 +17,14 @@ import java.util.Random;
 
 public class EcoEngine {
 
+    public static HashMap<String, Object> stockInfo;
+    public static ArrayList<String> stockNames;
+    private static int numberOfStocks;
+    private static boolean positivePriceChange;
+    private static double totalPriceChange;
     EcoEngine(int Stocks) {
         numberOfStocks = Stocks;
     }
-
-    public static HashMap<String, Object> stockInfo;
-    public static int numberOfStocks;
-    public static boolean positivePriceChange;
-    public static double totalPriceChange;
-    public static ArrayList<String> stockNames;
 
     public static void initializeEngine(int numStocks) { //Initializes the engine by creating the engine stocks
         numberOfStocks = numStocks;
@@ -41,7 +39,7 @@ public class EcoEngine {
         EcoEngine.simulateStocks();
     }
 
-    public static void createStocks() { //Creates a certain number of stocks, with certain information input into them
+    private static void createStocks() { //Creates a certain number of stocks, with certain information input into them
         stockInfo = new HashMap<>();
 
         stockNames = new ArrayList<>();
@@ -130,12 +128,11 @@ public class EcoEngine {
         stockInfo.put("Names", stockNames);
     }
 
-    public static void simulateStocks() { //Simulating the stocks by changing stock values on a fairly realistic algorithm
+    private static void simulateStocks() { //Simulating the stocks by changing stock values on a fairly realistic algorithm
         Integer stockVolatility;
         Double originalStockPrice = 0.0;
         Double newStockPrice = 0.0;
         stockNames = (ArrayList<String>) stockInfo.get("Names");
-        System.out.println(String.valueOf(stockNames));
         Random stockChangeParameter = new Random(); //Sets the parameter against the volatility is checked to see if there is a change in stock value
         for (int i = 0; i < stockNames.size(); i++) {
             Object[] stockInput = (Object[]) stockInfo.get(((ArrayList<String>) stockInfo.get("Names")).get(i));
@@ -210,7 +207,7 @@ public class EcoEngine {
 
     }
 
-    public static double changeStockPrice(double priceToBeChanged, boolean trending, int directionOfTrend, int currentDurationOfTrend) { //Changes the price of the stock based on an algorithm, and a random adjustment to keep things interesting
+    private static double changeStockPrice(double priceToBeChanged, boolean trending, int directionOfTrend, int currentDurationOfTrend) { //Changes the price of the stock based on an algorithm, and a random adjustment to keep things interesting
         Random percentageAdjustment = new Random();
         totalPriceChange = Math.pow(priceToBeChanged, -.507);
         totalPriceChange = totalPriceChange / 10;

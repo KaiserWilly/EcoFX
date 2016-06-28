@@ -14,10 +14,10 @@ import java.util.HashMap;
  * TSA Conference, 2016
  * ServerFile: Class containing code that stamps each console output
  */
-public class ServerFile {
-    public static HashMap<String, Object> dataToClient;
+class ServerFile {
+    private static HashMap<String, Object> dataToClient;
 
-    public static void showTimeStamp(String command) {
+    static void showTimeStamp(String command) {
         //Creates A Time Stamp, Used For Debugging Purposes
 
         Calendar now = Calendar.getInstance();

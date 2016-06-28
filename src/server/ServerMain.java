@@ -13,7 +13,7 @@ import java.net.Socket;
  * ServerMain: Class containing code that starts the server
  */
 public class ServerMain {
-    static Boolean serverGo = true;
+    private static Boolean serverGo = true;
 
     public static void startServer() {
         int ID = 0;
@@ -47,8 +47,5 @@ public class ServerMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    public void stopServer(){
-        serverGo = false;
     }
 }

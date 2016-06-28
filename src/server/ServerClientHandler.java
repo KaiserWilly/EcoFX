@@ -11,13 +11,12 @@ import java.util.HashMap;
  * TSA Conference, 2016
  * ServerClientHandler: Class containing code that interacts with the client
  */
-public class ServerClientHandler extends Thread {
+class ServerClientHandler extends Thread {
     private int id;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private Object[] fill = new Object[1];
 
-    public ServerClientHandler(Socket socket, int id) throws IOException {
+    ServerClientHandler(Socket socket, int id) throws IOException {
         OutputStream outputStream = socket.getOutputStream();
         out = new ObjectOutputStream(outputStream);
         this.id = id;

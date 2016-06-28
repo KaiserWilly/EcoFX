@@ -5,7 +5,10 @@ import rsc.StockManagement;
 import rsc.Values;
 import server.engine.EcoEngine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created 6/10/16
@@ -18,10 +21,10 @@ public class ServerValues {
     private static HashMap<String, Object> serverData = new HashMap<>();
     public static Integer secCount = 0;
     public static ArrayList<Object[]> clientsData = new ArrayList<>();
-    public static int stockEventID;
-    public static String stockEventsAffect;
+    private static int stockEventID;
+    private static String stockEventsAffect;
 
-    public static void genServerData() { //Generates new engine data
+    static void genServerData() { //Generates new engine data
         HashMap<String, Object> data;
         server.engine.EcoEngine.genereateData();
         HashMap<String, Object> serverD = EcoEngine.getData();

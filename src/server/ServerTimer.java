@@ -14,14 +14,14 @@ import java.util.TimerTask;
 public class ServerTimer {
     private static Timer timer;
 
-    public static void startTimer() { //Starts the timer
+    static void startTimer() { //Starts the timer
         timer = new Timer();
         Values.consoleQueue.add("Engine Started: Game begins in 3 seconds");
         timer.scheduleAtFixedRate(task(), 3000, 2000); //Task, delay, update speed
 
     }
 
-    public static TimerTask task() { //Keeps the time of the server
+    private static TimerTask task() { //Keeps the time of the server
         return new TimerTask() {
             @Override
             public void run() {

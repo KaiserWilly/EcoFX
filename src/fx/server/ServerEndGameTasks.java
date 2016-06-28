@@ -13,7 +13,6 @@ import server.ServerValues;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created 5/15/16
@@ -45,7 +44,6 @@ class ServerEndGameTasks {
                             double height = 0.0;
                             int rank = 1;
                             for (Object[] data : stockNames) {
-                                System.out.println(Arrays.toString(data));
                                 AnchorPane widgetPane = new AnchorPane();
                                 widgetPane.setPrefSize(415.0, 30.0);
                                 String graphPaneStyle = "-fx-border-radius: 2 2 2 2; -fx-background-radius: 2 2 2 2; -fx-background-color: #333333;";
