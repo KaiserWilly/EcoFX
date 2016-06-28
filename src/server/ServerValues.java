@@ -34,7 +34,7 @@ public class ServerValues {
         data.put("SEC", secCount);
         data.put("Market Data", serverD);
         data.put("Leaderboard", filterClientData(clientsData));
-        if (secCount % 4 == 0) {
+        if (secCount % 24 == 0) {
             data.put("Message", messageExecution(server.engine.EcoEngine.stockEvents(secCount)));  //Put the message to be broadcast so that it replaces the empty string
         }
         else{
@@ -198,6 +198,8 @@ public class ServerValues {
             Object[] newStockPriceAfterSplit = (Object[])EcoEngine.stockInfo.get(stockAffected);
             newStockPriceAfterSplit[1] = (double)newStockPriceAfterSplit[1] / multiplier;
             EcoEngine.stockInfo.replace(stockAffected,newStockPriceAfterSplit);
+
+            Values.consoleQueue.add("Stock " + stockAffected + " has split 1/" + multiplier);
 
             eventMessage = ("Stock " + stockAffected + " has split 1/" + multiplier);
         }
